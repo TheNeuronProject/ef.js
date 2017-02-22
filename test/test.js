@@ -31,7 +31,7 @@ var ast = [
 					type: 'text'
 				},
 				prop: {
-					value: ['input']
+					value: ['text']
 				}
 			}
 		],

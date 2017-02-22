@@ -15,7 +15,7 @@ const resolve = ({ arr, name, parentNode, subscriberNode }) => {
 	}
 	subscriberNode[name] = subscriberNode[name] || []
 	subscriberNode = subscriberNode[name]
-	subscriberNode.value = subscriberNode.value || ''
+	subscriberNode.value = subscriberNode.value || null
 	return { parentNode, subscriberNode}
 }
 

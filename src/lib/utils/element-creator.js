@@ -23,7 +23,7 @@ const createElement = (info, state, subscriber) => {
 				},
 				set(value) {
 					subscriberNode.value = value
-					for (let j = 0; j < subscriberNode.length; j++) subscriberNode[j](value)
+					for (let j of subscriberNode) j(value)
 				},
 				enumerable: true
 			})
@@ -40,19 +40,33 @@ const createElement = (info, state, subscriber) => {
 				parentNode: state.$data,
 				subscriberNode: subscriber
 			})
-			subscriberNode.push((value) => {
+			const handler = (value) => {
 				element[i] = value
-			})
+			}
+			subscriberNode.push(handler)
 			if (typeof parentNode[name] === 'undefined') Object.defineProperty(parentNode, name, {
 				get() {
 					return subscriberNode.value
 				},
 				set(value) {
 					subscriberNode.value = value
-					for (let j = 0; j < subscriberNode.length; j++) subscriberNode[j](value)
+					for (let j of subscriberNode) j(value)
 				},
 				enumerable: true
 			})
+
+			if (typeof prop === 'object' && (i === 'value' || i === 'checked')) {
+				const updateOthers = (value) => {
+					subscriberNode.value = value
+					for (let j of subscriberNode) {
+						if (j !== handler) j(value)
+					}
+				}
+				if (i === 'value') {
+					element.addEventListener('input', () => updateOthers(element.value), false)
+					element.addEventListener('change', () => updateOthers(element.value), false)
+				} else element.addEventListener('change', () => updateOthers(event.checked), false)
+			}
 		}
 	}
 	for (let i in info.event) {

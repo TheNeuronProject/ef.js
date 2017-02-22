@@ -33,7 +33,7 @@ const create = ({ ast, state, children, subscriber }) => {
 						},
 						set(value) {
 							subscriberNode.value = value
-							for (let j = 0; j < subscriberNode.length; j++) subscriberNode[j](value)
+							for (let j of subscriberNode) j(value)
 						},
 						enumerable: true
 					})
