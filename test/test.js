@@ -3,7 +3,7 @@ var ast = [
 		tag: 'div',
 		attr: {
 			id: 'id1',
-			class: ['root', 'class']
+			class: ['text']
 		},
 		event: {
 			click: 'sendMsg'
@@ -30,7 +30,7 @@ var ast = [
 				}
 			}
 		],
-		['text3'],
+		['text'],
 		'text2'
 	],
 	{ name: 'branch2' }
@@ -60,7 +60,7 @@ var component = new ef(ast)
 
 var state = component.$render()
 
-state.branch1 = component
+// state.branch1 = component
 
 // state.$methods.sendMsg = () => alert('Message1 sent!')
 // state.branch1.$methods.sendMsg = () => alert('Message2 sent!')

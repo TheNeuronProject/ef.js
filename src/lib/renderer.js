@@ -50,6 +50,7 @@ const render = (component) => {
 	const ast = _ast.get(component)
 	const state = {}
 	const children = {}
+	const subscriber = {}
 	Object.defineProperties(state, {
 		$data: {
 			value: {}
@@ -58,7 +59,7 @@ const render = (component) => {
 			value: {}
 		}
 	})
-	const element = create(ast, state, children)
+	const element = create({ ast, state, children, subscriber })
 	// deepAssign(state, data)
 	Object.defineProperty(state, '$element', {
 		value: element

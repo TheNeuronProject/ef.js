@@ -1,8 +1,8 @@
 import createElement from './element-creator.js'
 import resolve from './path-resolver.js'
 
-const create = (ast, state, children) => {
-	const element = createElement(ast[0], state)
+const create = ({ ast, state, children, subscriber }) => {
+	const element = createElement(ast[0], state, subscriber)
 
 	for (let i = 1; i < ast.length; i++) {
 		const node = ast[i]
@@ -14,18 +14,29 @@ const create = (ast, state, children) => {
 			case '[object Array]': {
 				if (Object.prototype.toString.call(node[0]) === '[object Object]') {
 					// Create child element
-					element.appendChild(create(node, state, children))
+					element.appendChild(create({ ast: node, state, children, subscriber }))
 				} else if (Object.prototype.toString.call(node[0]) === '[object String]') {
 					const name = node[node.length - 1]
 					let parentNode = state.$data
-					if (node.length - 1 > 0) parentNode = resolve(node, state.$data)
+					let sbuscriberNode = subscriber
+					if (node.length - 1 > 0) {
+						parentNode = resolve(node, parentNode)
+						sbuscriberNode = resolve(node, sbuscriberNode)
+					}
 					const textNode = document.createTextNode('')
-					Object.defineProperty(parentNode, name, {
+					sbuscriberNode[name] = sbuscriberNode[name] || []
+					sbuscriberNode = sbuscriberNode[name]
+					sbuscriberNode.value = sbuscriberNode.value || ''
+					sbuscriberNode.push((value) => {
+						textNode.textContent = value
+					})
+					if (typeof parentNode[name] === 'undefined') Object.defineProperty(parentNode, name, {
 						get() {
-							return textNode.textContent
+							return sbuscriberNode.value
 						},
 						set(value) {
-							textNode.textContent = value
+							sbuscriberNode.value = value
+							for (let j = 0; j < sbuscriberNode.length; j++) sbuscriberNode[j](value)
 						},
 						enumerable: true
 					})

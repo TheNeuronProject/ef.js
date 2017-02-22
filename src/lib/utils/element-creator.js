@@ -1,7 +1,7 @@
 import { warn } from '../../debug.js'
 import resolve from './path-resolver.js'
 
-const createElement = (info, state) => {
+const createElement = (info, state, subscriber) => {
 	const element = document.createElement(info.tag)
 	for (let i in info.attr) {
 		const attr = info.attr[i]
@@ -9,13 +9,24 @@ const createElement = (info, state) => {
 		else {
 			const name = attr[attr.length - 1]
 			let parentNode = state.$data
-			if (attr.length - 1 > 0) parentNode = resolve(attr, state.$data)
-			Object.defineProperty(parentNode, name, {
+			let sbuscriberNode = subscriber
+			if (attr.length - 1 > 0) {
+				parentNode = resolve(attr, parentNode)
+				sbuscriberNode = resolve(attr, sbuscriberNode)
+			}
+			sbuscriberNode[name] = sbuscriberNode[name] || []
+			sbuscriberNode = sbuscriberNode[name]
+			sbuscriberNode.value = sbuscriberNode.value || ''
+			sbuscriberNode.push((value) => {
+				element.setAttribute(i, value)
+			})
+			if (typeof parentNode[name] === 'undefined') Object.defineProperty(parentNode, name, {
 				get() {
-					return element.getAttribute(i)
+					return sbuscriberNode.value
 				},
 				set(value) {
-					element.setAttribute(i, value)
+					sbuscriberNode.value = value
+					for (let j = 0; j < sbuscriberNode.length; j++) sbuscriberNode[j](value)
 				},
 				enumerable: true
 			})
@@ -27,13 +38,24 @@ const createElement = (info, state) => {
 		else {
 			const name = prop[prop.length - 1]
 			let parentNode = state.$data
-			if (prop.length - 1 > 0) parentNode = resolve(prop, state.$data)
-			Object.defineProperty(parentNode, name, {
+			let sbuscriberNode = subscriber
+			if (prop.length - 1 > 0) {
+				parentNode = resolve(prop, parentNode)
+				sbuscriberNode = resolve(prop, sbuscriberNode)
+			}
+			sbuscriberNode[name] = sbuscriberNode[name] || []
+			sbuscriberNode = sbuscriberNode[name]
+			sbuscriberNode.value = sbuscriberNode.value || ''
+			sbuscriberNode.push((value) => {
+				element[i] = value
+			})
+			if (typeof parentNode[name] === 'undefined') Object.defineProperty(parentNode, name, {
 				get() {
-					return element[i]
+					return sbuscriberNode.value
 				},
 				set(value) {
-					element[i] = value
+					sbuscriberNode.value = value
+					for (let j = 0; j < sbuscriberNode.length; j++) sbuscriberNode[j](value)
 				},
 				enumerable: true
 			})
