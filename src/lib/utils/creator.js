@@ -1,5 +1,5 @@
 import createElement from './element-creator.js'
-import resolve from './path-resolver.js'
+import resolve from './resolver.js'
 
 const create = ({ ast, state, children, subscriber }) => {
 	const element = createElement(ast[0], state, subscriber)
@@ -17,26 +17,23 @@ const create = ({ ast, state, children, subscriber }) => {
 					element.appendChild(create({ ast: node, state, children, subscriber }))
 				} else if (Object.prototype.toString.call(node[0]) === '[object String]') {
 					const name = node[node.length - 1]
-					let parentNode = state.$data
-					let sbuscriberNode = subscriber
-					if (node.length - 1 > 0) {
-						parentNode = resolve(node, parentNode)
-						sbuscriberNode = resolve(node, sbuscriberNode)
-					}
 					const textNode = document.createTextNode('')
-					sbuscriberNode[name] = sbuscriberNode[name] || []
-					sbuscriberNode = sbuscriberNode[name]
-					sbuscriberNode.value = sbuscriberNode.value || ''
-					sbuscriberNode.push((value) => {
+					const { parentNode, subscriberNode } = resolve({
+						arr: node,
+						name: name,
+						parentNode: state.$data,
+						subscriberNode: subscriber
+					})
+					subscriberNode.push((value) => {
 						textNode.textContent = value
 					})
 					if (typeof parentNode[name] === 'undefined') Object.defineProperty(parentNode, name, {
 						get() {
-							return sbuscriberNode.value
+							return subscriberNode.value
 						},
 						set(value) {
-							sbuscriberNode.value = value
-							for (let j = 0; j < sbuscriberNode.length; j++) sbuscriberNode[j](value)
+							subscriberNode.value = value
+							for (let j = 0; j < subscriberNode.length; j++) subscriberNode[j](value)
 						},
 						enumerable: true
 					})
@@ -57,7 +54,7 @@ const create = ({ ast, state, children, subscriber }) => {
 
 						// Attach new element
 						const sibling = placeholder.nextSibling
-						children[node.name] = value.$render()
+						children[node.name] = value
 						parent.insertBefore(children[node.name].$element, sibling)
 					},
 					enumerable: true

@@ -21,6 +21,11 @@ var ast = [
 		{ name: 'branch1' },
 		[
 			{
+				tag: 'br'
+			}
+		],
+		[
+			{
 				tag: 'input',
 				attr: {
 					type: 'text'
@@ -28,6 +33,11 @@ var ast = [
 				prop: {
 					value: ['input']
 				}
+			}
+		],
+		[
+			{
+				tag: 'br'
 			}
 		],
 		['text'],
