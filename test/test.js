@@ -11,6 +11,11 @@ var ast = [
 	},
 	'text0',
 	['root', 'text'],
+	[
+		{
+			tag: 'br'
+		}
+	],
 	['text'],
 	[
 		{
@@ -30,6 +35,19 @@ var ast = [
 				attr: {
 					type: 'text'
 				},
+				prop: {
+					value: ['text']
+				}
+			}
+		],
+		[
+			{
+				tag: 'br'
+			}
+		],
+		[
+			{
+				tag: 'textarea',
 				prop: {
 					value: ['text']
 				}
