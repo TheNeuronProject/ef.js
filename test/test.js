@@ -21,11 +21,17 @@ var ast = [
 		{ name: 'branch1' },
 		[
 			{
-				tag: 'p'
-			},
-			['text3'],
-			'text2'
-		]
+				tag: 'input',
+				attr: {
+					type: 'text'
+				},
+				prop: {
+					value: ['input']
+				}
+			}
+		],
+		['text3'],
+		'text2'
 	],
 	{ name: 'branch2' }
 ]
@@ -56,7 +62,7 @@ var state = component.$render()
 
 state.branch1 = component
 
-state.$methods.sendMsg = () => alert('Message1 sent!')
-state.branch1.$methods.sendMsg = () => alert('Message2 sent!')
+// state.$methods.sendMsg = () => alert('Message1 sent!')
+// state.branch1.$methods.sendMsg = () => alert('Message2 sent!')
 
 document.querySelector('body').appendChild(state.$element)

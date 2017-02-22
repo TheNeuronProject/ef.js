@@ -1,3 +1,4 @@
+import { warn } from '../../debug.js'
 import resolve from './path-resolver.js'
 
 const createElement = (info, state) => {
@@ -8,7 +9,7 @@ const createElement = (info, state) => {
 		else {
 			const name = attr[attr.length - 1]
 			let parentNode = state.$data
-			if (attr.length - 1 > 0) parentNode = resolve(attr, state.$data, attr.length - 1)
+			if (attr.length - 1 > 0) parentNode = resolve(attr, state.$data)
 			Object.defineProperty(parentNode, name, {
 				get() {
 					return element.getAttribute(i)
@@ -20,9 +21,30 @@ const createElement = (info, state) => {
 			})
 		}
 	}
+	for (let i in info.prop) {
+		const prop = info.prop[i]
+		if (typeof attr === 'string') element[i] = prop
+		else {
+			const name = prop[prop.length - 1]
+			let parentNode = state.$data
+			if (prop.length - 1 > 0) parentNode = resolve(prop, state.$data)
+			Object.defineProperty(parentNode, name, {
+				get() {
+					return element[i]
+				},
+				set(value) {
+					element[i] = value
+				},
+				enumerable: true
+			})
+		}
+	}
 	for (let i in info.event) {
 		const method = info.event[i]
-		element.addEventListener(i, () => state.$methods[method](), false)
+		element.addEventListener(i, () => {
+			if (state.$methods[method]) state.$methods[method](state)
+			else warn(`No method named "${method}" found!`)
+		}, false)
 	}
 	return element
 }

@@ -1,9 +1,8 @@
 import createElement from './element-creator.js'
 import resolve from './path-resolver.js'
 
-const create = (ast, state) => {
+const create = (ast, state, children) => {
 	const element = createElement(ast[0], state)
-	const children = {}
 
 	for (let i = 1; i < ast.length; i++) {
 		const node = ast[i]
@@ -15,7 +14,7 @@ const create = (ast, state) => {
 			case '[object Array]': {
 				if (Object.prototype.toString.call(node[0]) === '[object Object]') {
 					// Create child element
-					element.appendChild(create(node, state))
+					element.appendChild(create(node, state, children))
 				} else if (Object.prototype.toString.call(node[0]) === '[object String]') {
 					const name = node[node.length - 1]
 					let parentNode = state.$data

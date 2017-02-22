@@ -24,8 +24,13 @@
  * 		{ name: 'branch1' },
  * 		[
  * 			{
- * 				tag: 'p',
- * 				attr: {...},
+ * 				tag: 'input',
+ * 				attr: {
+ * 					type: 'text'
+ * 				},
+ * 				prop: {
+ * 					value: ['input']
+ * 				},
  * 				event: {...}
  * 			},
  * 			'text2',
@@ -44,6 +49,7 @@ import create from './utils/creator.js'
 const render = (component) => {
 	const ast = _ast.get(component)
 	const state = {}
+	const children = {}
 	Object.defineProperties(state, {
 		$data: {
 			value: {}
@@ -52,7 +58,7 @@ const render = (component) => {
 			value: {}
 		}
 	})
-	const element = create(ast, state)
+	const element = create(ast, state, children)
 	// deepAssign(state, data)
 	Object.defineProperty(state, '$element', {
 		value: element
