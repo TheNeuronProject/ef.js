@@ -4,9 +4,6 @@ var ast = [
 		attr: {
 			id: 'id1',
 			class: ['text']
-		},
-		event: {
-			click: 'sendMsg'
 		}
 	},
 	'text0',
@@ -19,11 +16,20 @@ var ast = [
 	['text'],
 	[
 		{
-			tag: 'div'
+			tag: 'div',
+			attr: {
+				style: ['style']
+			}
 		},
 		'text1',
 		['info', 'node1'],
 		{ name: 'branch1' },
+		[
+			{
+				tag: 'br'
+			}
+		],
+		'Message: ',
 		[
 			{
 				tag: 'br'
@@ -45,11 +51,17 @@ var ast = [
 				tag: 'br'
 			}
 		],
+		'Input style here: ',
+		[
+			{
+				tag: 'br'
+			}
+		],
 		[
 			{
 				tag: 'textarea',
 				prop: {
-					value: ['text']
+					value: ['style']
 				}
 			}
 		],
@@ -60,6 +72,15 @@ var ast = [
 		],
 		['text'],
 		'text2'
+	],
+	[
+		{
+			tag: 'button',
+			event: {
+				click: 'sendMsg'
+			}
+		},
+		'sendMsg'
 	],
 	{ name: 'branch2' }
 ]
@@ -86,11 +107,13 @@ var ast = [
 
 var component = new ef(ast)
 
-var state = component.$render()
+var state = component.render()
 
-// state.branch1 = component
+state.branch2 = [
+	component.render(),
+	component.render()
+]
 
-// state.$methods.sendMsg = () => alert('Message1 sent!')
-// state.branch1.$methods.sendMsg = () => alert('Message2 sent!')
+state.$methods.sendMsg = (thisState) => alert(`The message is "${thisState.$data.text}"!`)
 
 document.querySelector('body').appendChild(state.$element)

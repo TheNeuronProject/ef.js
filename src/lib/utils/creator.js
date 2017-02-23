@@ -32,6 +32,7 @@ const create = ({ ast, state, children, subscriber }) => {
 							return subscriberNode.value
 						},
 						set(value) {
+							if (subscriberNode.value === value) return
 							subscriberNode.value = value
 							for (let j of subscriberNode) j(value)
 						},
@@ -48,14 +49,30 @@ const create = ({ ast, state, children, subscriber }) => {
 						return children[node.name]
 					},
 					set(value) {
+						if (children[node.name] && children[node.name].value === value) return
+						const fragment = document.createDocumentFragment()
 						const parent = placeholder.parentNode
+
+						// Identify types of original value and new value
+						const oldValType = Object.prototype.toString.call(children[node.name])
+						const newValType = Object.prototype.toString.call(value)
+
 						// Remove the old element if updated
-						if (children[node.name] && children[node.name].$element) parent.removeChild(children[node.name].$element)
+						if (children[node.name]) {
+							if (oldValType === '[object Array]') {
+								for (let j of children[node.name]) parent.removeChild(j.$element)
+							} else parent.removeChild(children[node.name].$element)
+						}
 
 						// Attach new element
-						const sibling = placeholder.nextSibling
+						if (newValType === '[object Array]') {
+							for (let j of value) fragment.appendChild(j.$element)
+						} else fragment.appendChild(value.$element)
+
+						// Update stored value
 						children[node.name] = value
-						parent.insertBefore(children[node.name].$element, sibling)
+						// Append to current component
+						parent.insertBefore(fragment, placeholder.nextSibling)
 					},
 					enumerable: true
 				})

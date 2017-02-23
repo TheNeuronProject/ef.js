@@ -17,7 +17,7 @@ const ef = class {
 		_ast.set(this, ast)
 	}
 
-	$render(data) {
+	render(data) {
 		return render(this, data)
 	}
 }

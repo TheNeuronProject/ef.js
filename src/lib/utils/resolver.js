@@ -2,7 +2,7 @@
 const resolvePath = (arr, obj) => {
 	for (let i = 0; i < arr.length - 1; i++) {
 		const name = arr[i]
-		obj[name] = obj[name] || {}
+		if (!obj[name]) Object.defineProperty(obj, name, { value: {} })
 		obj = obj[name]
 	}
 	return obj
@@ -16,7 +16,7 @@ const resolve = ({ arr, name, parentNode, subscriberNode }) => {
 	subscriberNode[name] = subscriberNode[name] || []
 	subscriberNode = subscriberNode[name]
 	subscriberNode.value = subscriberNode.value || null
-	return { parentNode, subscriberNode}
+	return { parentNode, subscriberNode }
 }
 
 export default resolve

@@ -22,6 +22,7 @@ const createElement = (info, state, subscriber) => {
 					return subscriberNode.value
 				},
 				set(value) {
+					if (subscriberNode.value === value) return
 					subscriberNode.value = value
 					for (let j of subscriberNode) j(value)
 				},
@@ -49,6 +50,7 @@ const createElement = (info, state, subscriber) => {
 					return subscriberNode.value
 				},
 				set(value) {
+					if (subscriberNode.value === value) return
 					subscriberNode.value = value
 					for (let j of subscriberNode) j(value)
 				},
@@ -57,6 +59,7 @@ const createElement = (info, state, subscriber) => {
 
 			if (typeof prop === 'object' && (i === 'value' || i === 'checked')) {
 				const updateOthers = (value) => {
+					if (subscriberNode.value === value) return
 					subscriberNode.value = value
 					for (let j of subscriberNode) {
 						if (j !== handler) j(value)
