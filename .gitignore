@@ -15,7 +15,7 @@ cache/
 
 # Project files
 dist/*
-test/*.dev.js
+test/ef.dev.js
 
 # node modules
 node_modules/

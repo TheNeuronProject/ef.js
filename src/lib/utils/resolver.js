@@ -2,7 +2,10 @@
 const resolvePath = (arr, obj) => {
 	for (let i = 0; i < arr.length - 1; i++) {
 		const name = arr[i]
-		if (!obj[name]) Object.defineProperty(obj, name, { value: {} })
+		if (!obj[name]) Object.defineProperty(obj, name, {
+			value: {},
+			enumerable: true
+		})
 		obj = obj[name]
 	}
 	return obj

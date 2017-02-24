@@ -7,6 +7,11 @@ var ast = [
 		}
 	},
 	'text0',
+	[
+		{
+			tag: 'br'
+		}
+	],
 	['root', 'text'],
 	[
 		{
@@ -108,12 +113,21 @@ var ast = [
 var component = new ef(ast)
 
 var state = component.render()
+var state2 = component.render()
+var state3 = component.render()
+var state4 = component.render()
 
-state.branch2 = [
-	component.render(),
-	component.render()
-]
+state.branch2 = [state2, state3]
 
-state.$methods.sendMsg = (thisState) => alert(`The message is "${thisState.$data.text}"!`)
+state2.branch2 = state4
+
+state.$data.text = 'box'
+state2.$data.text = 'box'
+state3.$data.text = 'box'
+state4.$data.text = 'box'
+
+state4.$data.root.text = 'On this node that button works.'
+
+state4.$methods.sendMsg = (thisState) => alert(`The message is "${thisState.$data.text}"!`)
 
 document.querySelector('body').appendChild(state.$element)

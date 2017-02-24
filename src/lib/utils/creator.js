@@ -1,5 +1,7 @@
 import createElement from './element-creator.js'
 import resolve from './resolver.js'
+import DOM from './dom-helper.js'
+import { removeItem } from './array-helper.js'
 
 const create = ({ ast, state, children, subscriber }) => {
 	const element = createElement(ast[0], state, subscriber)
@@ -8,13 +10,13 @@ const create = ({ ast, state, children, subscriber }) => {
 		const node = ast[i]
 		switch (Object.prototype.toString.call(node)) {
 			case '[object String]': {
-				element.appendChild(document.createTextNode(node))
+				DOM.append(element, document.createTextNode(node))
 				break
 			}
 			case '[object Array]': {
 				if (Object.prototype.toString.call(node[0]) === '[object Object]') {
 					// Create child element
-					element.appendChild(create({ ast: node, state, children, subscriber }))
+					DOM.append(element, create({ ast: node, state, children, subscriber }))
 				} else if (Object.prototype.toString.call(node[0]) === '[object String]') {
 					const name = node[node.length - 1]
 					const textNode = document.createTextNode('')
@@ -38,7 +40,7 @@ const create = ({ ast, state, children, subscriber }) => {
 						},
 						enumerable: true
 					})
-					element.appendChild(textNode)
+					DOM.append(element, textNode)
 				}
 				break
 			}
@@ -51,35 +53,47 @@ const create = ({ ast, state, children, subscriber }) => {
 					set(value) {
 						if (children[node.name] && children[node.name].value === value) return
 						const fragment = document.createDocumentFragment()
-						const parent = placeholder.parentNode
 
 						// Identify types of original value and new value
 						const oldValType = Object.prototype.toString.call(children[node.name])
 						const newValType = Object.prototype.toString.call(value)
 
-						// Remove the old element if updated
+						// Update components
 						if (children[node.name]) {
 							if (oldValType === '[object Array]') {
-								for (let j of children[node.name]) parent.removeChild(j.$element)
-							} else parent.removeChild(children[node.name].$element)
-						}
-
-						// Attach new element
-						if (newValType === '[object Array]') {
-							for (let j of value) fragment.appendChild(j.$element)
-						} else fragment.appendChild(value.$element)
+								if (newValType === '[object Array]') {
+									for (let j of value) {
+										DOM.append(fragment, j.$element)
+										removeItem(children[node.name], j)
+									}
+								} else if (newValType === '[object Object]') {
+									DOM.append(fragment, value.$element)
+									removeItem(children[node.name], value)
+								}
+								for (let j of children[node.name]) DOM.remove(j.$element)
+							} else if (newValType === '[object Array]') {
+								for (let j of value) DOM.append(fragment, j.$element)
+								if (value.indexOf(children[node.name]) === -1) DOM.remove(children[node.name].$element)
+							} else {
+								if (newValType === '[object Object]') DOM.append(fragment, value.$element)
+								DOM.remove(children[node.name].$element)
+							}
+						} else if (newValType === '[object Array]') for (let j of value) DOM.append(fragment, j.$element)
+						else if (newValType === '[object Object]') DOM.append(fragment, value.$element)
 
 						// Update stored value
 						children[node.name] = value
 						// Append to current component
-						parent.insertBefore(fragment, placeholder.nextSibling)
+						DOM.before(placeholder, fragment)
 					},
 					enumerable: true
 				})
-				element.appendChild(placeholder)
+				DOM.append(element, placeholder)
 				break
 			}
-			default:
+			default: {
+				throw new TypeError('Not a standard ef.js AST!')
+			}
 		}
 	}
 
