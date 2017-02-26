@@ -1,15 +1,19 @@
 import createElement from './element-creator.js'
 import DOM from './dom-helper.js'
+import ARR from './array-helper.js'
+import DOMARR from './dom-arr-helper.js'
 import { resolve } from './resolver.js'
-import { removeItem } from './array-helper.js'
 
 const create = ({ ast, state, children, subscriber }) => {
+	// First create an element according to the description
 	const element = createElement(ast[0], state, subscriber)
 
+	// Append child nodes
 	for (let i = 1; i < ast.length; i++) {
 		const node = ast[i]
 		switch (Object.prototype.toString.call(node)) {
 			case '[object String]': {
+				// Static text node
 				DOM.append(element, document.createTextNode(node))
 				break
 			}
@@ -18,6 +22,7 @@ const create = ({ ast, state, children, subscriber }) => {
 					// Create child element
 					DOM.append(element, create({ ast: node, state, children, subscriber }))
 				} else if (Object.prototype.toString.call(node[0]) === '[object String]') {
+					// Data binding text node
 					const name = node[node.length - 1]
 					const textNode = document.createTextNode('')
 					const { parentNode, subscriberNode } = resolve({
@@ -26,9 +31,11 @@ const create = ({ ast, state, children, subscriber }) => {
 						parentNode: state.$data,
 						subscriberNode: subscriber
 					})
+					// Subscribe value changing
 					subscriberNode.push((value) => {
 						textNode.textContent = value
 					})
+					// Bind operating methods if not exist
 					if (typeof parentNode[name] === 'undefined') Object.defineProperty(parentNode, name, {
 						get() {
 							return subscriberNode.value
@@ -48,6 +55,11 @@ const create = ({ ast, state, children, subscriber }) => {
 				const placeholder = document.createTextNode('')
 				Object.defineProperty(state, node.name, {
 					get() {
+						if (Object.prototype.toString.call(children[node.name]) === '[object Array]') {
+							const newArr = ARR.copy(children[node.name])
+							for (let i in DOMARR) newArr[i] = DOMARR[i].bind(children[node.name])
+							return newArr
+						}
 						return children[node.name]
 					},
 					set(value) {
@@ -64,11 +76,11 @@ const create = ({ ast, state, children, subscriber }) => {
 								if (newValType === '[object Array]') {
 									for (let j of value) {
 										DOM.append(fragment, j.$element)
-										removeItem(children[node.name], j)
+										ARR.remove(children[node.name], j)
 									}
 								} else if (newValType === '[object Object]') {
 									DOM.append(fragment, value.$element)
-									removeItem(children[node.name], value)
+									ARR.remove(children[node.name], value)
 								}
 								for (let j of children[node.name]) DOM.remove(j.$element)
 							} else if (newValType === '[object Array]') {
@@ -82,8 +94,7 @@ const create = ({ ast, state, children, subscriber }) => {
 						else if (newValType === '[object Object]') DOM.append(fragment, value.$element)
 
 						// Update stored value
-						if (newValType === '[object Array]') children[node.name] = value.slice(0)
-						else children[node.name] = value
+						children[node.name] = value
 						// Append to current component
 						DOM.before(placeholder, fragment)
 					},

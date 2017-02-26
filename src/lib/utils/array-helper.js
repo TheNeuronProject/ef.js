@@ -1,6 +1,40 @@
-const removeItem = (arr, item) => {
-	const index = arr.indexOf(item)
-	if (index > -1) arr.splice(index, 1)
+const proto = Array.prototype
+
+const ARR = {
+	copy(arr) {
+		return proto.slice.call(arr, 0)
+	},
+	pop(arr) {
+		return proto.pop.call(arr)
+	},
+	push(arr, ...items) {
+		return proto.push.apply(arr, items)
+	},
+	remove(arr, item) {
+		const index = proto.indexOf.call(arr, item)
+		if (index > -1) {
+			proto.splice.call(arr, index, 1)
+			return item
+		}
+	},
+	reverse(arr) {
+		return proto.reverse.call(arr)
+	},
+	shift(arr) {
+		return proto.shift.call(arr)
+	},
+	slice(arr, index, length) {
+		return proto.slice.call(arr, index, length)
+	},
+	sort(arr, fn) {
+		return proto.sort.call(arr, fn)
+	},
+	splice(arr, ...args) {
+		return proto.splice.apply(arr, args)
+	},
+	unshift(arr, ...items) {
+		return proto.unshift.apply(arr, items)
+	}
 }
 
-export { removeItem }
+export default ARR

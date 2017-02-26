@@ -128,6 +128,6 @@ state4.$data.text = 'box'
 
 state4.$data.root.text = 'On this node that button works.'
 
-state4.$methods.sendMsg = (thisState) => alert(`The message is "${thisState.$data.text}"!`)
+state4.$methods.sendMsg = function(thisState) { alert('The message is "' + thisState.$data.text + '"!') }
 
 document.querySelector('body').appendChild(state.$element)

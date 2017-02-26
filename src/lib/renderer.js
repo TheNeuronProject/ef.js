@@ -45,7 +45,7 @@
 import { _ast } from '../share.js'
 import create from './utils/creator.js'
 import { resolvePath } from './utils/resolver'
-import { removeItem } from './utils/array-helper.js'
+import ARR from './utils/array-helper.js'
 // import deepAssign from 'deep-assign'
 
 const resolveSubscriber = (path, subscriber) => {
@@ -62,7 +62,7 @@ const unsubscribe = (path, fn, subscriber) => {
 	const subscriberNode = resolveSubscriber(path, subscriber)
 	const index = subscriberNode.indexOf(fn)
 	if (index === -1) return
-	removeItem(subscriberNode, fn)
+	ARR.remove(subscriberNode, fn)
 }
 
 const render = (component) => {

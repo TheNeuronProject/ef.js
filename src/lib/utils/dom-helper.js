@@ -1,54 +1,55 @@
-const safeZone = document.createDocumentFragment()
+const proto = Node.prototype
+// const safeZone = document.createDocumentFragment()
 
 const DOM = {
-	addClass(node, className) {
-		const classes = className.split(' ')
-		node.classList.add(...classes)
-	},
+	// addClass(node, className) {
+	// 	const classes = className.split(' ')
+	// 	node.classList.add(...classes)
+	// },
 
-	removeClass(node, className) {
-		const classes = className.split(' ')
-		node.classList.remove(...classes)
-	},
+	// removeClass(node, className) {
+	// 	const classes = className.split(' ')
+	// 	node.classList.remove(...classes)
+	// },
 
-	toggleClass(node, className) {
-		const classes = className.split(' ')
-		const classArr = node.className.split(' ')
-		for (let i of classes) {
-			const classIndex = classArr.indexOf(i)
-			if (classIndex > -1) {
-				classArr.splice(classIndex, 1)
-			} else {
-				classArr.push(i)
-			}
-		}
-		node.className = classArr.join(' ').trim()
-	},
+	// toggleClass(node, className) {
+	// 	const classes = className.split(' ')
+	// 	const classArr = node.className.split(' ')
+	// 	for (let i of classes) {
+	// 		const classIndex = classArr.indexOf(i)
+	// 		if (classIndex > -1) {
+	// 			classArr.splice(classIndex, 1)
+	// 		} else {
+	// 			classArr.push(i)
+	// 		}
+	// 	}
+	// 	node.className = classArr.join(' ').trim()
+	// },
 
-	replaceWith(node, newNode) {
-		const parent = node.parentNode
-		if (parent) parent.replaceChild(newNode, node)
-	},
+	// replaceWith(node, newNode) {
+	// 	const parent = node.parentNode
+	// 	if (parent) proto.replaceChild.call(parent, newNode, node)
+	// },
 
-	swap(node, newNode) {
-		const nodeParent = node.parentNode
-		const newNodeParent = newNode.parentNode
-		const nodeSibling = node.nextSibling
-		const newNodeSibling = newNode.nextSibling
-		if (nodeParent && newNodeParent) {
-			nodeParent.insertBefore(newNode, nodeSibling)
-			newNodeParent.insertBefore(node, newNodeSibling)
-		}
-	},
+	// swap(node, newNode) {
+	// 	const nodeParent = node.parentNode
+	// 	const newNodeParent = newNode.parentNode
+	// 	const nodeSibling = node.nextSibling
+	// 	const newNodeSibling = newNode.nextSibling
+	// 	if (nodeParent && newNodeParent) {
+	// 		proto.insertBefore.call(nodeParent, newNode, nodeSibling)
+	// 		proto.insertBefore.call(newNodeParent, node, newNodeSibling)
+	// 	}
+	// },
 
 	before(node, ...nodes) {
 		if (node.parentNode) {
 			const tempFragment = document.createDocumentFragment()
 			nodes.reverse()
 			for (let i of nodes) {
-				tempFragment.appendChild(i)
+				proto.appendChild.call(tempFragment, i)
 			}
-			node.parentNode.insertBefore(tempFragment, node)
+			proto.insertBefore.call(node.parentNode, tempFragment, node)
 		}
 	},
 
@@ -56,12 +57,12 @@ const DOM = {
 		if (node.parentNode) {
 			const tempFragment = document.createDocumentFragment()
 			for (let i of nodes) {
-				tempFragment.appendChild(i)
+				proto.appendChild.call(tempFragment, i)
 			}
 			if (node.nextSibling) {
-				node.parentNode.insertBefore(tempFragment, node.nextSibling)
+				proto.insertBefore.call(node.parentNode, tempFragment, node.nextSibling)
 			} else {
-				node.parentNode.append(tempFragment)
+				proto.appendChild.call(node.parentNode, tempFragment)
 			}
 		}
 	},
@@ -72,50 +73,50 @@ const DOM = {
 		}
 		const tempFragment = document.createDocumentFragment()
 		for (let i of nodes) {
-			tempFragment.appendChild(i)
+			proto.appendChild.call(tempFragment, i)
 		}
-		node.appendChild(tempFragment)
+		proto.appendChild.call(node, tempFragment)
 	},
 
-	prepend(node, ...nodes) {
-		if ([1,9,11].indexOf(node.nodeType) === -1) {
-			return
-		}
-		const tempFragment = document.createDocumentFragment()
-		nodes.reverse()
-		for (let i of nodes) {
-			tempFragment.appendChild(i)
-		}
-		if (node.firstChild) {
-			node.insertBefore(tempFragment, node.firstChild)
-		} else {
-			node.appendChild(tempFragment)
-		}
-	},
+	// prepend(node, ...nodes) {
+	// 	if ([1,9,11].indexOf(node.nodeType) === -1) {
+	// 		return
+	// 	}
+	// 	const tempFragment = document.createDocumentFragment()
+	// 	nodes.reverse()
+	// 	for (let i of nodes) {
+	// 		proto.appendChild.call(tempFragment, i)
+	// 	}
+	// 	if (node.firstChild) {
+	// 		proto.insertBefore.call(node, tempFragment, node.firstChild)
+	// 	} else {
+	// 		proto.appendChild.call(node, tempFragment)
+	// 	}
+	// },
 
-	appendTo(node, newNode) {
-		newNode.appendChild(node)
-	},
+	// appendTo(node, newNode) {
+	// 	proto.appendChild.call(newNode, node)
+	// },
 
-	prependTo(node, newNode) {
-		if (newNode.firstChild) {
-			newNode.insertBefore(node, node.firstChild)
-		} else {
-			newNode.appendChild(node)
-		}
-	},
+	// prependTo(node, newNode) {
+	// 	if (newNode.firstChild) {
+	// 		proto.insertBefore.call(newNode, node, node.firstChild)
+	// 	} else {
+	// 		proto.appendChild.call(newNode, node)
+	// 	}
+	// },
 
-	empty(node) {
-		node.innerHTML = ''
-	},
+	// empty(node) {
+	// 	node.innerHTML = ''
+	// },
 
 	remove(node) {
-		node.parentNode.removeChild(node)
+		proto.removeChild.call(node.parentNode, node)
 	},
 
-	safeRemove(node) {
-		safeZone.appendChild(node)
-	}
+	// safeRemove(node) {
+	// 	proto.appendChild.call(safeZone, node)
+	// }
 }
 
 export default DOM
