@@ -1,6 +1,6 @@
 import createElement from './element-creator.js'
-import resolve from './resolver.js'
 import DOM from './dom-helper.js'
+import { resolve } from './resolver.js'
 import { removeItem } from './array-helper.js'
 
 const create = ({ ast, state, children, subscriber }) => {
@@ -21,7 +21,7 @@ const create = ({ ast, state, children, subscriber }) => {
 					const name = node[node.length - 1]
 					const textNode = document.createTextNode('')
 					const { parentNode, subscriberNode } = resolve({
-						arr: node,
+						path: node,
 						name: name,
 						parentNode: state.$data,
 						subscriberNode: subscriber
@@ -36,7 +36,7 @@ const create = ({ ast, state, children, subscriber }) => {
 						set(value) {
 							if (subscriberNode.value === value) return
 							subscriberNode.value = value
-							for (let j of subscriberNode) j(value)
+							for (let j of subscriberNode) j.call(state, value)
 						},
 						enumerable: true
 					})
@@ -82,7 +82,8 @@ const create = ({ ast, state, children, subscriber }) => {
 						else if (newValType === '[object Object]') DOM.append(fragment, value.$element)
 
 						// Update stored value
-						children[node.name] = value
+						if (newValType === '[object Array]') children[node.name] = value.slice(0)
+						else children[node.name] = value
 						// Append to current component
 						DOM.before(placeholder, fragment)
 					},

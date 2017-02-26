@@ -8,13 +8,12 @@ import render from './lib/renderer.js'
 
 // Construct the class
 const ef = class {
-	// constructor(template) {
-	// 	if (!template) throw new Error('Cannot create new component without template!')
-	// 	_ast.set(this, parse(template))
-	// }
 
-	constructor(ast) {
-		_ast.set(this, ast)
+	constructor(value) {
+		// const valType = Object.prototype.toString.call(value)
+		// if (valType === '[object String]') value = parse(value)
+		// else if (valType !== '[object Array]') throw new TypeError('Cannot create new component without proper template or AST!')
+		_ast.set(this, value)
 	}
 
 	render(data) {

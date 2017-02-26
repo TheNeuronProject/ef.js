@@ -1,7 +1,7 @@
 // Resolve an array described path to an object
-const resolvePath = (arr, obj) => {
-	for (let i = 0; i < arr.length - 1; i++) {
-		const name = arr[i]
+const resolvePath = (path, obj) => {
+	for (let i = 0; i < path.length - 1; i++) {
+		const name = path[i]
 		if (!obj[name]) Object.defineProperty(obj, name, {
 			value: {},
 			enumerable: true
@@ -11,10 +11,10 @@ const resolvePath = (arr, obj) => {
 	return obj
 }
 
-const resolve = ({ arr, name, parentNode, subscriberNode }) => {
-	if (arr.length - 1 > 0) {
-		parentNode = resolvePath(arr, parentNode)
-		subscriberNode = resolvePath(arr, subscriberNode)
+const resolve = ({ path, name, parentNode, subscriberNode }) => {
+	if (path.length - 1 > 0) {
+		parentNode = resolvePath(path, parentNode)
+		subscriberNode = resolvePath(path, subscriberNode)
 	}
 	subscriberNode[name] = subscriberNode[name] || []
 	subscriberNode = subscriberNode[name]
@@ -22,4 +22,4 @@ const resolve = ({ arr, name, parentNode, subscriberNode }) => {
 	return { parentNode, subscriberNode }
 }
 
-export default resolve
+export { resolvePath, resolve }

@@ -44,7 +44,26 @@
 
 import { _ast } from '../share.js'
 import create from './utils/creator.js'
+import { resolvePath } from './utils/resolver'
+import { removeItem } from './utils/array-helper.js'
 // import deepAssign from 'deep-assign'
+
+const resolveSubscriber = (path, subscriber) => {
+	const pathArr = path.split('.')
+	return resolvePath(pathArr, subscriber)[pathArr[pathArr.length - 1]]
+}
+
+const subscribe = (path, fn, subscriber) => {
+	const subscriberNode = resolveSubscriber(path, subscriber)
+	if (subscriberNode.indexOf(fn) === -1) subscriberNode.push(fn)
+}
+
+const unsubscribe = (path, fn, subscriber) => {
+	const subscriberNode = resolveSubscriber(path, subscriber)
+	const index = subscriberNode.indexOf(fn)
+	if (index === -1) return
+	removeItem(subscriberNode, fn)
+}
 
 const render = (component) => {
 	const ast = _ast.get(component)
@@ -57,6 +76,16 @@ const render = (component) => {
 		},
 		$methods: {
 			value: {}
+		},
+		$subscribe: {
+			value: (path, fn) => {
+				subscribe(path, fn, subscriber)
+			}
+		},
+		$unsubscribe: {
+			value: (path, fn) => {
+				unsubscribe(path, fn, subscriber)
+			}
 		}
 	})
 	const element = create({ ast, state, children, subscriber })

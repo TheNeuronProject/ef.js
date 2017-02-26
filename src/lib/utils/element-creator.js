@@ -1,5 +1,5 @@
 import { warn } from '../../debug.js'
-import resolve from './resolver.js'
+import { resolve } from './resolver.js'
 
 const createElement = (info, state, subscriber) => {
 	const element = document.createElement(info.tag)
@@ -9,7 +9,7 @@ const createElement = (info, state, subscriber) => {
 		else {
 			const name = attr[attr.length - 1]
 			const { parentNode, subscriberNode } = resolve({
-				arr: attr,
+				path: attr,
 				name: name,
 				parentNode: state.$data,
 				subscriberNode: subscriber
@@ -24,7 +24,7 @@ const createElement = (info, state, subscriber) => {
 				set(value) {
 					if (subscriberNode.value === value) return
 					subscriberNode.value = value
-					for (let j of subscriberNode) j(value)
+					for (let j of subscriberNode) j.call(state, value)
 				},
 				enumerable: true
 			})
@@ -36,7 +36,7 @@ const createElement = (info, state, subscriber) => {
 		else {
 			const name = prop[prop.length - 1]
 			const { parentNode, subscriberNode } = resolve({
-				arr: prop,
+				path: prop,
 				name: name,
 				parentNode: state.$data,
 				subscriberNode: subscriber
@@ -52,7 +52,7 @@ const createElement = (info, state, subscriber) => {
 				set(value) {
 					if (subscriberNode.value === value) return
 					subscriberNode.value = value
-					for (let j of subscriberNode) j(value)
+					for (let j of subscriberNode) j.call(state, value)
 				},
 				enumerable: true
 			})
@@ -62,7 +62,7 @@ const createElement = (info, state, subscriber) => {
 					if (subscriberNode.value === value) return
 					subscriberNode.value = value
 					for (let j of subscriberNode) {
-						if (j !== handler) j(value)
+						if (j !== handler) j.call(state, value)
 					}
 				}
 				if (i === 'value') {
