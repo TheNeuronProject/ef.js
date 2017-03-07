@@ -28,7 +28,7 @@ var ast = [
 		},
 		'text1',
 		['info', 'node1'],
-		{ name: 'branch1' },
+		{ name: 'branch', type: 'node' },
 		[
 			{
 				tag: 'br'
@@ -87,7 +87,7 @@ var ast = [
 		},
 		'sendMsg'
 	],
-	{ name: 'branch2' }
+	{ name: 'list', type: 'list' }
 ]
 
 // var data = {
@@ -117,15 +117,18 @@ var state2 = component.render()
 var state3 = component.render()
 var state4 = component.render()
 
-state.branch2 = [state2, state3]
+state.list = [state2, state3]
 
-state2.branch2 = state4
+state2.branch = state4
 
 state.$data.text = 'box'
 state2.$data.text = 'box'
 state3.$data.text = 'box'
 state4.$data.text = 'box'
 
+state.$data.root.text = 'component 1'
+state2.$data.root.text = 'component 2'
+state3.$data.root.text = 'component 3'
 state4.$data.root.text = 'On this node that button works.'
 
 state4.$methods.sendMsg = function(thisState) { alert('The message is "' + thisState.$data.text + '"!') }

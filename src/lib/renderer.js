@@ -3,46 +3,54 @@
  * 	{
  * 		tag: 'div',
  * 		attr: {
- * 			id: 'id1',
- * 			class: ['root', 'class']
+ * 			class: ['class'],
+ * 			style: ['attr', 'style'],
+ * 			id: 'testdiv',
+ * 			'some-attr': 'some text'
+ * 			content: null
  * 		},
+ * 		prop: {
+ * 			title: ['name'],
+ * 			anotherProperty: 'text',
+ * 			contentEditable: ['edit']
+ * 		}
  * 		event: {
- * 			click: 'sendMsg',
- * 			keydown: 'checkInput'
+ * 			click: 'updateInfo',
+ * 			mousedown: 'setState'
  * 		}
  * 	},
- * 	'text0',
- * 	['root', 'text'],
+ * 	'name: ',
+ * 	['name'],
+ * 	'\nJob: ',
+ * 	['job'],
  * 	[
  * 		{
- * 			tag: 'div',
- * 			attr: {...},
- * 			event: {...}
+ * 			tag: 'br',
+ * 		}
+ * 	],
+ * 	{ name: 'node1', type: 'node' },
+ * 	[
+ * 		{
+ * 			tag: 'p',
+ * 			attr: {
+ * 				class: 'some class name'
+ * 			}
  * 		},
- * 		'text1',
- * 		['info', 'node1'],
- * 		{ name: 'branch1' },
  * 		[
  * 			{
- * 				tag: 'input',
- * 				attr: {
- * 					type: 'text'
- * 				},
- * 				prop: {
- * 					value: ['input']
- * 				},
- * 				event: {...}
+ * 				tag: 'span'
  * 			},
- * 			'text2',
- * 			...
- * 		]
- * 	],
- * 	{ name: 'branch2' },
- * 	[...]
+ * 			'Notice: ',
+ * 			['notice']
+ * 		],
+ * 		'some text',
+ * 		{ name: 'node2', type: 'node' },
+ * 		{ name: 'list1', type: 'list' }
+ * 	]
  * ]
  */
 
-import { _ast } from '../share.js'
+import { warn } from './debug.js'
 import create from './utils/creator.js'
 import { resolvePath } from './utils/resolver'
 import ARR from './utils/array-helper.js'
@@ -55,6 +63,7 @@ const resolveSubscriber = (path, subscriber) => {
 
 const subscribe = (path, fn, subscriber) => {
 	const subscriberNode = resolveSubscriber(path, subscriber)
+	if (!subscriberNode) return warn(`Nothing to subscribe on '${path}'!`)
 	if (subscriberNode.indexOf(fn) === -1) subscriberNode.push(fn)
 }
 
@@ -65,8 +74,7 @@ const unsubscribe = (path, fn, subscriber) => {
 	ARR.remove(subscriberNode, fn)
 }
 
-const render = (component) => {
-	const ast = _ast.get(component)
+const render = (ast) => {
 	const state = {}
 	const children = {}
 	const subscriber = {}

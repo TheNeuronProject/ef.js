@@ -11,7 +11,8 @@ const create = ({ ast, state, children, subscriber }) => {
 	// Append child nodes
 	for (let i = 1; i < ast.length; i++) {
 		const node = ast[i]
-		switch (Object.prototype.toString.call(node)) {
+		const nodeType = Object.prototype.toString.call(node)
+		switch (nodeType) {
 			case '[object String]': {
 				// Static text node
 				DOM.append(element, document.createTextNode(node))
@@ -53,58 +54,51 @@ const create = ({ ast, state, children, subscriber }) => {
 			}
 			case '[object Object]': {
 				const placeholder = document.createTextNode('')
-				Object.defineProperty(state, node.name, {
-					get() {
-						if (Object.prototype.toString.call(children[node.name]) === '[object Array]') {
-							const newArr = ARR.copy(children[node.name])
-							for (let i in DOMARR) newArr[i] = DOMARR[i].bind(children[node.name])
-							return newArr
-						}
-						return children[node.name]
-					},
-					set(value) {
-						if (children[node.name] && children[node.name].value === value) return
-						const fragment = document.createDocumentFragment()
-
-						// Identify types of original value and new value
-						const oldValType = Object.prototype.toString.call(children[node.name])
-						const newValType = Object.prototype.toString.call(value)
-
-						// Update components
-						if (children[node.name]) {
-							if (oldValType === '[object Array]') {
-								if (newValType === '[object Array]') {
-									for (let j of value) {
-										DOM.append(fragment, j.$element)
-										ARR.remove(children[node.name], j)
-									}
-								} else if (newValType === '[object Object]') {
-									DOM.append(fragment, value.$element)
-									ARR.remove(children[node.name], value)
+				if (node.type === 'node') {
+					Object.defineProperty(state, node.name, {
+						get() {
+							return children[node.name]
+						},
+						set(value) {
+							if (children[node.name] && children[node.name].value === value) return
+							// Update component
+							if (children[node.name]) DOM.remove(children[node.name].$element)
+							DOM.after(placeholder, value.$element)
+							// Update stored value
+							children[node.name] = value
+						},
+						enumerable: true
+					})
+				} else if (node.type === 'list') {
+					Object.defineProperty(state, node.name, {
+						get() {
+							return children[node.name]
+						},
+						set(value) {
+							if (children[node.name] && children[node.name].value === value) return
+							const fragment = document.createDocumentFragment()
+							// Update components
+							if (children[node.name]) {
+								for (let j of value) {
+									DOM.append(fragment, j.$element)
+									ARR.remove(children[node.name], j)
 								}
 								for (let j of children[node.name]) DOM.remove(j.$element)
-							} else if (newValType === '[object Array]') {
-								for (let j of value) DOM.append(fragment, j.$element)
-								if (value.indexOf(children[node.name]) === -1) DOM.remove(children[node.name].$element)
-							} else {
-								if (newValType === '[object Object]') DOM.append(fragment, value.$element)
-								DOM.remove(children[node.name].$element)
-							}
-						} else if (newValType === '[object Array]') for (let j of value) DOM.append(fragment, j.$element)
-						else if (newValType === '[object Object]') DOM.append(fragment, value.$element)
-
-						// Update stored value
-						children[node.name] = value
-						// Append to current component
-						DOM.before(placeholder, fragment)
-					},
-					enumerable: true
-				})
+							} else for (let j of value) DOM.append(fragment, j.$element)
+							// Update stored value
+							children[node.name] = Object.assign(value, DOMARR)
+							// Append to current component
+							DOM.after(placeholder, fragment)
+						},
+						enumerable: true
+					})
+				} else throw new TypeError(`Not a standard ef.js AST: Unknown mounting point type '${node.type}'`)
+				// Append placeholder
 				DOM.append(element, placeholder)
 				break
 			}
 			default: {
-				throw new TypeError('Not a standard ef.js AST!')
+				throw new TypeError(`Not a standard ef.js AST: Unknown node type '${nodeType}'`)
 			}
 		}
 	}

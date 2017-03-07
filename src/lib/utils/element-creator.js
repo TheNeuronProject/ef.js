@@ -1,4 +1,4 @@
-import { warn } from '../../debug.js'
+import { warn } from '../debug.js'
 import { resolve } from './resolver.js'
 
 const createElement = (info, state, subscriber) => {

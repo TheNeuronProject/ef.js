@@ -42,16 +42,16 @@ const DOM = {
 	// 	}
 	// },
 
-	before(node, ...nodes) {
-		if (node.parentNode) {
-			const tempFragment = document.createDocumentFragment()
-			nodes.reverse()
-			for (let i of nodes) {
-				proto.appendChild.call(tempFragment, i)
-			}
-			proto.insertBefore.call(node.parentNode, tempFragment, node)
-		}
-	},
+	// before(node, ...nodes) {
+	// 	if (node.parentNode) {
+	// 		const tempFragment = document.createDocumentFragment()
+	// 		nodes.reverse()
+	// 		for (let i of nodes) {
+	// 			proto.appendChild.call(tempFragment, i)
+	// 		}
+	// 		proto.insertBefore.call(node.parentNode, tempFragment, node)
+	// 	}
+	// },
 
 	after(node, ...nodes) {
 		if (node.parentNode) {
