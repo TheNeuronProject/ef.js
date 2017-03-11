@@ -1,0 +1,22 @@
+this is a comment
+>div
+	#class = {{class}}
+	#style = {{attr.style}}
+	#id = testdiv
+	#some-attr = some text
+	#content =
+	%title = {{name}}
+	%anotherProperty = text
+	%contentEditable = {{edit}}
+	@click = updateInfo
+	@mousedown = setState
+	.Name: {{name}}&nJob: {{job}}
+	>br
+	-node1
+	>p
+		#class = some class name
+		>span
+			.Notice: {{notice}}
+		.some text
+		-node2
+		+list1

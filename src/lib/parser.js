@@ -37,6 +37,4 @@ const parse = (template, parser) => {
 	return parser(template)
 }
 
-window.parse = parse
-
 export default parse

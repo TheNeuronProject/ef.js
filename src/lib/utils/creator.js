@@ -2,7 +2,9 @@ import createElement from './element-creator.js'
 import DOM from './dom-helper.js'
 import ARR from './array-helper.js'
 import DOMARR from './dom-arr-helper.js'
+import { _placeHolder } from './dom-arr-helper.js'
 import { resolve } from './resolver.js'
+import { warnAttachment } from '../debug.js'
 
 const create = ({ ast, state, children, subscriber }) => {
 	// First create an element according to the description
@@ -61,6 +63,7 @@ const create = ({ ast, state, children, subscriber }) => {
 						},
 						set(value) {
 							if (children[node.name] && children[node.name].value === value) return
+							if (value.$attached) return warnAttachment(value)
 							// Update component
 							if (children[node.name]) DOM.remove(children[node.name].$element)
 							DOM.after(placeholder, value.$element)
@@ -70,18 +73,25 @@ const create = ({ ast, state, children, subscriber }) => {
 						enumerable: true
 					})
 				} else if (node.type === 'list') {
+					const initArr = Object.assign([], DOMARR)
+					_placeHolder.set(initArr, placeholder)
+					children[node.name] = initArr
 					Object.defineProperty(state, node.name, {
 						get() {
 							return children[node.name]
 						},
 						set(value) {
 							if (children[node.name] && children[node.name].value === value) return
+							_placeHolder.set(value, placeholder)
 							const fragment = document.createDocumentFragment()
 							// Update components
 							if (children[node.name]) {
 								for (let j of value) {
-									DOM.append(fragment, j.$element)
-									ARR.remove(children[node.name], j)
+									if (j.$attached) warnAttachment(j)
+									else {
+										DOM.append(fragment, j.$element)
+										ARR.remove(children[node.name], j)
+									}
 								}
 								for (let j of children[node.name]) DOM.remove(j.$element)
 							} else for (let j of value) DOM.append(fragment, j.$element)

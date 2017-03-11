@@ -74,6 +74,10 @@ const unsubscribe = (path, fn, subscriber) => {
 	ARR.remove(subscriberNode, fn)
 }
 
+const checkAttached = function () {
+	return !!this.$element.parentNode
+}
+
 const render = (ast) => {
 	const state = {}
 	const children = {}
@@ -94,6 +98,9 @@ const render = (ast) => {
 			value: (path, fn) => {
 				unsubscribe(path, fn, subscriber)
 			}
+		},
+		$attached: {
+			get: checkAttached
 		}
 	})
 	const element = create({ ast, state, children, subscriber })

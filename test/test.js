@@ -110,12 +110,12 @@ var ast = [
 // 	}
 // }
 
-var component = new ef(ast)
+var module = new ef(ast)
 
-var state = component.render()
-var state2 = component.render()
-var state3 = component.render()
-var state4 = component.render()
+var state = module.render()
+var state2 = module.render()
+var state3 = module.render()
+var state4 = module.render()
 
 state.list = [state2, state3]
 
