@@ -117,19 +117,29 @@ var state2 = module.render()
 var state3 = module.render()
 var state4 = module.render()
 
-state.list = [state2, state3]
+// state.list = [state2, state3]
 
 state2.branch = state4
 
-state.$data.text = 'box'
+// state.$data.text = 'box'
 state2.$data.text = 'box'
 state3.$data.text = 'box'
 state4.$data.text = 'box'
 
-state.$data.root.text = 'component 1'
+// state.$data.root.text = 'component 1'
 state2.$data.root.text = 'component 2'
 state3.$data.root.text = 'component 3'
 state4.$data.root.text = 'On this node that button works.'
+
+state.$update({
+	$data: {
+		text: 'box',
+		root: {
+			text: 'component 1'
+		}
+	},
+	list: [state2, state3]
+})
 
 state4.$methods.sendMsg = function(thisState) { alert('The message is "' + thisState.$data.text + '"!') }
 

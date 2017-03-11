@@ -4,12 +4,13 @@
 import { info } from './lib/debug.js'
 import parse from './lib/parser.js'
 import render from './lib/renderer.js'
+import eftParser from './lib/utils/eft-parser.js'
 
 // Mock provate properties
 const _ast = new WeakMap()
 
 // Set parser
-let parser = null
+let parser = eftParser
 
 // Construct the class
 const ef = class {
@@ -21,12 +22,18 @@ const ef = class {
 		_ast.set(this, value)
 	}
 
-	render() {
-		return render(_ast.get(this))
+	render(state) {
+		const result = render(_ast.get(this))
+		if (state) render.$update(state)
+		return result
 	}
 
 	static setPatser(newParser) {
 		parser = newParser
+	}
+
+	static parse(template) {
+		eftParser(template)
 	}
 }
 

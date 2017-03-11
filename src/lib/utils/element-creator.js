@@ -1,5 +1,6 @@
 import { warn } from '../debug.js'
 import { resolve } from './resolver.js'
+import subscribe from './subscriber.js'
 
 const createElement = (info, state, subscriber) => {
 	const element = document.createElement(info.tag)
@@ -17,17 +18,7 @@ const createElement = (info, state, subscriber) => {
 			subscriberNode.push((value) => {
 				element.setAttribute(i, value)
 			})
-			if (typeof parentNode[name] === 'undefined') Object.defineProperty(parentNode, name, {
-				get() {
-					return subscriberNode.value
-				},
-				set(value) {
-					if (subscriberNode.value === value) return
-					subscriberNode.value = value
-					for (let j of subscriberNode) j.call(state, value)
-				},
-				enumerable: true
-			})
+			subscribe({subscriberNode, parentNode, name, state})
 		}
 	}
 	for (let i in info.prop) {
@@ -45,17 +36,7 @@ const createElement = (info, state, subscriber) => {
 				element[i] = value
 			}
 			subscriberNode.push(handler)
-			if (typeof parentNode[name] === 'undefined') Object.defineProperty(parentNode, name, {
-				get() {
-					return subscriberNode.value
-				},
-				set(value) {
-					if (subscriberNode.value === value) return
-					subscriberNode.value = value
-					for (let j of subscriberNode) j.call(state, value)
-				},
-				enumerable: true
-			})
+			subscribe({subscriberNode, parentNode, name, state})
 
 			if (typeof prop === 'object' && (i === 'value' || i === 'checked')) {
 				const updateOthers = (value) => {

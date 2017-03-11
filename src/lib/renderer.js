@@ -54,7 +54,7 @@ import { warn } from './debug.js'
 import create from './utils/creator.js'
 import { resolvePath } from './utils/resolver'
 import ARR from './utils/array-helper.js'
-// import deepAssign from 'deep-assign'
+import deepAssign from 'deep-assign'
 
 const resolveSubscriber = (path, subscriber) => {
 	const pathArr = path.split('.')
@@ -78,16 +78,41 @@ const checkAttached = function () {
 	return !!this.$element.parentNode
 }
 
+const update = function (state) {
+	const tmpState = Object.assign({}, state)
+	if (tmpState.$data) {
+		Object.assign(this.$data, tmpState.$data)
+		delete(tmpState.$data)
+	}
+	if (tmpState.$methods) {
+		Object.assign(this.$methods, tmpState.$methods)
+		delete(tmpState.$methods)
+	}
+	Object.assign(this, tmpState)
+}
+
 const render = (ast) => {
 	const state = {}
 	const children = {}
+	const data = {}
+	const methods = {}
 	const subscriber = {}
 	Object.defineProperties(state, {
 		$data: {
-			value: {}
+			get() {
+				return data
+			},
+			set(newData) {
+				deepAssign(data, newData)
+			}
 		},
 		$methods: {
-			value: {}
+			get() {
+				return methods
+			},
+			set(newMethods) {
+				deepAssign(methods, newMethods)
+			}
 		},
 		$subscribe: {
 			value: (path, fn) => {
@@ -101,6 +126,9 @@ const render = (ast) => {
 		},
 		$attached: {
 			get: checkAttached
+		},
+		$update: {
+			value: update
 		}
 	})
 	const element = create({ ast, state, children, subscriber })

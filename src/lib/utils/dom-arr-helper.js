@@ -14,10 +14,8 @@ const DOMARR = {
 	push(...items) {
 		const elements = []
 		for (let i of items) {
-			if (i.$attached) {
-				warnAttachment(i)
-				ARR.remove(items, i)
-			} else ARR.push(elements, i.$element)
+			if (i.$attached) return warnAttachment(i)
+			ARR.push(elements, i.$element)
 		}
 		if (this.length === 0) DOM.after(_placeHolder.get(this), ...elements)
 		else DOM.after(this[this.length - 1].$element, ...elements)
@@ -79,10 +77,8 @@ const DOMARR = {
 		DOM.before(this[0].$element, insertPoint)
 		const elements = []
 		for (let i of items) {
-			if (i.$attached) {
-				warnAttachment(i)
-				ARR.remove(items, i)
-			} else ARR.push(elements, i.$element)
+			if (i.$attached) return warnAttachment(i)
+			ARR.push(elements, i.$element)
 		}
 		DOM.after(insertPoint, ...elements)
 		DOM.remove(insertPoint)
@@ -90,5 +86,4 @@ const DOMARR = {
 	}
 }
 
-export default DOMARR
-export { _placeHolder }
+export { DOMARR, _placeHolder }

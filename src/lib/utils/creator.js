@@ -1,9 +1,9 @@
 import createElement from './element-creator.js'
 import DOM from './dom-helper.js'
 import ARR from './array-helper.js'
-import DOMARR from './dom-arr-helper.js'
-import { _placeHolder } from './dom-arr-helper.js'
+import { DOMARR, _placeHolder } from './dom-arr-helper.js'
 import { resolve } from './resolver.js'
+import subscribe from './subscriber.js'
 import { warnAttachment } from '../debug.js'
 
 const create = ({ ast, state, children, subscriber }) => {
@@ -39,17 +39,7 @@ const create = ({ ast, state, children, subscriber }) => {
 						textNode.textContent = value
 					})
 					// Bind operating methods if not exist
-					if (typeof parentNode[name] === 'undefined') Object.defineProperty(parentNode, name, {
-						get() {
-							return subscriberNode.value
-						},
-						set(value) {
-							if (subscriberNode.value === value) return
-							subscriberNode.value = value
-							for (let j of subscriberNode) j.call(state, value)
-						},
-						enumerable: true
-					})
+					subscribe({subscriberNode, parentNode, name, state})
 					DOM.append(element, textNode)
 				}
 				break
@@ -87,11 +77,9 @@ const create = ({ ast, state, children, subscriber }) => {
 							// Update components
 							if (children[node.name]) {
 								for (let j of value) {
-									if (j.$attached) warnAttachment(j)
-									else {
-										DOM.append(fragment, j.$element)
-										ARR.remove(children[node.name], j)
-									}
+									if (j.$attached) return warnAttachment(j)
+									DOM.append(fragment, j.$element)
+									ARR.remove(children[node.name], j)
 								}
 								for (let j of children[node.name]) DOM.remove(j.$element)
 							} else for (let j of value) DOM.append(fragment, j.$element)
