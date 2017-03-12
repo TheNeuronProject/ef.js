@@ -24,6 +24,9 @@ const module2 = new ef(ast)
 const component1 = module1.render() // Create a component without data
 const component2 = module2.render(data) // Create a component and then updates it's data
 
+component1.$element // The DOM element of component1
+component2.$element // The DOM element of component2
+
 component1.$data.something = 'something new' // Update the binding data 'something'
 component2.$methods.someMethod = (state, e) => {
 	state.$data.something = 'something new'
@@ -52,6 +55,8 @@ Here is an example template.
 ```
 Tree structure
 Lines not started with >#%@.+- are considered as comments
+The escape character of eft is '&', to prevent the conflict with js escapes.
+Except for the change of the character, all the usage should be the same.
 this is a comment
 '>' stands for tag name
 >div
