@@ -10,7 +10,7 @@ const info = logger.info.bind(null, tag)
 const warn = logger.warn.bind(null, tag)
 const error = logger.error.bind(null, tag)
 
-const warnAttachment = state => trace('Please detatch the component before attaching to a new component! Component to be detatched:', state)
+const warnAttachment = state => error('Detatch the component before attaching it to a new component! Component to be detatched:', state)
 
 if (ENV === 'production') {
 	logger.setLevel('error')

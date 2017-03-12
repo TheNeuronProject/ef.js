@@ -1,14 +1,15 @@
 import { warn } from '../debug.js'
 import { resolve } from './resolver.js'
-import subscribe from './subscriber.js'
+import ARR from './array-helper.js'
+import initSubscribe from './subscriber.js'
 
 const createElement = (info, state, subscriber) => {
 	const element = document.createElement(info.tag)
 	for (let i in info.attr) {
-		const attr = info.attr[i]
+		const attr = ARR.copy(info.attr[i])
 		if (typeof attr === 'string') element.setAttribute(i, attr)
 		else {
-			const name = attr[attr.length - 1]
+			const name = attr.pop()
 			const { parentNode, subscriberNode } = resolve({
 				path: attr,
 				name: name,
@@ -18,14 +19,14 @@ const createElement = (info, state, subscriber) => {
 			subscriberNode.push((value) => {
 				element.setAttribute(i, value)
 			})
-			subscribe({subscriberNode, parentNode, name, state})
+			initSubscribe({subscriberNode, parentNode, name, state})
 		}
 	}
 	for (let i in info.prop) {
-		const prop = info.prop[i]
-		if (typeof attr === 'string') element[i] = prop
+		const prop = ARR.copy(info.prop[i])
+		if (typeof prop === 'string') element[i] = prop
 		else {
-			const name = prop[prop.length - 1]
+			const name = prop.pop()
 			const { parentNode, subscriberNode } = resolve({
 				path: prop,
 				name: name,
@@ -36,7 +37,7 @@ const createElement = (info, state, subscriber) => {
 				element[i] = value
 			}
 			subscriberNode.push(handler)
-			subscribe({subscriberNode, parentNode, name, state})
+			initSubscribe({subscriberNode, parentNode, name, state})
 
 			if (typeof prop === 'object' && (i === 'value' || i === 'checked')) {
 				const updateOthers = (value) => {
@@ -55,9 +56,9 @@ const createElement = (info, state, subscriber) => {
 	}
 	for (let i in info.event) {
 		const method = info.event[i]
-		element.addEventListener(i, () => {
-			if (state.$methods[method]) state.$methods[method](state)
-			else warn(`No method named "${method}" found!`)
+		element.addEventListener(i, (e) => {
+			if (state.$methods[method]) state.$methods[method](state, e)
+			else warn(`No method named '${method}' found!`)
 		}, false)
 	}
 	return element

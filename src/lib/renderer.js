@@ -50,21 +50,16 @@
  * ]
  */
 
-import { warn } from './debug.js'
 import create from './utils/creator.js'
-import { resolvePath } from './utils/resolver'
+import { resolvePath, resolve } from './utils/resolver'
+import initSubscribe from './utils/subscriber.js'
 import ARR from './utils/array-helper.js'
 import deepAssign from 'deep-assign'
 
 const resolveSubscriber = (path, subscriber) => {
 	const pathArr = path.split('.')
-	return resolvePath(pathArr, subscriber)[pathArr[pathArr.length - 1]]
-}
-
-const subscribe = (path, fn, subscriber) => {
-	const subscriberNode = resolveSubscriber(path, subscriber)
-	if (!subscriberNode) return warn(`Nothing to subscribe on '${path}'!`)
-	if (subscriberNode.indexOf(fn) === -1) subscriberNode.push(fn)
+	const name = pathArr.pop()
+	return resolvePath(pathArr, subscriber)[name]
 }
 
 const unsubscribe = (path, fn, subscriber) => {
@@ -116,7 +111,16 @@ const render = (ast) => {
 		},
 		$subscribe: {
 			value: (path, fn) => {
-				subscribe(path, fn, subscriber)
+				const pathArr = path.split('.')
+				const name = pathArr.pop()
+				const { parentNode, subscriberNode } = resolve({
+					path: pathArr,
+					name: name,
+					parentNode: data,
+					subscriberNode: subscriber
+				})
+				subscriberNode.push(fn)
+				initSubscribe({subscriberNode, parentNode, name, state})
 			}
 		},
 		$unsubscribe: {

@@ -2,7 +2,7 @@ import DOM from './dom-helper.js'
 import ARR from './array-helper.js'
 import { warnAttachment } from '../debug.js'
 
-const _placeHolder = new WeakMap()
+const _anchor = new WeakMap()
 
 const DOMARR = {
 	pop() {
@@ -17,7 +17,7 @@ const DOMARR = {
 			if (i.$attached) return warnAttachment(i)
 			ARR.push(elements, i.$element)
 		}
-		if (this.length === 0) DOM.after(_placeHolder.get(this), ...elements)
+		if (this.length === 0) DOM.after(_anchor.get(this), ...elements)
 		else DOM.after(this[this.length - 1].$element, ...elements)
 		return ARR.push(this, ...items)
 	},
@@ -86,4 +86,4 @@ const DOMARR = {
 	}
 }
 
-export { DOMARR, _placeHolder }
+export { DOMARR, _anchor }

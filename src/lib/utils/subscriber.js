@@ -1,6 +1,5 @@
-const subscribe = ({subscriberNode, parentNode, name, state}) => {
+const initSubscribe = ({subscriberNode, parentNode, name, state}) => {
 	if (typeof parentNode[name] === 'undefined') {
-		subscriberNode.value = ''
 		Object.defineProperty(parentNode, name, {
 			get() {
 				return subscriberNode.value
@@ -15,4 +14,4 @@ const subscribe = ({subscriberNode, parentNode, name, state}) => {
 	}
 }
 
-export default subscribe
+export default initSubscribe

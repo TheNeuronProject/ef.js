@@ -2,11 +2,10 @@ import deepAssign from 'deep-assign'
 
 // Resolve an array described path to an object
 const resolvePath = (path, obj) => {
-	for (let i = 0; i < path.length - 1; i++) {
-		const name = path[i]
-		if (!obj[name]) {
+	for (let i of path) {
+		if (!obj[i]) {
 			const node = {}
-			Object.defineProperty(obj, name, {
+			Object.defineProperty(obj, i, {
 				get() {
 					return node
 				},
@@ -16,19 +15,19 @@ const resolvePath = (path, obj) => {
 				enumerable: true
 			})
 		}
-		obj = obj[name]
+		obj = obj[i]
 	}
 	return obj
 }
 
 const resolve = ({ path, name, parentNode, subscriberNode }) => {
-	if (path.length - 1 > 0) {
+	if (path.length > 0) {
 		parentNode = resolvePath(path, parentNode)
 		subscriberNode = resolvePath(path, subscriberNode)
 	}
 	subscriberNode[name] = subscriberNode[name] || []
 	subscriberNode = subscriberNode[name]
-	subscriberNode.value = subscriberNode.value || null
+	subscriberNode.value = subscriberNode.value || ''
 	return { parentNode, subscriberNode }
 }
 
