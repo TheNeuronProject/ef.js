@@ -46,24 +46,25 @@ const eftParser = (template) => {
 	const lines = template.split(/[\r\n]/)
 	const ast = []
 	let prevDepth = 0
-	let prevType = ''
+	let prevType = 'comment'
 	let currentNode = ast
 	let topExists = false
 	for (let i in lines) {
 		let { depth, content } = getDepth(lines[i])
 
 		if (content) {
-			if (depth < 0 || depth - prevDepth > 1 || topExists) throw new SyntaxError(`Bad indent at line ${parseInt(i, 10) + 1}`)
+			if (depth < 0 || depth - prevDepth > 1 || (depth - prevDepth === 1 && ['comment', 'tag'].indexOf(prevType) === -1) || (depth === 0 && topExists)) throw new SyntaxError(`Bad indent at line ${parseInt(i, 10) + 1}`)
 			const type = content[0]
 			content = content.slice(1)
 			if (!content && typeSymbols.indexOf(type) >= 0) throw new SyntaxError(`Empty content at line ${parseInt(i, 10) + 1}`)
 			// Jump back to parent
-			if (depth < prevDepth || (depth === prevDepth && prevType === '>')) currentNode = resolveDepth(ast, depth)
+			if (depth < prevDepth || (depth === prevDepth && prevType === 'tag')) currentNode = resolveDepth(ast, depth)
 			prevDepth = depth
 
 			switch (type) {
 				case '>': {
-					prevType = '>'
+					topExists = true
+					prevType = 'tag'
 					const newNode = [{
 						tag: content,
 						attr: {},
@@ -75,32 +76,32 @@ const eftParser = (template) => {
 					break
 				}
 				case '#': {
-					prevType = '#'
+					prevType = 'attr'
 					const { name, value } = parseNodeProps(content)
 					currentNode[0].attr[name] = value
 					break
 				}
 				case '%': {
-					prevType = '%'
+					prevType = 'prop'
 					const { name, value } = parseNodeProps(content)
 					currentNode[0].prop[name] = value
 					break
 				}
 				case '@': {
-					prevType = '@'
+					prevType = 'event'
 					const { name, value } = parseNodeProps(content)
 					if (typeof value !== 'string') throw new SyntaxError(`Methods should not be wrapped in mustaches. At line ${parseInt(i, 10) + 1}`)
 					currentNode[0].event[name] = value
 					break
 				}
 				case '.': {
-					prevType = '.'
+					prevType = 'text'
 					const parts = parseText(content)
 					currentNode.push(...parts)
 					break
 				}
 				case '-': {
-					prevType = '-'
+					prevType = 'node'
 					currentNode.push({
 						name: content,
 						type: 'node'
@@ -108,7 +109,7 @@ const eftParser = (template) => {
 					break
 				}
 				case '+': {
-					prevType = '+'
+					prevType = 'list'
 					currentNode.push({
 						name: content,
 						type: 'list'
@@ -116,7 +117,7 @@ const eftParser = (template) => {
 					break
 				}
 				default: {
-					prevType = ''
+					prevType = 'comment'
 				}
 			}
 		}

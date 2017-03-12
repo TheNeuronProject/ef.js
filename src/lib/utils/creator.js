@@ -45,7 +45,10 @@ const create = ({ ast, state, children, subscriber }) => {
 				break
 			}
 			case '[object Object]': {
-				const placeholder = document.createTextNode('')
+				const placeholder = (() => {
+					if (ENV === 'production') return document.createTextNode('')
+					return document.createComment(`Mounting point for '${node.name}'`)
+				})()
 				if (node.type === 'node') {
 					Object.defineProperty(state, node.name, {
 						get() {
