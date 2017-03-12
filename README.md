@@ -7,6 +7,9 @@
 ``` javascript
 import ef from 'ef.js'
 
+ef.setParser(someparser) // Change the default parser for ef.js so you can use a different type of template
+ef.parseEft('Your awesome temolate') // Get ef.js ast using default parser
+
 const template = 'Your awsome template'
 const ast = [/* AST parsed by eft-parser */]
 
