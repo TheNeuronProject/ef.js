@@ -30,7 +30,7 @@
 // 		'+' stands for list mounting point
 // 		+list1
 
-import eftParser from './utils/eft-parser.js'
+import eftParser from 'eft-parser'
 
 const parse = (template, parser) => {
 	if (!parser) parser = eftParser

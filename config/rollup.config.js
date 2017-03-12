@@ -34,7 +34,7 @@ module.exports = {
 			VERSION: JSON.stringify(`${version}.${git.branch()}.${git.short()}`)
 		}),
 		babel({
-			exclude: 'node_modules/**',
+			include: ['node_modules/eft-parser/**', 'src/**'],
 			runtimeHelpers: true
 		}),
 		(process.env.NODE_ENV === 'production' && uglify())
