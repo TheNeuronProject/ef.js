@@ -4,6 +4,9 @@ const ARR = {
 	copy(arr) {
 		return proto.slice.call(arr, 0)
 	},
+	fullCopy(arr) {
+		return JSON.parse(JSON.stringify(arr))
+	},
 	pop(arr) {
 		return proto.pop.call(arr)
 	},

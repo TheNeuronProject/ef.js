@@ -87,6 +87,7 @@ const update = function (state) {
 }
 
 const render = (ast) => {
+	ast = ARR.fullCopy(ast)
 	const state = {}
 	const children = {}
 	const data = {}

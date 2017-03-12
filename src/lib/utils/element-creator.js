@@ -1,12 +1,11 @@
 import { warn } from '../debug.js'
 import { resolve } from './resolver.js'
-import ARR from './array-helper.js'
 import initSubscribe from './subscriber.js'
 
 const createElement = (info, state, subscriber) => {
 	const element = document.createElement(info.tag)
 	for (let i in info.attr) {
-		const attr = ARR.copy(info.attr[i])
+		const attr = info.attr[i]
 		if (typeof attr === 'string') element.setAttribute(i, attr)
 		else {
 			const name = attr.pop()
@@ -23,7 +22,7 @@ const createElement = (info, state, subscriber) => {
 		}
 	}
 	for (let i in info.prop) {
-		const prop = ARR.copy(info.prop[i])
+		const prop = info.prop[i]
 		if (typeof prop === 'string') element[i] = prop
 		else {
 			const name = prop.pop()
