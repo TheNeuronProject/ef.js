@@ -58,7 +58,7 @@ const eftParser = (template) => {
 			content = content.slice(1)
 			if (!content && typeSymbols.indexOf(type) >= 0) throw new SyntaxError(`Empty content at line ${parseInt(i, 10) + 1}`)
 			// Jump back to parent
-			if (depth < prevDepth || (depth === prevDepth && prevType === '>')) currentNode = resolveDepth(ast[0], depth)
+			if (depth < prevDepth || (depth === prevDepth && prevType === '>')) currentNode = resolveDepth(ast, depth)
 			prevDepth = depth
 
 			switch (type) {

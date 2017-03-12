@@ -24,7 +24,7 @@ const ef = class {
 
 	render(state) {
 		const result = render(_ast.get(this))
-		if (state) render.$update(state)
+		if (state) result.$update(state)
 		return result
 	}
 
@@ -32,8 +32,8 @@ const ef = class {
 		parser = newParser
 	}
 
-	static parse(template) {
-		eftParser(template)
+	static parseEft(template) {
+		return eftParser(template)
 	}
 }
 
