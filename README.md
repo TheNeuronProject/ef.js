@@ -41,12 +41,12 @@ component1.listMP.push(componet2) // Mount component2 to list 'listMP' mounting 
 
 ```
 
-## Template format
+## ef.js template(eft) format
 ef.js template is **very srtict to indents**. Only tabs are allowed. Wrong indents could lead to a parsing error.
 
 Here is an example template.
 
-``` javascript
+```
 Tree structure
 Lines not started with >#%@.+- are considered as comments
 this is a comment
@@ -79,6 +79,8 @@ this is a comment
 		'+' stands for list mounting point
 		+list1
 ```
+
+For standalone eft parser see [eft-parser](https://github.com/ClassicOldSong/eft-parser).
 
 ## Run a test
 ```
