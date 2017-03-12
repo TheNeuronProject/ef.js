@@ -9,11 +9,8 @@ import ef from 'ef.js'
 
 const template = 'Your awsome template'
 const ast = [/* AST parsed by eft-parser */]
-const data1 = {
-	$data: {/* Binding data */}
-	$methods: {/* Binding methods */}
-}
-const data2 = {
+
+const data = {
 	$data: {/* Binding data */}
 	$methods: {/* Binding methods */}
 }
@@ -21,8 +18,8 @@ const data2 = {
 const module1 = new ef(template)
 const module2 = new ef(ast)
 
-const component1 = module1.render(data1)
-const component2 = module2.render(data2)
+const component1 = module1.render() // Create a component without data
+const component2 = module2.render(data) // Create a component and then updates it's data
 
 component1.$data.something = 'something new' // Update the binding data 'something'
 component2.$methods.someMethod = (state, e) => {
