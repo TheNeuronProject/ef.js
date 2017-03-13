@@ -99,7 +99,6 @@ var template = 'this is a comment\n' +
 '	#content =\n' +
 '	%title = {{name}}\n' +
 '	%anotherProperty = text\n' +
-'	%contentEditable = {{edit}}\n' +
 '	.Name: {{name}}&nJob: {{job}}\n' +
 '	>br\n' +
 '	-node1\n' +
@@ -121,7 +120,7 @@ var data1 = {
 			notice: 'ooooooops'
 	},
 	$methods: {
-		alertNotice(state) {
+		alertNotice: function (state) {
 			alert(state.$data.notice)
 		}
 	}
@@ -159,7 +158,7 @@ var data2 = {
 		}
 	},
 	$methods: {
-		sendMsg(state) {
+		sendMsg: function (state) {
 			alert('The message is \n"' + state.$data.text + '"!')
 		}
 	},

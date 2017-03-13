@@ -1,6 +1,7 @@
 /* global VERSION */
 
 // Import everything
+import './lib/utils/polyfills.js'
 import { info } from './lib/debug.js'
 import parse from './lib/parser.js'
 import render from './lib/renderer.js'
