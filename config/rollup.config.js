@@ -15,7 +15,7 @@ module.exports = {
 	entry: 'src/ef.js',
 	devDest: 'test/ef.dev.js',
 	proDest: 'dist/ef.min.js',
-	format: 'iife',
+	format: 'umd',
 	sourceMap: 'inline',
 	plugins: [
 		progress({

@@ -47,7 +47,7 @@ const create = ({ ast, state, children, subscriber }) => {
 			case '[object Object]': {
 				const anchor = (() => {
 					if (ENV === 'production') return document.createTextNode('')
-					return document.createComment(`Mounting point anchor for '${node.name}'`)
+					return document.createComment(`Mounting point for '${node.name}'`)
 				})()
 				if (node.type === 'node') {
 					Object.defineProperty(state, node.name, {
