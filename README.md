@@ -48,7 +48,7 @@ component1.listMP.push(componet2) // Mount component2 to list 'listMP' mounting 
 ```
 
 ## ef.js template(eft) format
-ef.js template is **very srtict to indents**. Only tabs are allowed. Wrong indents could lead to a parsing error.
+ef.js template is **very strict to indents**. Only tabs are allowed. Wrong indents could lead to a parsing error.
 
 Here is an example template.
 
