@@ -8,9 +8,9 @@
 import ef from 'ef.js'
 
 ef.setParser(someparser) // Change the default parser for ef.js so you can use a different type of template
-ef.parseEft('Your awesome temolate') // Get ef.js ast using default parser
+ef.parseEft('Your awesome template') // Get ef.js ast using default parser
 
-const template = 'Your awsome template'
+const template = 'Your awesome template'
 const ast = [/* AST parsed by eft-parser */]
 
 const data = {
@@ -48,14 +48,14 @@ component1.listMP.push(componet2) // Mount component2 to list 'listMP' mounting 
 ```
 
 ## ef.js template(eft) format
-ef.js template is **very strict to indents**. Only tabs are allowed. Wrong indents could lead to a parsing error.
+ef.js templates are **very strict to indents**. Only tabs are allowed. Wrong indents could lead to a parsing error.
 
 Here is an example template.
 
 ```
 Tree structure
 Lines not started with >#%@.+- are considered as comments
-The escape character of eft is '&', to prevent the conflict with js escapes.
+The escape character of eft is '&', for prevention of the conflict with js escapes.
 Except for the change of the character, all the usage should be the same.
 this is a comment
 '>' stands for tag name
@@ -106,9 +106,9 @@ $ cd ef.js
 $ npm install
 $ npm run build
 ```
-Then you can get the fresh-built `ef.min.js` at the `dist` folder.
+Then you can get the fresh-built `ef.min.js` in the `dist` folder.
 
-**Note:** All debugging messages are disabled in the production version
+**Note:** All debugging messages are disabled in the production version, but you can enable them using `localStorage.setItem('loglevel:ef', 'TRACE')`
 
 ## License
 [MIT](http://cos.mit-license.org/)
