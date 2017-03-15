@@ -4,7 +4,10 @@ import ARR from './array-helper.js'
 import { DOMARR, _anchor } from './dom-arr-helper.js'
 import { resolve } from './resolver.js'
 import initSubscribe from './subscriber.js'
-import { warnAttachment } from '../debug.js'
+import { warn, warnAttachment } from '../debug.js'
+
+// Reserved names
+const reserved = 'attached data element methods subscribe unsubscribe update'.split(' ').map(i => `$${i}`)
 
 const create = ({ ast, state, children, subscriber }) => {
 	// First create an element according to the description
@@ -45,6 +48,10 @@ const create = ({ ast, state, children, subscriber }) => {
 				break
 			}
 			case '[object Object]': {
+				if (reserved.indexOf(node.name) !== -1) {
+					warn(`No reserved name '${node.name}' should be used, ignoring.`)
+					break
+				}
 				const anchor = (() => {
 					if (ENV === 'production') return document.createTextNode('')
 					return document.createComment(`Mounting point for '${node.name}'`)

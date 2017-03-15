@@ -1,4 +1,4 @@
-/* global VERSION */
+/* global GITVERSION */
 
 // Import everything
 import './lib/utils/polyfills.js'
@@ -6,6 +6,7 @@ import { info } from './lib/debug.js'
 import parse from './lib/parser.js'
 import render from './lib/renderer.js'
 import eftParser from 'eft-parser'
+import { version } from '../package.json'
 
 // Mock provate properties
 const _ast = new WeakMap()
@@ -40,4 +41,4 @@ const ef = class {
 
 export default ef
 
-info(`ef.js v${VERSION} initialized!`)
+info(`ef.js v${version}.${GITVERSION} initialized!`)

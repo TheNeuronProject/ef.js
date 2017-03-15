@@ -8,7 +8,6 @@ const uglify = require('rollup-plugin-uglify')
 const progress = require('rollup-plugin-progress')
 const json = require('rollup-plugin-json')
 const git = require('git-rev-sync')
-const { version } = require('../package.json')
 
 module.exports = {
 	moduleName: 'ef',
@@ -21,7 +20,9 @@ module.exports = {
 		progress({
 			clearLine: false
 		}),
-		eslint(),
+		eslint({
+			exclude: ['*.json', '**/*.json']
+		}),
 		resolve({
 			jsnext: true,
 			main: true,
@@ -31,7 +32,7 @@ module.exports = {
 		json(),
 		replace({
 			ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-			VERSION: JSON.stringify(`${version}.${git.branch()}.${git.short()}`)
+			GITVERSION: JSON.stringify(`${git.branch()}.${git.short()}`)
 		}),
 		buble({
 			transforms: {
