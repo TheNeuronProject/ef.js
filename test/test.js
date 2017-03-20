@@ -3,7 +3,7 @@ var ast = [
 		tag: 'div',
 		attr: {
 			id: 'id1',
-			class: ['text']
+			class: ['text', ['box test']]
 		}
 	},
 	'text0',
@@ -22,6 +22,7 @@ var ast = [
 	[
 		{
 			tag: 'div',
+			alias: 'testAlias',
 			attr: {
 				style: ['style']
 			}
@@ -66,7 +67,7 @@ var ast = [
 			{
 				tag: 'textarea',
 				prop: {
-					value: ['style']
+					value: ['style', ['background-color: #ECECEC']]
 				}
 			}
 		],
@@ -138,9 +139,9 @@ state3.list1.push(state4)
 state2.branch = state3
 
 // state.$data.text = 'box'
-state2.$data.text = 'box'
-state3.$data.text = 'box'
-state4.$data.text = 'box'
+// state2.$data.text = 'box'
+// state3.$data.text = 'box'
+// state4.$data.text = 'box'
 
 // state.$data.root.text = 'component 1'
 state2.$data.root.text = 'component 2'

@@ -40,6 +40,8 @@ component2.$unsubscribe('info.data', logData) // Stop observing a value
 component1.$update(data) // Update the whole component state
 component2.$attached // Check if the component has mounted to something
 
+component1.$nodes // Get all named nodes
+
 component1.mountingPoint = component2 // Mount component2 to 'mountingPoint' on component1
 component1.mountingPoint = null // Detach the mounted component
 
@@ -78,9 +80,10 @@ this is a comment
 	>br
 	'-' stands for standard mounting point
 	-node1
-	>p
-		#class = some class names
-		>span
+	'.' after a tag name stands for class names for this tag
+	>p.some.class.names
+		'#' at the end of a tag name stands for the name of the node
+		>span.notice#notice_box
 			.Notice: {{notice}}
 		.some text
 		-node2

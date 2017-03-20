@@ -2,33 +2,35 @@ import createElement from './element-creator.js'
 import DOM from './dom-helper.js'
 import ARR from './array-helper.js'
 import { DOMARR, _anchor } from './dom-arr-helper.js'
-import { resolve } from './resolver.js'
+import { resolveDefault, resolve } from './resolver.js'
+import typeOf from './type-of.js'
 import initSubscribe from './subscriber.js'
 import { warn, warnAttachment } from '../debug.js'
 
 // Reserved names
-const reserved = 'attached data element methods subscribe unsubscribe update'.split(' ').map(i => `$${i}`)
+const reserved = 'attached data element nodes methods subscribe unsubscribe update'.split(' ').map(i => `$${i}`)
 
-const create = ({ ast, state, children, subscriber }) => {
+const create = ({ ast, state, defaults, nodes, children, subscriber }) => {
 	// First create an element according to the description
-	const element = createElement(ast[0], state, subscriber)
+	const element = createElement({info: ast[0], state, defaults, nodes, subscriber})
 
 	// Append child nodes
 	for (let i = 1; i < ast.length; i++) {
 		const node = ast[i]
-		const nodeType = Object.prototype.toString.call(node)
+		const nodeType = typeOf(node)
 		switch (nodeType) {
-			case '[object String]': {
+			case 'string': {
 				// Static text node
 				DOM.append(element, document.createTextNode(node))
 				break
 			}
-			case '[object Array]': {
-				if (Object.prototype.toString.call(node[0]) === '[object Object]') {
+			case 'array': {
+				if (typeOf(node[0]) === 'object') {
 					// Create child element
-					DOM.append(element, create({ ast: node, state, children, subscriber }))
-				} else if (Object.prototype.toString.call(node[0]) === '[object String]') {
+					DOM.append(element, create({ ast: node, state, defaults, nodes, children, subscriber }))
+				} else if (typeOf(node[0]) === 'string') {
 					// Data binding text node
+					resolveDefault(node, defaults)
 					const name = node.pop()
 					const textNode = document.createTextNode('')
 					const { parentNode, subscriberNode } = resolve({
@@ -47,7 +49,7 @@ const create = ({ ast, state, children, subscriber }) => {
 				}
 				break
 			}
-			case '[object Object]': {
+			case 'object': {
 				if (reserved.indexOf(node.name) !== -1) {
 					warn(`No reserved name '${node.name}' should be used, ignoring.`)
 					break

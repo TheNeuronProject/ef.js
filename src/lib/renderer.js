@@ -3,7 +3,7 @@
  * 	{
  * 		tag: 'div',
  * 		attr: {
- * 			class: ['class'],
+ * 			class: ['class', ['some classname']],
  * 			style: ['attr', 'style'],
  * 			id: 'testdiv',
  * 			'some-attr': 'some text'
@@ -90,7 +90,9 @@ const render = (ast) => {
 	ast = ARR.fullCopy(ast)
 	const state = {}
 	const children = {}
+	const nodes = {}
 	const data = {}
+	const defaults = {}
 	const methods = {}
 	const subscriber = {}
 	Object.defineProperties(state, {
@@ -108,6 +110,11 @@ const render = (ast) => {
 			},
 			set(newMethods) {
 				deepAssign(methods, newMethods)
+			}
+		},
+		$nodes: {
+			get() {
+				return Object.assign({}, nodes)
 			}
 		},
 		$subscribe: {
@@ -136,8 +143,9 @@ const render = (ast) => {
 			value: update
 		}
 	})
-	const element = create({ ast, state, children, subscriber })
-	// deepAssign(state, data)
+	const element = create({ ast, state, defaults, nodes, children, subscriber })
+	// Initialize with default data
+	state.$data = defaults
 	Object.defineProperty(state, '$element', {
 		value: element
 	})

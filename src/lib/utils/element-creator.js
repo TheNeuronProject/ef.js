@@ -1,13 +1,16 @@
 import { warn } from '../debug.js'
-import { resolve } from './resolver.js'
+import { resolveDefault, resolve } from './resolver.js'
+import typeOf from './type-of.js'
 import initSubscribe from './subscriber.js'
 
-const createElement = (info, state, subscriber) => {
+const createElement = ({info, state, defaults, nodes, subscriber}) => {
 	const element = document.createElement(info.tag)
+	if (info.alias) nodes[info.alias] = element
 	for (let i in info.attr) {
 		const attr = info.attr[i]
-		if (typeof attr === 'string') element.setAttribute(i, attr)
+		if (typeOf(attr) === 'string') element.setAttribute(i, attr)
 		else {
+			resolveDefault(attr, defaults)
 			const name = attr.pop()
 			const { parentNode, subscriberNode } = resolve({
 				path: attr,
@@ -23,8 +26,9 @@ const createElement = (info, state, subscriber) => {
 	}
 	for (let i in info.prop) {
 		const prop = info.prop[i]
-		if (typeof prop === 'string') element[i] = prop
+		if (typeOf(prop) === 'string') element[i] = prop
 		else {
+			resolveDefault(prop, defaults)
 			const name = prop.pop()
 			const { parentNode, subscriberNode } = resolve({
 				path: prop,
@@ -38,7 +42,7 @@ const createElement = (info, state, subscriber) => {
 			subscriberNode.push(handler)
 			initSubscribe({subscriberNode, parentNode, name, state})
 
-			if (typeof prop === 'object' && (i === 'value' || i === 'checked')) {
+			if (i === 'value' || i === 'checked') {
 				const updateOthers = (value) => {
 					if (subscriberNode.value === value) return
 					subscriberNode.value = value

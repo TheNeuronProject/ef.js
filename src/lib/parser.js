@@ -23,7 +23,10 @@
 // 	-node1
 // 	>p
 // 		#class = some class names
-// 		>span
+// 		'.' after tag name means static class name, just like what you do in emmet
+// 		'#' at the end of the tag announcement will generate a quick access point
+// 		of this element in the state tree
+// 		>span.notice#notice
 // 			.Notice: {{notice}}
 // 		.some text
 // 		-node2
