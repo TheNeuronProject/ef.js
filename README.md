@@ -1,5 +1,5 @@
 # ef.js [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/ClassicOldSong/ef.js/master/LICENSE) [![npm](https://img.shields.io/npm/dt/ef.js.svg?style=flat-square)](https://www.npmjs.com/package/ef.js) [![Build status](https://img.shields.io/travis/ClassicOldSong/ef.js.svg?style=flat-square)](https://travis-ci.org/ClassicOldSong/ef.js)
-<img align="left" width="95" height="95" title="logo of ef" src="https://cloud.githubusercontent.com/assets/10512422/24116533/15dbd8b2-0de2-11e7-9ae8-6885f429a923.png">
+<img align="right" width="95" height="95" title="logo of ef" src="https://cloud.githubusercontent.com/assets/10512422/24116533/15dbd8b2-0de2-11e7-9ae8-6885f429a923.png">
 
 (maybe) An elegant HTML template & MVC framework
 
