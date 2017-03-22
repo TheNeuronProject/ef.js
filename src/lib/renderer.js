@@ -51,16 +51,10 @@
  */
 
 import create from './utils/creator.js'
-import { resolvePath, resolve } from './utils/resolver'
-import initSubscribe from './utils/subscriber.js'
+import { resolveSubscriber } from './utils/resolver'
+import initBinding from './utils/binding.js'
 import ARR from './utils/array-helper.js'
 import deepAssign from 'deep-assign'
-
-const resolveSubscriber = (path, subscriber) => {
-	const pathArr = path.split('.')
-	const name = pathArr.pop()
-	return resolvePath(pathArr, subscriber)[name]
-}
 
 const unsubscribe = (path, fn, subscriber) => {
 	const subscriberNode = resolveSubscriber(path, subscriber)
@@ -92,7 +86,7 @@ const render = (ast) => {
 	const children = {}
 	const nodes = {}
 	const data = {}
-	const defaults = {}
+	const innerData = {}
 	const methods = {}
 	const subscriber = {}
 	Object.defineProperties(state, {
@@ -118,17 +112,9 @@ const render = (ast) => {
 			}
 		},
 		$subscribe: {
-			value: (path, fn) => {
-				const pathArr = path.split('.')
-				const name = pathArr.pop()
-				const { parentNode, subscriberNode } = resolve({
-					path: pathArr,
-					name: name,
-					parentNode: data,
-					subscriberNode: subscriber
-				})
-				subscriberNode.push(fn)
-				initSubscribe({subscriberNode, parentNode, name, state})
+			value: (pathStr, fn) => {
+				const path = pathStr.split('.')
+				initBinding({path, state, subscriber, innerData, fn})
 			}
 		},
 		$unsubscribe: {
@@ -143,9 +129,7 @@ const render = (ast) => {
 			value: update
 		}
 	})
-	const element = create({ ast, state, defaults, nodes, children, subscriber })
-	// Initialize with default data
-	state.$data = defaults
+	const element = create({ast, state, innerData, nodes, children, subscriber})
 	Object.defineProperty(state, '$element', {
 		value: element
 	})

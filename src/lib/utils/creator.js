@@ -2,17 +2,16 @@ import createElement from './element-creator.js'
 import DOM from './dom-helper.js'
 import ARR from './array-helper.js'
 import { DOMARR, _anchor } from './dom-arr-helper.js'
-import { resolveDefault, resolve } from './resolver.js'
 import typeOf from './type-of.js'
-import initSubscribe from './subscriber.js'
+import initBinding from './binding.js'
 import { warn, warnAttachment } from '../debug.js'
 
 // Reserved names
 const reserved = 'attached data element nodes methods subscribe unsubscribe update'.split(' ').map(i => `$${i}`)
 
-const create = ({ ast, state, defaults, nodes, children, subscriber }) => {
+const create = ({ ast, state, innerData, nodes, children, subscriber }) => {
 	// First create an element according to the description
-	const element = createElement({info: ast[0], state, defaults, nodes, subscriber})
+	const element = createElement({info: ast[0], state, innerData, nodes, subscriber})
 
 	// Append child nodes
 	for (let i = 1; i < ast.length; i++) {
@@ -27,24 +26,16 @@ const create = ({ ast, state, defaults, nodes, children, subscriber }) => {
 			case 'array': {
 				if (typeOf(node[0]) === 'object') {
 					// Create child element
-					DOM.append(element, create({ ast: node, state, defaults, nodes, children, subscriber }))
+					DOM.append(element, create({ ast: node, state, innerData, nodes, children, subscriber }))
 				} else if (typeOf(node[0]) === 'string') {
 					// Data binding text node
-					resolveDefault(node, defaults)
-					const name = node.pop()
 					const textNode = document.createTextNode('')
-					const { parentNode, subscriberNode } = resolve({
-						path: node,
-						name: name,
-						parentNode: state.$data,
-						subscriberNode: subscriber
-					})
-					// Subscribe value changing
-					subscriberNode.push((value) => {
+					const handler = (value) => {
 						textNode.textContent = value
-					})
-					// Bind operating methods if not exist
-					initSubscribe({subscriberNode, parentNode, name, state})
+					}
+					initBinding({path: node, state, subscriber, innerData, handler})
+
+					// Append element to the component
 					DOM.append(element, textNode)
 				}
 				break
