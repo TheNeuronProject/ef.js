@@ -9,7 +9,7 @@ import { warn, warnAttachment } from '../debug.js'
 // Reserved names
 const reserved = 'attached data element nodes methods subscribe unsubscribe update'.split(' ').map(i => `$${i}`)
 
-const create = ({ ast, state, innerData, nodes, children, subscriber }) => {
+const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 	// First create an element according to the description
 	const element = createElement({info: ast[0], state, innerData, nodes, subscriber})
 
@@ -26,7 +26,7 @@ const create = ({ ast, state, innerData, nodes, children, subscriber }) => {
 			case 'array': {
 				if (typeOf(node[0]) === 'object') {
 					// Create child element
-					DOM.append(element, create({ ast: node, state, innerData, nodes, children, subscriber }))
+					DOM.append(element, create({ast: node, state, innerData, nodes, children, subscriber}))
 				} else if (typeOf(node[0]) === 'string') {
 					// Data binding text node
 					const textNode = document.createTextNode('')
