@@ -2,8 +2,6 @@ import DOM from './dom-helper.js'
 import ARR from './array-helper.js'
 import { warnAttachment } from '../debug.js'
 
-const _anchor = new WeakMap()
-
 const DOMARR = {
 	pop() {
 		if (this.length === 0) return
@@ -11,13 +9,13 @@ const DOMARR = {
 		DOM.remove(poped.$element)
 		return poped
 	},
-	push(...items) {
+	push(anchor, ...items) {
 		const elements = []
 		for (let i of items) {
 			if (i.$attached) return warnAttachment(i)
 			ARR.push(elements, i.$element)
 		}
-		if (this.length === 0) DOM.after(_anchor.get(this), ...elements)
+		if (this.length === 0) DOM.after(anchor, ...elements)
 		else DOM.after(this[this.length - 1].$element, ...elements)
 		return ARR.push(this, ...items)
 	},
@@ -86,4 +84,18 @@ const DOMARR = {
 	}
 }
 
-export { DOMARR, _anchor }
+const defineArr = (arr, anchor) => {
+	Object.defineProperties(arr, {
+		pop: {value: DOMARR.pop},
+		push: {value: DOMARR.push.bind(arr, anchor)},
+		remove: {value: DOMARR.remove},
+		reverse: {value: DOMARR.reverse},
+		shift: {value: DOMARR.shift},
+		sort: {value: DOMARR.sort},
+		splice: {value: DOMARR.splice},
+		unshift: {value: DOMARR.unshift}
+	})
+	return arr
+}
+
+export default defineArr

@@ -40,7 +40,7 @@ const createElement = ({info, state, innerData, nodes, subscriber}) => {
 	for (let i in info.event) {
 		const method = info.event[i]
 		element.addEventListener(i, (e) => {
-			if (state.$methods[method]) state.$methods[method](state, e)
+			if (state.$methods[method]) state.$methods[method](e, state)
 			else warn(`No method named '${method}' found!`)
 		}, false)
 	}

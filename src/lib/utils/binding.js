@@ -23,8 +23,11 @@ const initBinding = ({path, state, subscriber, innerData, handler}) => {
 			enumerable: true
 		})
 	}
+	if (_default) {
+		parentNode[name] = _default
+	}
+	handler(parentNode[name])
 	subscriberNode.push(handler)
-	if (_default) parentNode[name] = _default
 
 	return {dataNode, subscriberNode}
 }

@@ -1,7 +1,7 @@
 import createElement from './element-creator.js'
 import DOM from './dom-helper.js'
 import ARR from './array-helper.js'
-import { DOMARR, _anchor } from './dom-arr-helper.js'
+import defineArr from './dom-arr-helper.js'
 import typeOf from './type-of.js'
 import initBinding from './binding.js'
 import { warn, warnAttachment } from '../debug.js'
@@ -66,16 +66,15 @@ const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 						enumerable: true
 					})
 				} else if (node.type === 'list') {
-					const initArr = Object.assign([], DOMARR)
-					_anchor.set(initArr, anchor)
+					const initArr = defineArr([], anchor)
 					children[node.name] = initArr
 					Object.defineProperty(state, node.name, {
 						get() {
 							return children[node.name]
 						},
 						set(value) {
+							value = ARR.copy(value)
 							if (children[node.name] && children[node.name].value === value) return
-							_anchor.set(value, anchor)
 							const fragment = document.createDocumentFragment()
 							// Update components
 							if (children[node.name]) {
@@ -87,7 +86,7 @@ const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 								for (let j of children[node.name]) DOM.remove(j.$element)
 							} else for (let j of value) DOM.append(fragment, j.$element)
 							// Update stored value
-							children[node.name] = Object.assign(value, DOMARR)
+							children[node.name] = defineArr(value, anchor)
 							// Append to current component
 							DOM.after(anchor, fragment)
 						},

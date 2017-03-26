@@ -12,6 +12,7 @@ gen/
 .fuse_*
 yarn.lock
 cache/
+temp/
 
 # Project files
 plugins/

@@ -36,7 +36,7 @@ component1.$element // The DOM element of component1
 component2.$element // The DOM element of component2
 
 component1.$data.something = 'something new' // Update the binding data 'something'
-component2.$methods.someMethod = (state, e) => {
+component2.$methods.someMethod = (e, state) => {
 	state.$data.something = 'something new'
 	console.log('Event target', e.target)
 } // Update binding method

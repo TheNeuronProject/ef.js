@@ -51,9 +51,10 @@
  */
 
 import create from './utils/creator.js'
-import { resolveSubscriber } from './utils/resolver'
+import { resolveSubscriber } from './utils/resolver.js'
 import initBinding from './utils/binding.js'
 import ARR from './utils/array-helper.js'
+import { assign } from './utils/polyfills.js'
 import deepAssign from 'deep-assign'
 
 const unsubscribe = (path, fn, subscriber) => {
@@ -68,16 +69,16 @@ const checkAttached = function () {
 }
 
 const update = function (state) {
-	const tmpState = Object.assign({}, state)
+	const tmpState = assign({}, state)
 	if (tmpState.$data) {
-		Object.assign(this.$data, tmpState.$data)
+		assign(this.$data, tmpState.$data)
 		delete(tmpState.$data)
 	}
 	if (tmpState.$methods) {
-		Object.assign(this.$methods, tmpState.$methods)
+		assign(this.$methods, tmpState.$methods)
 		delete(tmpState.$methods)
 	}
-	Object.assign(this, tmpState)
+	assign(this, tmpState)
 }
 
 const render = (ast) => {
@@ -108,7 +109,7 @@ const render = (ast) => {
 		},
 		$nodes: {
 			get() {
-				return Object.assign({}, nodes)
+				return assign({}, nodes)
 			}
 		},
 		$subscribe: {

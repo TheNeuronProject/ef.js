@@ -1,7 +1,5 @@
 import _assign from 'object.assign'
-import _WeakMap from 'weak-map'
 
-const _define = (obj, name, val) => Object.defineProperty(obj, name, { value: val })
+const assign = Object.assign || _assign
 
-if (!Object.assign) _define(Object, 'assign', _assign)
-if (!window.WeakMap) _define(window, 'WeakMap', _WeakMap)
+export { assign }
