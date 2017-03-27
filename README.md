@@ -10,6 +10,7 @@ ef.js also provides a simple template-engine which helps you create component mo
 Related projects:
 + [eft-parser](https://github.com/ClassicOldSong/eft-parser) - Parser for eft templates
 + [rollup-plugin-eft](https://github.com/ClassicOldSong/rollup-plugin-eft) - Import .eft templates directly from your code, taking the advantage of ef.js into your project with zero configuration.
++ [SublimeEFMLHightlighter](https://github.com/ClassicOldSong/SublimeEFMLHightlighter) - EFML hightlighter for SublimeText3
 
 ## Usage
 ``` javascript
@@ -36,7 +37,7 @@ component1.$element // The DOM element of component1
 component2.$element // The DOM element of component2
 
 component1.$data.something = 'something new' // Update the binding data 'something'
-component2.$methods.someMethod = (e, state) => {
+component2.$methods.someMethod = ({e, state}) => {
 	state.$data.something = 'something new'
 	console.log('Event target', e.target)
 } // Update binding method
@@ -57,7 +58,7 @@ component1.listMP.push(componet2) // Mount component2 to list 'listMP' mounting 
 
 ```
 
-## ef.js template(eft) format
+## ef.js template language (EFML) format
 ef.js templates are **very strict to indents**. Only tabs are allowed. Wrong indents could lead to a parsing error.
 
 Here is an example template.

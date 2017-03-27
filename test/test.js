@@ -121,7 +121,7 @@ var data1 = {
 			notice: 'ooooooops'
 	},
 	$methods: {
-		alertNotice: function (state) {
+		alertNotice: function ({state}) {
 			alert(state.$data.notice)
 		}
 	}
@@ -159,7 +159,8 @@ var data2 = {
 		}
 	},
 	$methods: {
-		sendMsg: function (state) {
+		sendMsg: function ({e, state}) {
+			console.log('Event triggered:', e)
 			alert('The message is \n"' + state.$data.text + '"!')
 		}
 	},

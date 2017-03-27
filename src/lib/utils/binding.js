@@ -4,8 +4,8 @@ const initBinding = ({path, state, subscriber, innerData, handler}) => {
 	const _default = resolveDefault(path)
 	const name = path.pop()
 	const { parentNode, subscriberNode, dataNode } = resolve({
-		path: path,
-		name: name,
+		path,
+		name,
 		parentNode: state.$data,
 		subscriberNode: subscriber,
 		dataNode: innerData
@@ -26,7 +26,7 @@ const initBinding = ({path, state, subscriber, innerData, handler}) => {
 	if (_default) {
 		parentNode[name] = _default
 	}
-	handler(parentNode[name])
+	if (parentNode[name]) handler(parentNode[name])
 	subscriberNode.push(handler)
 
 	return {dataNode, subscriberNode}
