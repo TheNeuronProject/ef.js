@@ -4,7 +4,7 @@ import initBinding from './binding.js'
 
 const createElement = ({info, state, innerData, nodes, subscriber}) => {
 	const element = document.createElement(info.tag)
-	if (info.alias) nodes[info.alias] = element
+	if (info.alias) Object.defineProperty(nodes, info.alias, {value: element})
 	for (let i in info.attr) {
 		const attr = info.attr[i]
 		if (typeOf(attr) === 'string') element.setAttribute(i, attr)

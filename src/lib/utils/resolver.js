@@ -3,7 +3,7 @@ import typeOf from './type-of.js'
 
 // Resolve an array described path to an object
 const resolvePath = (path, obj) => {
-	for (let i of path) obj = obj[i] || {}
+	for (let i of path) obj = obj[i] = obj[i] || {}
 	return obj
 }
 
@@ -32,8 +32,7 @@ const resolve = ({ path, name, parentNode, subscriberNode, dataNode }) => {
 		subscriberNode = resolvePath(path, subscriberNode)
 		dataNode = resolvePath(path, dataNode)
 	}
-	subscriberNode[name] = subscriberNode[name] || []
-	subscriberNode = subscriberNode[name]
+	subscriberNode = subscriberNode[name] = subscriberNode[name] || []
 	dataNode[name] = dataNode[name] || ''
 	return { parentNode, subscriberNode, dataNode }
 }

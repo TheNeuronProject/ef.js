@@ -113,9 +113,9 @@ const render = (ast) => {
 			}
 		},
 		$subscribe: {
-			value: (pathStr, fn) => {
+			value: (pathStr, handler) => {
 				const path = pathStr.split('.')
-				initBinding({path, state, subscriber, innerData, fn})
+				initBinding({path, state, subscriber, innerData, handler})
 			}
 		},
 		$unsubscribe: {

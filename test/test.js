@@ -3,7 +3,7 @@ var ast = [
 		tag: 'div',
 		attr: {
 			id: 'id1',
-			class: ['text', ['box test']]
+			class: ['class', 'text', ['box test']]
 		}
 	},
 	'text0',
@@ -18,7 +18,7 @@ var ast = [
 			tag: 'br'
 		}
 	],
-	['text'],
+	['class', 'text'],
 	[
 		{
 			tag: 'div',
@@ -48,7 +48,7 @@ var ast = [
 					type: 'text'
 				},
 				prop: {
-					value: ['text']
+					value: ['class', 'text']
 				}
 			}
 		],
@@ -161,7 +161,7 @@ var data2 = {
 	$methods: {
 		sendMsg: function ({e, state}) {
 			console.log('Event triggered:', e)
-			alert('The message is \n"' + state.$data.text + '"!')
+			alert('The message is \n"' + state.$data.class.text + '"!')
 		}
 	},
 	list: [state2]
