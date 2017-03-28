@@ -37,9 +37,10 @@ component1.$element // The DOM element of component1
 component2.$element // The DOM element of component2
 
 component1.$data.something = 'something new' // Update the binding data 'something'
-component2.$methods.someMethod = ({e, state}) => {
+component2.$methods.someMethod = ({e, value, state}) => {
 	state.$data.something = 'something new'
 	console.log('Event target', e.target)
+	console.log('Value passed', value)
 } // Update binding method
 
 const logData = val => console.log('Subscribed data updated:', val
@@ -85,7 +86,8 @@ this is a comment
 	%title = {{name}}
 	%anotherProperty = text
 	'@' stands for events
-	@click = updateInfo
+	contents after ':' are considered as value passed to the handler
+	@click = updateInfo:
 	@mousedown = setState
 	'.' stands for text nodes
 	.Name: {{name}}&nJob: {{job}}
