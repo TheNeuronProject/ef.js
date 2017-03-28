@@ -72,15 +72,18 @@ this is a comment
 '>' stands for tag name
 >div
 	'#' stands for attributes
-	#class = {{class}}
-	#style = {{attr.style}}
+	Mustaches stands for binding data
+	content inside mustaches after '=' stands for the default value for this binding
+	content without mustaches stands for a static data
+	which means that you cannot modify them using ef.js
+	#class = {{class = some class name}}
+	#style = {{attr.style = background: #ECECEC}}
 	#id = testdiv
 	#some-attr = some text
 	#content =
 	'%' stands for properties
 	%title = {{name}}
 	%anotherProperty = text
-	%contentEditable = {{edit}}
 	'@' stands for events
 	@click = updateInfo
 	@mousedown = setState
@@ -92,7 +95,8 @@ this is a comment
 	'.' after a tag name stands for class names for this tag
 	>p.some.class.names
 		'#' at the end of a tag name stands for the name of the node
-		>span.notice#notice_box
+		Mustaches after a dot will bind to 'class' automatically
+		>span.{{emergency = emergency}}#notice_box
 			.Notice: {{notice}}
 		.some text
 		-node2
