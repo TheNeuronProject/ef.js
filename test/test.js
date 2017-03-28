@@ -92,8 +92,7 @@ var ast = [
 ]
 
 var template = 'this is a comment\n' +
-'>div\n' +
-'	#class = {{class}}\n' +
+'>div.{{class = some class name}}\n' +
 '	#style = {{attr.style}}\n' +
 '	#id = testdiv\n' +
 '	#some-attr = some text\n' +
