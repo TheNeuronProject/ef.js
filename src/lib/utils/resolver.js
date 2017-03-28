@@ -1,5 +1,4 @@
 import deepAssign from 'deep-assign'
-import typeOf from './type-of.js'
 
 // Resolve an array described path to an object
 const resolvePath = (path, obj) => {
@@ -37,17 +36,10 @@ const resolve = ({ path, name, parentNode, subscriberNode, dataNode }) => {
 	return { parentNode, subscriberNode, dataNode }
 }
 
-const resolveDefault = (path) => {
-	// Check whether has default value
-	if (typeOf(path[path.length - 1]) !== 'array') return
-	const _default = path.pop()[0]
-	return _default
-}
-
 const resolveSubscriber = (path, subscriber) => {
 	const pathArr = path.split('.')
 	const name = pathArr.pop()
 	return resolvePath(pathArr, subscriber)[name]
 }
 
-export { resolvePath, resolve, resolveDefault, resolveSubscriber }
+export { resolvePath, resolve, resolveSubscriber }

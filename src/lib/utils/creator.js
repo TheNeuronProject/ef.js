@@ -27,13 +27,13 @@ const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 				if (typeOf(node[0]) === 'object') {
 					// Create child element
 					DOM.append(element, create({ast: node, state, innerData, nodes, children, subscriber}))
-				} else if (typeOf(node[0]) === 'string') {
+				} else if (typeOf(node[0]) === 'array') {
 					// Data binding text node
 					const textNode = document.createTextNode('')
 					const handler = (value) => {
 						textNode.textContent = value
 					}
-					initBinding({path: node, state, subscriber, innerData, handler})
+					initBinding({bind: node, state, subscriber, innerData, handler})
 
 					// Append element to the component
 					DOM.append(element, textNode)

@@ -1,7 +1,7 @@
-import { resolveDefault, resolve } from './resolver.js'
+import { resolve } from './resolver.js'
 
-const initBinding = ({path, state, subscriber, innerData, handler}) => {
-	const _default = resolveDefault(path)
+const initBinding = ({bind, state, subscriber, innerData, handler}) => {
+	const [path, _default] = bind
 	const name = path.pop()
 	const { parentNode, subscriberNode, dataNode } = resolve({
 		path,

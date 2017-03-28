@@ -3,7 +3,7 @@ var ast = [
 		tag: 'div',
 		attr: {
 			id: 'id1',
-			class: ['class', 'text', ['box test']]
+			class: [['class', 'text'], 'box test']
 		}
 	},
 	'text0',
@@ -12,23 +12,23 @@ var ast = [
 			tag: 'br'
 		}
 	],
-	['root', 'text'],
+	[['root', 'text']],
 	[
 		{
 			tag: 'br'
 		}
 	],
-	['class', 'text'],
+	[['class', 'text']],
 	[
 		{
 			tag: 'div',
 			alias: 'testAlias',
 			attr: {
-				style: ['style']
+				style: [['style']]
 			}
 		},
 		'text1',
-		['info', 'node1'],
+		[['info', 'node1']],
 		{ name: 'branch', type: 'node' },
 		[
 			{
@@ -48,7 +48,7 @@ var ast = [
 					type: 'text'
 				},
 				prop: {
-					value: ['class', 'text']
+					value: [['class', 'text']]
 				}
 			}
 		],
@@ -67,7 +67,7 @@ var ast = [
 			{
 				tag: 'textarea',
 				prop: {
-					value: ['style', ['background-color: #ECECEC']]
+					value: [['style'], 'background-color: #ECECEC']
 				}
 			}
 		],
@@ -76,14 +76,14 @@ var ast = [
 				tag: 'br'
 			}
 		],
-		['text'],
+		[['text']],
 		'text2'
 	],
 	[
 		{
 			tag: 'button',
 			event: {
-				click: 'sendMsg'
+				click: ['sendMsg', 'some data']
 			}
 		},
 		'sendMsg'
@@ -105,7 +105,7 @@ var template = 'this is a comment\n' +
 '	>p\n' +
 '		#class = some class name\n' +
 '		@click = alertNotice\n' +
-'		/@mousedown = setState\n' +
+'		/@mousedown = setState:test value\n' +
 '		>span\n' +
 '			.Notice: {{notice}}\n' +
 '		. test\n' +
@@ -158,9 +158,10 @@ var data2 = {
 		}
 	},
 	$methods: {
-		sendMsg: function ({e, state}) {
-			console.log('Event triggered:', e)
-			alert('The message is \n"' + state.$data.class.text + '"!')
+		sendMsg: function (info) {
+			console.log('Event triggered:', info.e)
+			console.log('Value passed:', info.value)
+			alert('The message is \n"' + info.state.$data.class.text + '"!')
 		}
 	},
 	list: [state2]

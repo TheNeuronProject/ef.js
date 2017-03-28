@@ -10,7 +10,7 @@ const createElement = ({info, state, innerData, nodes, subscriber}) => {
 		if (typeOf(attr) === 'string') element.setAttribute(i, attr)
 		else {
 			const handler = value => element.setAttribute(i, value)
-			initBinding({path: attr, state, subscriber, innerData, handler})
+			initBinding({bind: attr, state, subscriber, innerData, handler})
 		}
 	}
 	for (let i in info.prop) {
@@ -20,7 +20,7 @@ const createElement = ({info, state, innerData, nodes, subscriber}) => {
 			const handler = (value) => {
 				element[i] = value
 			}
-			const {dataNode, subscriberNode} = initBinding({path: prop, state, subscriber, innerData, handler})
+			const {dataNode, subscriberNode} = initBinding({bind: prop, state, subscriber, innerData, handler})
 
 			if (i === 'value' || i === 'checked') {
 				const updateOthers = (value) => {
@@ -38,10 +38,10 @@ const createElement = ({info, state, innerData, nodes, subscriber}) => {
 		}
 	}
 	for (let i in info.event) {
-		const method = info.event[i]
+		const [method, value] = info.event[i]
 		element.addEventListener(i, (e) => {
-			if (state.$methods[method]) state.$methods[method]({e, state})
-			else warn(`No method named '${method}' found!`)
+			if (state.$methods[method]) state.$methods[method]({e, value, state})
+			else warn(`Method named '${method}' not found!`)
 		}, false)
 	}
 	return element

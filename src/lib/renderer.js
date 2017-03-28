@@ -3,26 +3,26 @@
  * 	{
  * 		tag: 'div',
  * 		attr: {
- * 			class: ['class', ['some classname']],
- * 			style: ['attr', 'style'],
+ * 			class: [['class'], 'some classname'],
+ * 			style: [['attr', 'style']],
  * 			id: 'testdiv',
  * 			'some-attr': 'some text'
  * 			content: null
  * 		},
  * 		prop: {
- * 			title: ['name'],
+ * 			title: [['name']],
  * 			anotherProperty: 'text',
- * 			contentEditable: ['edit']
+ * 			contentEditable: [['edit']]
  * 		}
  * 		event: {
- * 			click: 'updateInfo',
+ * 			click: ['updateInfo', ['info']],
  * 			mousedown: 'setState'
  * 		}
  * 	},
  * 	'name: ',
- * 	['name'],
+ * 	[['name']],
  * 	'\nJob: ',
- * 	['job'],
+ * 	[['job']],
  * 	[
  * 		{
  * 			tag: 'br',
@@ -41,7 +41,7 @@
  * 				tag: 'span'
  * 			},
  * 			'Notice: ',
- * 			['notice']
+ * 			[['notice']]
  * 		],
  * 		'some text',
  * 		{ name: 'node2', type: 'node' },
@@ -115,7 +115,7 @@ const render = (ast) => {
 		$subscribe: {
 			value: (pathStr, handler) => {
 				const path = pathStr.split('.')
-				initBinding({path, state, subscriber, innerData, handler})
+				initBinding({bind: [path], state, subscriber, innerData, handler})
 			}
 		},
 		$unsubscribe: {
