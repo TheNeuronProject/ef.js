@@ -7,7 +7,7 @@ import initBinding from './binding.js'
 import { warn, warnAttachment } from '../debug.js'
 
 // Reserved names
-const reserved = 'attached data element nodes methods subscribe unsubscribe update'.split(' ').map(i => `$${i}`)
+const reserved = 'attached data element nodes methods subscribe unsubscribe update destroy'.split(' ').map(i => `$${i}`)
 
 const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 	// First create an element according to the description
@@ -55,7 +55,7 @@ const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 							return children[node.name]
 						},
 						set(value) {
-							if (children[node.name] && children[node.name].value === value) return
+							if (children[node.name] === value) return
 							if (value.$attached) return warnAttachment(value)
 							// Update component
 							if (children[node.name]) DOM.remove(children[node.name].$element)
@@ -63,7 +63,8 @@ const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 							// Update stored value
 							children[node.name] = value
 						},
-						enumerable: true
+						enumerable: true,
+						configurable: true
 					})
 				} else if (node.type === 'list') {
 					const initArr = defineArr([], anchor)
@@ -74,7 +75,7 @@ const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 						},
 						set(value) {
 							value = ARR.copy(value)
-							if (children[node.name] && children[node.name].value === value) return
+							if (children[node.name] && ARR.equals(children[node.name], value)) return
 							const fragment = document.createDocumentFragment()
 							// Update components
 							if (children[node.name]) {
@@ -86,11 +87,13 @@ const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 								for (let j of children[node.name]) DOM.remove(j.$element)
 							} else for (let j of value) DOM.append(fragment, j.$element)
 							// Update stored value
-							children[node.name] = defineArr(value, anchor)
+							children[node.name].length = 0
+							ARR.push(children[node.name], ...value)
 							// Append to current component
 							DOM.after(anchor, fragment)
 						},
-						enumerable: true
+						enumerable: true,
+						configurable: true
 					})
 				} else throw new TypeError(`Not a standard ef.js AST: Unknown mounting point type '${node.type}'`)
 				// Append placeholder

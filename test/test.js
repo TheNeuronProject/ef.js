@@ -169,6 +169,21 @@ var data2 = {
 
 state.$update(data2)
 
+var states = []
+
+state2.$methods.sendMsg = function () {
+	var startTime = Date.now()
+	for (var i = 0; i < 1000; i++) states.push(module1.render())
+	state4.list1.push.apply(state4.list1, states)
+	var endTime = Date.now()
+	for (var i = 0; i < states.length; i++) {
+		states[i].$destroy()
+		states[i] = null
+	}
+	states = []
+	console.log('Done in', endTime - startTime, 'ms.')
+}
+
 // state4.$methods.sendMsg = function(thisState) { alert('The message is "\n' + thisState.$data.text + '"!') }
 
 document.querySelector('body').appendChild(state.$element)

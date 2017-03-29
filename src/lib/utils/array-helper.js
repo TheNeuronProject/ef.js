@@ -4,6 +4,12 @@ const ARR = {
 	copy(arr) {
 		return proto.slice.call(arr, 0)
 	},
+	equals(left, right) {
+		if (left === right) return true
+		if (left.length !== right.length) return false
+		for (let i in left) if (left[i] !== right[i]) return false
+		return true
+	},
 	fullCopy(arr) {
 		return JSON.parse(JSON.stringify(arr))
 	},

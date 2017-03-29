@@ -81,6 +81,18 @@ const update = function (state) {
 	assign(this, tmpState)
 }
 
+const destroy = function() {
+	delete this.$element
+	delete this.$data
+	delete this.$methods
+	delete this.$subscrib
+	delete this.$unsubscribe
+	delete this.$attached
+	delete this.$update
+	delete this.$destroy
+	for (let i in this) delete this[i]
+}
+
 const render = (ast) => {
 	ast = ARR.fullCopy(ast)
 	const state = {}
@@ -97,7 +109,8 @@ const render = (ast) => {
 			},
 			set(newData) {
 				deepAssign(data, newData)
-			}
+			},
+			configurable: true
 		},
 		$methods: {
 			get() {
@@ -105,34 +118,45 @@ const render = (ast) => {
 			},
 			set(newMethods) {
 				deepAssign(methods, newMethods)
-			}
+			},
+			configurable: true
 		},
 		$nodes: {
 			get() {
 				return assign({}, nodes)
-			}
+			},
+			configurable: true
 		},
 		$subscribe: {
 			value: (pathStr, handler) => {
 				const path = pathStr.split('.')
 				initBinding({bind: [path], state, subscriber, innerData, handler})
-			}
+			},
+			configurable: true
 		},
 		$unsubscribe: {
 			value: (path, fn) => {
 				unsubscribe(path, fn, subscriber)
-			}
+			},
+			configurable: true
 		},
 		$attached: {
-			get: checkAttached
+			get: checkAttached,
+			configurable: true
 		},
 		$update: {
-			value: update
+			value: update,
+			configurable: true
+		},
+		$destroy: {
+			value: destroy,
+			configurable: true
 		}
 	})
 	const element = create({ast, state, innerData, nodes, children, subscriber})
 	Object.defineProperty(state, '$element', {
-		value: element
+		value: element,
+		configurable: true
 	})
 	return state
 }
