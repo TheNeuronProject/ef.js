@@ -1,7 +1,9 @@
+import ARR from './array-helper.js'
 import { resolve } from './resolver.js'
 
 const initBinding = ({bind, state, subscriber, innerData, handler}) => {
-	const [path, _default] = bind
+	const [_path, _default] = bind
+	const path = ARR.copy(_path)
 	const name = path.pop()
 	const { parentNode, subscriberNode, dataNode } = resolve({
 		path,

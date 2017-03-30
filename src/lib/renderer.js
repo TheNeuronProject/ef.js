@@ -82,6 +82,10 @@ const update = function (state) {
 }
 
 const destroy = function() {
+	for (let i in this) {
+		this[i] = null
+		delete this[i]
+	}
 	delete this.$element
 	delete this.$data
 	delete this.$methods
@@ -90,11 +94,9 @@ const destroy = function() {
 	delete this.$attached
 	delete this.$update
 	delete this.$destroy
-	for (let i in this) delete this[i]
 }
 
 const render = (ast) => {
-	ast = ARR.fullCopy(ast)
 	const state = {}
 	const children = {}
 	const nodes = {}

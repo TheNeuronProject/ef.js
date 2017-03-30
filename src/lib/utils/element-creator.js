@@ -1,5 +1,4 @@
 import { warn } from '../debug.js'
-import typeOf from './type-of.js'
 import initBinding from './binding.js'
 
 const createElement = ({info, state, innerData, nodes, subscriber}) => {
@@ -7,7 +6,7 @@ const createElement = ({info, state, innerData, nodes, subscriber}) => {
 	if (info.alias) Object.defineProperty(nodes, info.alias, {value: element})
 	for (let i in info.attr) {
 		const attr = info.attr[i]
-		if (typeOf(attr) === 'string') element.setAttribute(i, attr)
+		if (typeof attr === 'string') element.setAttribute(i, attr)
 		else {
 			const handler = value => element.setAttribute(i, value)
 			initBinding({bind: attr, state, subscriber, innerData, handler})
@@ -15,7 +14,7 @@ const createElement = ({info, state, innerData, nodes, subscriber}) => {
 	}
 	for (let i in info.prop) {
 		const prop = info.prop[i]
-		if (typeOf(prop) === 'string') element[i] = prop
+		if (typeof prop === 'string') element[i] = prop
 		else {
 			const handler = (value) => {
 				element[i] = value

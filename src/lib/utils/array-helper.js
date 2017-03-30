@@ -10,9 +10,6 @@ const ARR = {
 		for (let i in left) if (left[i] !== right[i]) return false
 		return true
 	},
-	fullCopy(arr) {
-		return JSON.parse(JSON.stringify(arr))
-	},
 	pop(arr) {
 		return proto.pop.call(arr)
 	},

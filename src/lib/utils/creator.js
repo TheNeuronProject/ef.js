@@ -27,7 +27,7 @@ const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 				if (typeOf(node[0]) === 'object') {
 					// Create child element
 					DOM.append(element, create({ast: node, state, innerData, nodes, children, subscriber}))
-				} else if (typeOf(node[0]) === 'array') {
+				} else {
 					// Data binding text node
 					const textNode = document.createTextNode('')
 					const handler = (value) => {
@@ -56,7 +56,7 @@ const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 						},
 						set(value) {
 							if (children[node.name] === value) return
-							if (value.$attached) return warnAttachment(value)
+							if (value && value.$attached) return warnAttachment(value)
 							// Update component
 							if (children[node.name]) DOM.remove(children[node.name].$element)
 							DOM.after(anchor, value.$element)
@@ -74,8 +74,8 @@ const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 							return children[node.name]
 						},
 						set(value) {
-							value = ARR.copy(value)
 							if (children[node.name] && ARR.equals(children[node.name], value)) return
+							value = ARR.copy(value)
 							const fragment = document.createDocumentFragment()
 							// Update components
 							if (children[node.name]) {

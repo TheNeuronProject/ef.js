@@ -171,17 +171,22 @@ state.$update(data2)
 
 var states = []
 
-state2.$methods.sendMsg = function () {
+state2.$data.text = 'Click the button below to run a 10000 components render test.'
+
+state2.$methods.sendMsg = function (info) {
 	var startTime = Date.now()
-	for (var i = 0; i < 1000; i++) states.push(module1.render())
-	state4.list1.push.apply(state4.list1, states)
+	for (var i = 0; i < 10000; i++) states.push(module1.render())
+	// state4.list1.push.apply(state4.list1, states)
 	var endTime = Date.now()
 	for (var i = 0; i < states.length; i++) {
 		states[i].$destroy()
 		states[i] = null
 	}
 	states = []
-	console.log('Done in', endTime - startTime, 'ms.')
+	var time = endTime - startTime
+	var msg = '10000 components rendered in ' + time + 'ms.'
+	info.state.$data.text = msg
+	console.log(msg)
 }
 
 // state4.$methods.sendMsg = function(thisState) { alert('The message is "\n' + thisState.$data.text + '"!') }
