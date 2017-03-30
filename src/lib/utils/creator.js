@@ -59,7 +59,7 @@ const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 							if (value && value.$attached) return warnAttachment(value)
 							// Update component
 							if (children[node.name]) DOM.remove(children[node.name].$element)
-							DOM.after(anchor, value.$element)
+							if (value) DOM.after(anchor, value.$element)
 							// Update stored value
 							children[node.name] = value
 						},
@@ -75,7 +75,8 @@ const create = ({ast, state, innerData, nodes, children, subscriber}) => {
 						},
 						set(value) {
 							if (children[node.name] && ARR.equals(children[node.name], value)) return
-							value = ARR.copy(value)
+							if (value) value = ARR.copy(value)
+							else value = []
 							const fragment = document.createDocumentFragment()
 							// Update components
 							if (children[node.name]) {
