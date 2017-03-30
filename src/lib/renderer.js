@@ -155,7 +155,7 @@ const render = (ast) => {
 			configurable: true
 		}
 	})
-	const element = create({ast, state, innerData, nodes, children, subscriber})
+	const element = create({ast, state, innerData, nodes, children, subscriber, create})
 	Object.defineProperty(state, '$element', {
 		value: element,
 		configurable: true

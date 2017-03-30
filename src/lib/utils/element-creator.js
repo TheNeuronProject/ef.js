@@ -1,48 +1,57 @@
 import { warn } from '../debug.js'
 import initBinding from './binding.js'
 
-const createElement = ({info, state, innerData, nodes, subscriber}) => {
-	const element = document.createElement(info.tag)
-	if (info.alias) Object.defineProperty(nodes, info.alias, {value: element})
-	for (let i in info.attr) {
-		const attr = info.attr[i]
-		if (typeof attr === 'string') element.setAttribute(i, attr)
-		else {
-			const handler = value => element.setAttribute(i, value)
-			initBinding({bind: attr, state, subscriber, innerData, handler})
-		}
-	}
-	for (let i in info.prop) {
-		const prop = info.prop[i]
-		if (typeof prop === 'string') element[i] = prop
-		else {
-			const handler = (value) => {
-				element[i] = value
-			}
-			const {dataNode, subscriberNode} = initBinding({bind: prop, state, subscriber, innerData, handler})
+const getElement = (tag, alias, nodes) => {
+	const element = document.createElement(tag)
+	if (alias) Object.defineProperty(nodes, alias, {value: element})
+	return element
+}
 
-			if (i === 'value' || i === 'checked') {
-				const updateOthers = (value) => {
-					if (dataNode[name] === value) return
-					dataNode[name] = value
-					for (let j of subscriberNode) {
-						if (j !== handler) j.call(state, value)
-					}
-				}
-				if (i === 'value') {
-					element.addEventListener('input', () => updateOthers(element.value), false)
-					element.addEventListener('change', () => updateOthers(element.value), false)
-				} else element.addEventListener('change', () => updateOthers(event.checked), false)
-			}
+const updateOthers = ({dataNode, subscriberNode, handler, state, _key, value}) => {
+	if (dataNode[_key] === value) return
+	dataNode[_key] = value
+	for (let i of subscriberNode) {
+		if (i !== handler) i.call(state, value)
+	}
+}
+
+const addValListener = ({dataNode, subscriberNode, handler, state, element, key, _key}) => {
+	if (key === 'value') {
+		element.addEventListener('input', () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: element.value}), false)
+		element.addEventListener('change', () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: element.value}), false)
+	} else element.addEventListener('change', () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: event.checked}), false)
+}
+
+const addAttr = ({element, attr, key, state, subscriber, innerData}) => {
+	if (typeof attr === 'string') element.setAttribute(key, attr)
+	else initBinding({bind: attr, state, subscriber, innerData, handler: value => element.setAttribute(key, value)})
+}
+
+const addProp = ({element, prop, key, state, subscriber, innerData}) => {
+	if (typeof prop === 'string') element[key] = prop
+	else {
+		const handler = (value) => {
+			element[key] = value
 		}
+		const {dataNode, subscriberNode, _key} = initBinding({bind: prop, state, subscriber, innerData, handler})
+		if (key === 'value' || key === 'checked') addValListener({dataNode, subscriberNode, handler, state, element, key, _key})
 	}
-	for (let i in info.event) {
-		const [method, value] = info.event[i]
-		element.addEventListener(i, (e) => {
-			if (state.$methods[method]) state.$methods[method]({e, value, state})
-			else warn(`Method named '${method}' not found!`)
-		}, false)
-	}
+}
+
+const addEvent = ({element, event, key, state}) => {
+	const [method, value] = event
+	element.addEventListener(key, (e) => {
+		if (state.$methods[method]) state.$methods[method]({e, value, state})
+		else warn(`Method named '${method}' not found!`)
+	}, false)
+}
+
+const createElement = ({info, state, innerData, nodes, subscriber}) => {
+	const {attr, prop, event} = info
+	const element = getElement(info.tag, info.alias, nodes)
+	for (let i in attr) addAttr({element, attr: attr[i], key: i, state, subscriber, innerData})
+	for (let i in prop) addProp({element, prop: prop[i], key: i, state, subscriber, innerData})
+	for (let i in event) addEvent({element, event: event[i], key: i, state})
 	return element
 }
 

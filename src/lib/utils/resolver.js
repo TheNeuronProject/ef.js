@@ -28,21 +28,21 @@ const resolveReactivePath = (path, obj) => {
 	return obj
 }
 
-const resolve = ({ path, name, parentNode, subscriberNode, dataNode }) => {
+const resolve = ({ path, _key, parentNode, subscriberNode, dataNode }) => {
 	if (path.length > 0) {
 		parentNode = resolveReactivePath(path, parentNode)
 		subscriberNode = resolvePath(path, subscriberNode)
 		dataNode = resolvePath(path, dataNode)
 	}
-	if (!subscriberNode[name]) subscriberNode[name] = []
-	if (!dataNode[name]) dataNode[name] = ''
-	return { parentNode, subscriberNode: subscriberNode[name], dataNode }
+	if (!subscriberNode[_key]) subscriberNode[_key] = []
+	if (!dataNode[_key]) dataNode[_key] = ''
+	return { parentNode, subscriberNode: subscriberNode[_key], dataNode }
 }
 
 const resolveSubscriber = (path, subscriber) => {
 	const pathArr = path.split('.')
-	const name = pathArr.pop()
-	return resolvePath(pathArr, subscriber)[name]
+	const key = pathArr.pop()
+	return resolvePath(pathArr, subscriber)[key]
 }
 
 export { resolvePath, resolve, resolveSubscriber }

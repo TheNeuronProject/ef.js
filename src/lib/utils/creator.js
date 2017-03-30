@@ -7,105 +7,125 @@ import initBinding from './binding.js'
 import { warn, warnAttachment } from '../debug.js'
 
 // Reserved names
-const reserved = 'attached data element nodes methods subscribe unsubscribe update destroy'.split(' ').map(i => `$${i}`)
+const reserved = 'attached data element nodes methods subscribe unsubscribe update destroy'
+	.split(' ').map(i => `$${i}`)
 
-const create = ({ast, state, innerData, nodes, children, subscriber}) => {
+const bindTextNode = ({node, state, subscriber, innerData, element}) => {
+	// Data binding text node
+	const textNode = document.createTextNode('')
+	const handler = (value) => {
+		textNode.textContent = value
+	}
+	initBinding({bind: node, state, subscriber, innerData, handler})
+
+	// Append element to the component
+	DOM.append(element, textNode)
+}
+
+const updateMountingNode = ({children, name, anchor, value}) => {
+	// Update component
+	if (children[name]) DOM.remove(children[name].$element)
+	if (value) DOM.after(anchor, value.$element)
+	// Update stored value
+	children[name] = value
+}
+
+const bindMountingNode = ({state, name, children, anchor}) => {
+	Object.defineProperty(state, name, {
+		get() {
+			return children[name]
+		},
+		set(value) {
+			if (children[name] === value) return
+			if (value && value.$attached) return warnAttachment(value)
+			updateMountingNode({children, name, anchor, value})
+		},
+		enumerable: true,
+		configurable: true
+	})
+}
+
+const updateMountingList = ({children, name, anchor, value}) => {
+	if (value) value = ARR.copy(value)
+	else value = []
+	const fragment = document.createDocumentFragment()
+	// Update components
+	if (children[name]) {
+		for (let j of value) {
+			if (j.$attached) return warnAttachment(j)
+			DOM.append(fragment, j.$element)
+			ARR.remove(children[name], j)
+		}
+		for (let j of children[name]) DOM.remove(j.$element)
+	} else for (let j of value) DOM.append(fragment, j.$element)
+	// Update stored value
+	children[name].length = 0
+	ARR.push(children[name], ...value)
+	// Append to current component
+	DOM.after(anchor, fragment)
+}
+
+const bindMountingList = ({state, name, children, anchor}) => {
+	children[name] = defineArr([], anchor)
+	Object.defineProperty(state, name, {
+		get() {
+			return children[name]
+		},
+		set(value) {
+			if (children[name] && ARR.equals(children[name], value)) return
+			updateMountingList({children, name, anchor, value})
+		},
+		enumerable: true,
+		configurable: true
+	})
+}
+
+const createAnchor = (name) => {
+	const anchor = document.createTextNode('')
+	if (ENV !== 'production') {
+		DOM.before(anchor, document.createComment(`Start of mounting point '${name}'`))
+		DOM.after(anchor, document.createComment(`End of mounting point '${name}'`))
+	}
+	return anchor
+}
+
+const resolveAST = ({node, nodeType, element, state, innerData, nodes, children, subscriber, create}) => {
+	switch (nodeType) {
+		case 'string': {
+			// Static text node
+			DOM.append(element, document.createTextNode(node))
+			break
+		}
+		case 'array': {
+			if (typeOf(node[0]) === 'object') DOM.append(element, create({ast: node, state, innerData, nodes, children, subscriber, create}))
+			else bindTextNode({node, state, subscriber, innerData, element})
+			break
+		}
+		case 'object': {
+			if (reserved.indexOf(node.name) !== -1) {
+				warn(`Reserved name '${node.name}' should not be used, ignoring.`)
+				break
+			}
+			const anchor = createAnchor(node.name)
+			if (node.type === 'node') bindMountingNode({state, name: node.name, children, anchor})
+			else if (node.type === 'list') bindMountingList({state, name: node.name, children, anchor})
+			else throw new TypeError(`Not a standard ef.js AST: Unknown mounting point type '${node.type}'`)
+			// Append placeholder
+			DOM.append(element, anchor)
+			break
+		}
+		default: {
+			throw new TypeError(`Not a standard ef.js AST: Unknown node type '${nodeType}'`)
+		}
+	}
+}
+
+const create = ({ast, state, innerData, nodes, children, subscriber, create}) => {
 	// First create an element according to the description
 	const element = createElement({info: ast[0], state, innerData, nodes, subscriber})
 
 	// Append child nodes
-	for (let i = 1; i < ast.length; i++) {
-		const node = ast[i]
-		const nodeType = typeOf(node)
-		switch (nodeType) {
-			case 'string': {
-				// Static text node
-				DOM.append(element, document.createTextNode(node))
-				break
-			}
-			case 'array': {
-				if (typeOf(node[0]) === 'object') {
-					// Create child element
-					DOM.append(element, create({ast: node, state, innerData, nodes, children, subscriber}))
-				} else {
-					// Data binding text node
-					const textNode = document.createTextNode('')
-					const handler = (value) => {
-						textNode.textContent = value
-					}
-					initBinding({bind: node, state, subscriber, innerData, handler})
-
-					// Append element to the component
-					DOM.append(element, textNode)
-				}
-				break
-			}
-			case 'object': {
-				if (reserved.indexOf(node.name) !== -1) {
-					warn(`No reserved name '${node.name}' should be used, ignoring.`)
-					break
-				}
-				const anchor = (() => {
-					if (ENV === 'production') return document.createTextNode('')
-					return document.createComment(`Mounting point for '${node.name}'`)
-				})()
-				if (node.type === 'node') {
-					Object.defineProperty(state, node.name, {
-						get() {
-							return children[node.name]
-						},
-						set(value) {
-							if (children[node.name] === value) return
-							if (value && value.$attached) return warnAttachment(value)
-							// Update component
-							if (children[node.name]) DOM.remove(children[node.name].$element)
-							if (value) DOM.after(anchor, value.$element)
-							// Update stored value
-							children[node.name] = value
-						},
-						enumerable: true,
-						configurable: true
-					})
-				} else if (node.type === 'list') {
-					const initArr = defineArr([], anchor)
-					children[node.name] = initArr
-					Object.defineProperty(state, node.name, {
-						get() {
-							return children[node.name]
-						},
-						set(value) {
-							if (children[node.name] && ARR.equals(children[node.name], value)) return
-							if (value) value = ARR.copy(value)
-							else value = []
-							const fragment = document.createDocumentFragment()
-							// Update components
-							if (children[node.name]) {
-								for (let j of value) {
-									if (j.$attached) return warnAttachment(j)
-									DOM.append(fragment, j.$element)
-									ARR.remove(children[node.name], j)
-								}
-								for (let j of children[node.name]) DOM.remove(j.$element)
-							} else for (let j of value) DOM.append(fragment, j.$element)
-							// Update stored value
-							children[node.name].length = 0
-							ARR.push(children[node.name], ...value)
-							// Append to current component
-							DOM.after(anchor, fragment)
-						},
-						enumerable: true,
-						configurable: true
-					})
-				} else throw new TypeError(`Not a standard ef.js AST: Unknown mounting point type '${node.type}'`)
-				// Append placeholder
-				DOM.append(element, anchor)
-				break
-			}
-			default: {
-				throw new TypeError(`Not a standard ef.js AST: Unknown node type '${nodeType}'`)
-			}
-		}
-	}
+	for (let i = 1; i < ast.length; i++) resolveAST({node: ast[i], nodeType: typeOf(ast[i]),element, state, innerData, nodes, children, subscriber, create})
 
 	return element
 }
