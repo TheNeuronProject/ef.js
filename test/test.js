@@ -83,7 +83,7 @@ var ast = [
 		{
 			tag: 'button',
 			event: {
-				click: ['sendMsg', 'some data']
+				click: ['sendMsg', [['class', 'text'], 'box test2']]
 			}
 		},
 		'sendMsg'

@@ -38,8 +38,16 @@ const addProp = ({element, prop, key, state, subscriber, innerData}) => {
 	}
 }
 
-const addEvent = ({element, event, key, state}) => {
+const addEvent = ({element, event, key, state, subscriber, innerData}) => {
 	const [method, value] = event
+	if (Array.isArray(value)) {
+		const {dataNode, _key} = initBinding({bind: value, state, subscriber, innerData})
+		element.addEventListener(key, (e) => {
+			if (state.$methods[method]) state.$methods[method]({e, value: dataNode[_key], state})
+			else warn(`Method named '${method}' not found!`)
+		})
+		return
+	}
 	element.addEventListener(key, (e) => {
 		if (state.$methods[method]) state.$methods[method]({e, value, state})
 		else warn(`Method named '${method}' not found!`)
@@ -51,7 +59,7 @@ const createElement = ({info, state, innerData, nodes, subscriber}) => {
 	const element = getElement(info.tag, info.alias, nodes)
 	for (let i in attr) addAttr({element, attr: attr[i], key: i, state, subscriber, innerData})
 	for (let i in prop) addProp({element, prop: prop[i], key: i, state, subscriber, innerData})
-	for (let i in event) addEvent({element, event: event[i], key: i, state})
+	for (let i in event) addEvent({element, event: event[i], key: i, state, subscriber, innerData})
 	return element
 }
 

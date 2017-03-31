@@ -28,8 +28,11 @@ const initBinding = ({bind, state, subscriber, innerData, handler}) => {
 	if (_default) {
 		parentNode[_key] = _default
 	}
-	if (parentNode[_key]) handler(parentNode[_key])
-	subscriberNode.push(handler)
+
+	if (handler) {
+		if (parentNode[_key]) handler(parentNode[_key])
+		subscriberNode.push(handler)
+	}
 
 	return {dataNode, subscriberNode, _key}
 }
