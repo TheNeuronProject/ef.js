@@ -20,3 +20,6 @@ test/ef.dev.js
 
 # node modules
 node_modules/
+
+# local tools
+publish
