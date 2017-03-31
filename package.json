@@ -1,7 +1,7 @@
 {
   "name": "ef.js",
   "version": "0.1.1-alpha.11",
-  "description": "(maybe) An elegent HTML template framework",
+  "description": "(maybe) An elegant HTML template framework",
   "main": "dist/ef.min.js",
   "module": "src/ef.js",
   "scripts": {
