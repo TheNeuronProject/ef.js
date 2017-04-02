@@ -24,7 +24,7 @@ const DOMARR = {
 		for (let i of items) {
 			const removed = ARR.remove(this, i)
 			if (removed) {
-				DOM.remove(removed)
+				DOM.remove(removed.$element)
 				ARR.push(removedItems, removed)
 			}
 		}
