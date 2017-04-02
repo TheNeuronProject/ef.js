@@ -19,7 +19,7 @@ const addValListener = ({dataNode, subscriberNode, handler, state, element, key,
 	if (key === 'value') {
 		element.addEventListener('input', () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: element.value}), false)
 		element.addEventListener('change', () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: element.value}), false)
-	} else element.addEventListener('change', () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: event.checked}), false)
+	} else element.addEventListener('change', () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: element.checked}), false)
 }
 
 const addAttr = ({element, attr, key, state, subscriber, innerData}) => {
