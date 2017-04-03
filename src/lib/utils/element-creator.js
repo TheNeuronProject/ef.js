@@ -3,7 +3,10 @@ import initBinding from './binding.js'
 
 const getElement = (tag, alias, nodes) => {
 	const element = document.createElement(tag)
-	if (alias) Object.defineProperty(nodes, alias, {value: element})
+	if (alias) Object.defineProperty(nodes, alias, {
+		value: element,
+		enumerable: true
+	})
 	return element
 }
 

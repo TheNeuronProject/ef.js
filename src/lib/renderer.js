@@ -125,7 +125,7 @@ const render = (ast) => {
 		},
 		$nodes: {
 			get() {
-				return assign({}, nodes)
+				return nodes
 			},
 			configurable: true
 		},
