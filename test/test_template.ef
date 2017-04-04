@@ -1,7 +1,7 @@
 this is a comment
 >div
 	#class = {{class}}
-	#style = {{attr.style = &x23rwr&u02adwew&ni&u}}
+	#style = {{attr.style}}
 	#id = testdiv
 	#some-attr = some text
 	#content =
@@ -16,7 +16,7 @@ this is a comment
 	>p
 		#class = some class name
 		>span
-			.Notice: {{notice}}&x23rwr&u02adwew&nfgrfi&u90
+			.Notice: {{notice}}
 		.some text
 		-node2
 		+list1

@@ -10,7 +10,8 @@ ef.js also provides a simple template-engine which helps you create component mo
 Related projects:
 + [eft-parser](https://github.com/ClassicOldSong/eft-parser) - Parser for eft templates
 + [rollup-plugin-eft](https://github.com/ClassicOldSong/rollup-plugin-eft) - Import .eft templates directly from your code, taking the advantage of ef.js into your project with zero configuration.
-+ [SublimeEFMLHighlighter](https://github.com/ClassicOldSong/SublimeEFMLHighlighter) - EFML hightlighter for SublimeText3
++ [SublimeEFMLHighlighter](https://github.com/ClassicOldSong/SublimeEFMLHighlighter) - EFML highlighter for SublimeText3
++ [EFML.vim](https://github.com/deluxghost/EFML.vim) - EFML (*.ef, *.eft) syntax highlighting for Vim
 
 ## Usage
 ``` javascript
