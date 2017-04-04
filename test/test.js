@@ -1,7 +1,7 @@
 var ast = [
 	{
-		tag: 'div',
-		attr: {
+		t: 'div',
+		a: {
 			id: 'id1',
 			class: [['class', 'text'], 'box test']
 		}
@@ -9,27 +9,27 @@ var ast = [
 	'text0',
 	[
 		{
-			tag: 'br'
+			t: 'br'
 		}
 	],
 	[['root', 'text']],
 	[
 		{
-			tag: 'br'
+			t: 'br'
 		}
 	],
 	[['class', 'text']],
 	[
 		{
-			tag: 'div',
-			alias: 'testAlias',
-			attr: {
+			t: 'div',
+			n: 'testAlias',
+			a: {
 				style: [['style']]
 			}
 		},
 		'text1',
 		[['info', 'node1']],
-		{ name: 'branch', type: 'node' },
+		{ n: 'branch', t: 0 },
 		[
 			{
 				tag: 'br'
@@ -43,37 +43,37 @@ var ast = [
 		],
 		[
 			{
-				tag: 'input',
-				attr: {
+				t: 'input',
+				a: {
 					type: 'text'
 				},
-				prop: {
+				p: {
 					value: [['class', 'text']]
 				}
 			}
 		],
 		[
 			{
-				tag: 'br'
+				t: 'br'
 			}
 		],
 		'Input style here: ',
 		[
 			{
-				tag: 'br'
+				t: 'br'
 			}
 		],
 		[
 			{
-				tag: 'textarea',
-				prop: {
+				t: 'textarea',
+				p: {
 					value: [['style'], 'background-color: #ECECEC']
 				}
 			}
 		],
 		[
 			{
-				tag: 'br'
+				t: 'br'
 			}
 		],
 		[['text']],
@@ -81,14 +81,14 @@ var ast = [
 	],
 	[
 		{
-			tag: 'button',
-			event: {
-				click: ['sendMsg', [['class', 'text'], 'box test2']]
+			t: 'button',
+			e: {
+				click: ['sendMsg', 'some data']
 			}
 		},
 		'sendMsg'
 	],
-	{ name: 'list', type: 'list' }
+	{ n: 'list', t: 1 }
 ]
 
 var template = 'this is a comment\n' +

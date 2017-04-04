@@ -15,8 +15,12 @@ cache/
 temp/
 
 # Project files
-plugins/
+build/
+config/
 test/
+
+# Hidden files
+.*
 
 # node modules
 node_modules/

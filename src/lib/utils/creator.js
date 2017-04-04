@@ -93,19 +93,19 @@ const resolveAST = ({node, nodeType, element, state, innerData, nodes, children,
 			break
 		}
 		case 'object': {
-			if (reserved.indexOf(node.name) !== -1) {
-				warn(`Reserved name '${node.name}' should not be used, ignoring.`)
+			if (reserved.indexOf(node.n) !== -1) {
+				warn(`Reserved name '${node.n}' should not be used, ignoring.`)
 				break
 			}
 			const anchor = document.createTextNode('')
-			if (node.type === 'node') bindMountingNode({state, name: node.name, children, anchor})
-			else if (node.type === 'list') bindMountingList({state, name: node.name, children, anchor})
-			else throw new TypeError(`Not a standard ef.js AST: Unknown mounting point type '${node.type}'`)
+			if (node.t === 0) bindMountingNode({state, name: node.n, children, anchor})
+			else if (node.t === 1) bindMountingList({state, name: node.n, children, anchor})
+			else throw new TypeError(`Not a standard ef.js AST: Unknown mounting point type '${node.t}'`)
 			// Append placeholder
 			DOM.append(element, anchor)
 			if (ENV !== 'production') {
-				DOM.before(anchor, document.createComment(`Start of mounting point '${node.name}'`))
-				DOM.after(anchor, document.createComment(`End of mounting point '${node.name}'`))
+				DOM.before(anchor, document.createComment(`Start of mounting point '${node.n}'`))
+				DOM.after(anchor, document.createComment(`End of mounting point '${node.n}'`))
 			}
 			break
 		}

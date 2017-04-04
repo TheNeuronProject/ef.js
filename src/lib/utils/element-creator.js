@@ -1,9 +1,9 @@
 import { warn } from '../debug.js'
 import initBinding from './binding.js'
 
-const getElement = (tag, alias, nodes) => {
+const getElement = (tag, _name, nodes) => {
 	const element = document.createElement(tag)
-	if (alias) Object.defineProperty(nodes, alias, {
+	if (_name) Object.defineProperty(nodes, _name, {
 		value: element,
 		enumerable: true
 	})
@@ -58,8 +58,8 @@ const addEvent = ({element, event, key, state, subscriber, innerData}) => {
 }
 
 const createElement = ({info, state, innerData, nodes, subscriber}) => {
-	const {attr, prop, event} = info
-	const element = getElement(info.tag, info.alias, nodes)
+	const {t: tag, a: attr, p: prop, e: event, n: _name} = info
+	const element = getElement(tag, _name, nodes)
 	for (let i in attr) addAttr({element, attr: attr[i], key: i, state, subscriber, innerData})
 	for (let i in prop) addProp({element, prop: prop[i], key: i, state, subscriber, innerData})
 	for (let i in event) addEvent({element, event: event[i], key: i, state, subscriber, innerData})
