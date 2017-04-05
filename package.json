@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "deep-assign": "^2.0.0",
-    "eft-parser": "^0.2.9",
+    "eft-parser": "^0.3.0",
     "object.assign": "^4.0.4"
   }
 }
