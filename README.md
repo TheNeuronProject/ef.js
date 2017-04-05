@@ -10,7 +10,9 @@ ef.js also provides a simple template-engine which helps you create component mo
 Related projects:
 + [eft-parser](https://github.com/ClassicOldSong/eft-parser) - Parser for eft templates
 + [rollup-plugin-eft](https://github.com/ClassicOldSong/rollup-plugin-eft) - Import .eft templates directly from your code, taking the advantage of ef.js into your project with zero configuration.
-+ [SublimeEFMLHighlighter](https://github.com/ClassicOldSong/SublimeEFMLHighlighter) - EFML highlighter for SublimeText3
++ [SublimeEFMLHighlighter](https://github.com/ClassicOldSong/SublimeEFMLHighlighter) - EFML syntax highlighter for SublimeText3
++ [VSCodeEFMLHighlighter](https://marketplace.visualstudio.com/items?itemName=ClassicOldSong.efml) - EFML syntax highlighter for VSCode
++ [AtomEFMLHighlighter](https://atom.io/packages/efml) - EFML syntax highlighter for Atom
 + [EFML.vim](https://github.com/deluxghost/EFML.vim) - EFML (*.ef, *.eft) syntax highlighting for Vim
 
 ## Usage
@@ -88,7 +90,7 @@ this is a comment
 	%anotherProperty = text
 	'@' stands for events
 	contents after ':' are considered as value passed to the handler
-	@click = updateInfo:
+	@click = updateInfo:{{binding.info}}
 	@mousedown = setState
 	'.' stands for text nodes
 	.Name: {{name}}&nJob: {{job}}
