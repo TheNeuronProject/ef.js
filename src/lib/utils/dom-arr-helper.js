@@ -3,6 +3,13 @@ import ARR from './array-helper.js'
 import { warnAttachment } from '../debug.js'
 
 const DOMARR = {
+	empty() {
+		for (let i of this) {
+			DOM.remove(i.$element)
+			i.$destroy()
+		}
+		ARR.empty(this)
+	},
 	pop() {
 		if (this.length === 0) return
 		const poped = ARR.pop(this)
@@ -86,6 +93,7 @@ const DOMARR = {
 
 const defineArr = (arr, anchor) => {
 	Object.defineProperties(arr, {
+		empty: {value: DOMARR.empty},
 		pop: {value: DOMARR.pop},
 		push: {value: DOMARR.push.bind(arr, anchor)},
 		remove: {value: DOMARR.remove},

@@ -89,7 +89,8 @@ const destroy = function() {
 	delete this.$element
 	delete this.$data
 	delete this.$methods
-	delete this.$subscrib
+	delete this.$nodes
+	delete this.$subscribe
 	delete this.$unsubscribe
 	delete this.$attached
 	delete this.$update

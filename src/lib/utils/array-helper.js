@@ -4,6 +4,10 @@ const ARR = {
 	copy(arr) {
 		return proto.slice.call(arr, 0)
 	},
+	empty(arr) {
+		arr.length = 0
+		return arr
+	},
 	equals(left, right) {
 		if (!Array.isArray(right)) return false
 		if (left === right) return true

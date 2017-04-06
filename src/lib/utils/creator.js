@@ -4,7 +4,7 @@ import ARR from './array-helper.js'
 import defineArr from './dom-arr-helper.js'
 import typeOf from './type-of.js'
 import initBinding from './binding.js'
-import { warn, warnAttachment } from '../debug.js'
+import { warn, warnAttachment, warnParentNode } from '../debug.js'
 
 // Reserved names
 const reserved = 'attached data element nodes methods subscribe unsubscribe update destroy'
@@ -22,7 +22,12 @@ const bindTextNode = ({node, state, subscriber, innerData, element}) => {
 	DOM.append(element, textNode)
 }
 
-const updateMountingNode = ({children, name, anchor, value}) => {
+const updateMountingNode = ({$element, children, name, anchor, value}) => {
+	if (children[name] === value) return
+	if (value) {
+		if (value.$attached) return warnAttachment(value)
+		if (value.$element.contains($element)) return warnParentNode()
+	}
 	// Update component
 	if (children[name]) DOM.remove(children[name].$element)
 	if (value) DOM.after(anchor, value.$element)
@@ -36,16 +41,14 @@ const bindMountingNode = ({state, name, children, anchor}) => {
 			return children[name]
 		},
 		set(value) {
-			if (children[name] === value) return
-			if (value && value.$attached) return warnAttachment(value)
-			updateMountingNode({children, name, anchor, value})
+			updateMountingNode({$element: state.$element, children, name, anchor, value})
 		},
 		enumerable: true,
 		configurable: true
 	})
 }
 
-const updateMountingList = ({children, name, anchor, value}) => {
+const updateMountingList = ({$element, children, name, anchor, value}) => {
 	if (value) value = ARR.copy(value)
 	else value = []
 	const fragment = document.createDocumentFragment()
@@ -53,6 +56,7 @@ const updateMountingList = ({children, name, anchor, value}) => {
 	if (children[name]) {
 		for (let j of value) {
 			if (j.$attached) return warnAttachment(j)
+			if (j.$element.contains($element)) return warnParentNode()
 			DOM.append(fragment, j.$element)
 			ARR.remove(children[name], j)
 		}
@@ -73,7 +77,7 @@ const bindMountingList = ({state, name, children, anchor}) => {
 		},
 		set(value) {
 			if (children[name] && ARR.equals(children[name], value)) return
-			updateMountingList({children, name, anchor, value})
+			updateMountingList({$element: state.$element, children, name, anchor, value})
 		},
 		enumerable: true,
 		configurable: true

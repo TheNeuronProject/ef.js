@@ -109,7 +109,7 @@ var template = 'this is a comment\n' +
 '		>span\n' +
 '			.Notice: {{notice}}\n' +
 '		. test\n' +
-'	 	-node2\n' +
+'		-node2\n' +
 '		+list1'
 
 var data1 = {
