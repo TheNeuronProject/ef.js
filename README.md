@@ -13,7 +13,9 @@ Related projects:
 + [SublimeEFMLHighlighter](https://github.com/ClassicOldSong/SublimeEFMLHighlighter) - EFML syntax highlighter for SublimeText3
 + [VSCodeEFMLHighlighter](https://marketplace.visualstudio.com/items?itemName=ClassicOldSong.efml) - EFML syntax highlighter for VSCode
 + [AtomEFMLHighlighter](https://atom.io/packages/efml) - EFML syntax highlighter for Atom
-+ [EFML.vim](https://github.com/deluxghost/EFML.vim) - EFML (*.ef, *.eft) syntax highlighting for Vim
+
+Community project(s):
++ [EFML.vim](https://github.com/deluxghost/EFML.vim) by [deluxghost](https://github.com/deluxghost) - EFML (*.ef, *.eft) syntax highlighting for Vim
 
 ## Usage
 ``` javascript
@@ -32,6 +34,7 @@ const data = {
 
 const module1 = new ef(template)
 const module2 = new ef(ast)
+const module3 = ef.t`Your awesome template`
 
 const component1 = module1.render() // Create a component without data
 const component2 = module2.render(data) // Create a component and then updates it's data
@@ -84,7 +87,7 @@ this is a comment
 	#style = {{attr.style = background: #ECECEC}}
 	#id = testdiv
 	#some-attr = some text
-	#content =
+	#content
 	'%' stands for properties
 	%title = {{name}}
 	%anotherProperty = text

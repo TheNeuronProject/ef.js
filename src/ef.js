@@ -5,6 +5,7 @@ import { info } from './lib/debug.js'
 import parse from './lib/parser.js'
 import render from './lib/renderer.js'
 import typeOf from './lib/utils/type-of.js'
+import mixStr from './lib/utils/literals-mix.js'
 import eftParser from 'eft-parser'
 import { version } from '../package.json'
 
@@ -34,6 +35,10 @@ const ef = class {
 
 	static parseEft(template) {
 		return eftParser(template)
+	}
+
+	static t(...strs) {
+		return new ef(mixStr(...strs))
 	}
 }
 
