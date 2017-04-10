@@ -49,7 +49,7 @@ component2.$methods.someMethod = ({e, value, state}) => {
 	console.log('Value passed', value)
 } // Update binding method
 
-const logData = val => console.log('Subscribed data updated:', val
+const logData = val => console.log('Subscribed data updated:', val)
 component1.$subscribe('info.data', logData) // Observe a value
 component2.$unsubscribe('info.data', logData) // Stop observing a value
 
