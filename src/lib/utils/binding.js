@@ -12,7 +12,7 @@ const initBinding = ({bind, state, subscriber, innerData, handler}) => {
 		subscriberNode: subscriber,
 		dataNode: innerData
 	})
-	if (typeof parentNode[_key] === 'undefined') {
+	if (!Object.hasOwnProperty.call(parentNode, _key)) {
 		Object.defineProperty(parentNode, _key, {
 			get() {
 				return dataNode[_key]
