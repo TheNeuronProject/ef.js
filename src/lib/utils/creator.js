@@ -25,7 +25,6 @@ const bindTextNode = ({node, state, subscriber, innerData, element}) => {
 const updateMountingNode = ({$element, children, name, anchor, value}) => {
 	if (children[name] === value) return
 	if (value) {
-		if (value.$attached) return warnAttachment(value)
 		if (value.$element.contains($element)) return warnParentNode()
 	}
 	// Update component
@@ -55,7 +54,7 @@ const updateMountingList = ({$element, children, name, anchor, value}) => {
 	// Update components
 	if (children[name]) {
 		for (let j of value) {
-			if (j.$attached) return warnAttachment(j)
+			if (j.$attached) warnAttachment(j)
 			if (j.$element.contains($element)) return warnParentNode()
 			DOM.append(fragment, j.$element)
 			ARR.remove(children[name], j)
