@@ -43,38 +43,23 @@ const DOM = {
 	// },
 
 	before(node, ...nodes) {
-		if (node.parentNode) {
-			const tempFragment = document.createDocumentFragment()
-			nodes.reverse()
-			for (let i of nodes) {
-				proto.appendChild.call(tempFragment, i)
-			}
-			proto.insertBefore.call(node.parentNode, tempFragment, node)
-		}
+		const tempFragment = document.createDocumentFragment()
+		nodes.reverse()
+		for (let i of nodes) proto.appendChild.call(tempFragment, i)
+		proto.insertBefore.call(node.parentNode, tempFragment, node)
 	},
 
 	after(node, ...nodes) {
-		if (node.parentNode) {
-			const tempFragment = document.createDocumentFragment()
-			for (let i of nodes) {
-				proto.appendChild.call(tempFragment, i)
-			}
-			if (node.nextSibling) {
-				proto.insertBefore.call(node.parentNode, tempFragment, node.nextSibling)
-			} else {
-				proto.appendChild.call(node.parentNode, tempFragment)
-			}
-		}
+		const tempFragment = document.createDocumentFragment()
+		for (let i of nodes) proto.appendChild.call(tempFragment, i)
+		if (node.nextSibling) proto.insertBefore.call(node.parentNode, tempFragment, node.nextSibling)
+		else proto.appendChild.call(node.parentNode, tempFragment)
 	},
 
 	append(node, ...nodes) {
-		if ([1,9,11].indexOf(node.nodeType) === -1) {
-			return
-		}
+		if ([1,9,11].indexOf(node.nodeType) === -1) return
 		const tempFragment = document.createDocumentFragment()
-		for (let i of nodes) {
-			proto.appendChild.call(tempFragment, i)
-		}
+		for (let i of nodes) proto.appendChild.call(tempFragment, i)
 		proto.appendChild.call(node, tempFragment)
 	},
 

@@ -18,10 +18,7 @@ const DOMARR = {
 	},
 	push(anchor, ...items) {
 		const elements = []
-		for (let i of items) {
-			if (i.$attached) return warnAttachment(i)
-			ARR.push(elements, i.$element)
-		}
+		for (let i of items) ARR.push(elements, i.$element)
 		if (this.length === 0) DOM.after(anchor, ...elements)
 		else DOM.after(this[this.length - 1].$element, ...elements)
 		return ARR.push(this, ...items)
