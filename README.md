@@ -7,6 +7,10 @@ ef.js is a static MVC framework for browsers, which you can write your UI withou
 
 ef.js also provides a simple template-engine which helps you create component modules with data binding at ease, but you can also use your favourite template-engine if it can be parsed into ef.js's AST.
 
+Demo:
++ [TodoMVC](https://classicoldsong.github.io/todomvc-efjs/) - [repo](https://github.com/ClassicOldSong/todomvc-efjs)
++ [dbmon](https://classicoldsong.github.io/js-repaint-perfs/ef/index.html) - [repo](https://github.com/ClassicOldSong/js-repaint-perfs)
+
 Related projects:
 + [eft-parser](https://github.com/ClassicOldSong/eft-parser) - Parser for eft templates
 + [rollup-plugin-eft](https://github.com/ClassicOldSong/rollup-plugin-eft) - Import .eft templates directly from your code, taking the advantage of ef.js into your project with zero configuration.
