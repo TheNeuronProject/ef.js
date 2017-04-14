@@ -1,16 +1,16 @@
 import deepAssign from 'deep-assign'
 
 // Resolve an array described path to an object
-const resolvePath = (path, obj) => {
-	for (let i of path) {
+const resolvePath = (_path, obj) => {
+	for (let i of _path) {
 		if (!obj[i]) obj[i] = {}
 		obj = obj[i]
 	}
 	return obj
 }
 
-const resolveReactivePath = (path, obj) => {
-	for (let i of path) {
+const resolveReactivePath = (_path, obj) => {
+	for (let i of _path) {
 		if (!obj[i]) {
 			const node = {}
 			Object.defineProperty(obj, i, {
@@ -28,19 +28,19 @@ const resolveReactivePath = (path, obj) => {
 	return obj
 }
 
-const resolve = ({ path, _key, parentNode, subscriberNode, dataNode }) => {
-	if (path.length > 0) {
-		parentNode = resolveReactivePath(path, parentNode)
-		subscriberNode = resolvePath(path, subscriberNode)
-		dataNode = resolvePath(path, dataNode)
+const resolve = ({ _path, _key, parentNode, subscriberNode, dataNode }) => {
+	if (_path.length > 0) {
+		parentNode = resolveReactivePath(_path, parentNode)
+		subscriberNode = resolvePath(_path, subscriberNode)
+		dataNode = resolvePath(_path, dataNode)
 	}
 	if (!subscriberNode[_key]) subscriberNode[_key] = []
 	if (!Object.hasOwnProperty.call(dataNode, _key)) dataNode[_key] = ''
 	return { parentNode, subscriberNode: subscriberNode[_key], dataNode }
 }
 
-const resolveSubscriber = (path, subscriber) => {
-	const pathArr = path.split('.')
+const resolveSubscriber = (_path, subscriber) => {
+	const pathArr = _path.split('.')
 	const key = pathArr.pop()
 	return resolvePath(pathArr, subscriber)[key]
 }

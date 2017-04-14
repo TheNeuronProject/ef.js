@@ -57,8 +57,8 @@ import ARR from './utils/array-helper.js'
 import { assign } from './utils/polyfills.js'
 import deepAssign from 'deep-assign'
 
-const unsubscribe = (path, fn, subscriber) => {
-	const subscriberNode = resolveSubscriber(path, subscriber)
+const unsubscribe = (_path, fn, subscriber) => {
+	const subscriberNode = resolveSubscriber(_path, subscriber)
 	const index = subscriberNode.indexOf(fn)
 	if (index === -1) return
 	ARR.remove(subscriberNode, fn)
@@ -132,14 +132,14 @@ const render = (ast) => {
 		},
 		$subscribe: {
 			value: (pathStr, handler) => {
-				const path = pathStr.split('.')
-				initBinding({bind: [path], state, subscriber, innerData, handler})
+				const _path = pathStr.split('.')
+				initBinding({bind: [_path], state, subscriber, innerData, handler})
 			},
 			configurable: true
 		},
 		$unsubscribe: {
-			value: (path, fn) => {
-				unsubscribe(path, fn, subscriber)
+			value: (_path, fn) => {
+				unsubscribe(_path, fn, subscriber)
 			},
 			configurable: true
 		},

@@ -104,8 +104,9 @@ const resolveAST = ({node, nodeType, element, state, innerData, nodes, children,
 			if (node.t === 0) bindMountingNode({state, name: node.n, children, anchor})
 			else if (node.t === 1) bindMountingList({state, name: node.n, children, anchor})
 			else throw new TypeError(`Not a standard ef.js AST: Unknown mounting point type '${node.t}'`)
-			// Append placeholder
+			// Append anchor
 			DOM.append(element, anchor)
+			// Display anchor indicator in development mode
 			if (ENV !== 'production') {
 				DOM.before(anchor, document.createComment(`Start of mounting point '${node.n}'`))
 				DOM.after(anchor, document.createComment(`End of mounting point '${node.n}'`))
@@ -123,7 +124,7 @@ const create = ({ast, state, innerData, nodes, children, subscriber, create}) =>
 	const element = createElement({info: ast[0], state, innerData, nodes, subscriber})
 
 	// Append child nodes
-	for (let i = 1; i < ast.length; i++) resolveAST({node: ast[i], nodeType: typeOf(ast[i]),element, state, innerData, nodes, children, subscriber, create})
+	for (let i = 1; i < ast.length; i++) resolveAST({node: ast[i], nodeType: typeOf(ast[i]), element, state, innerData, nodes, children, subscriber, create})
 
 	return element
 }
