@@ -83,7 +83,7 @@ var ast = [
 		{
 			t: 'button',
 			e: {
-				click: ['sendMsg', 'some data']
+				click: {m: 'sendMsg', v: 'some data'}
 			}
 		},
 		'sendMsg'
@@ -104,7 +104,7 @@ var template = 'this is a comment\n' +
 '	-node1\n' +
 '	>p\n' +
 '		#class = some class name\n' +
-'		@click = alertNotice\n' +
+'		@click.stop = alertNotice\n' +
 '		/@mousedown = setState:test value\n' +
 '		>span\n' +
 '			.Notice: {{notice}}\n' +

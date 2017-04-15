@@ -42,18 +42,31 @@ const addProp = ({element, prop, key, state, subscriber, innerData}) => {
 }
 
 const addEvent = ({element, event, key, state, subscriber, innerData}) => {
-	const [method, value] = event
-	if (Array.isArray(value)) {
-		const {dataNode, _key} = initBinding({bind: value, state, subscriber, innerData})
-		element.addEventListener(key, (e) => {
-			if (state.$methods[method]) state.$methods[method]({e, value: dataNode[_key], state})
-			else warn(`Method named '${method}' not found!`)
-		})
-		return
+
+	/** m: method                   : string
+	 *  s: stopPropagation          : number/undefined
+	 *  i: stopImmediatePropagation : number/undefined
+	 *  p: preventDefault           : number/undefined
+	 *  v: value                    : string/array/undefined
+	 */
+	const {m, s, i, p, v} = event
+	const [listener, ...k] = key.split('.')
+	const kc = []
+	for (let i of k) {
+		const keyCode = parseInt(i, 10)
+		if (!isNaN(keyCode)) kc.push(keyCode)
 	}
-	element.addEventListener(key, (e) => {
-		if (state.$methods[method]) state.$methods[method]({e, value, state})
-		else warn(`Method named '${method}' not found!`)
+	const {dataNode, _key} = (() => {
+		if (Array.isArray(v)) return initBinding({bind: v, state, subscriber, innerData})
+		return {dataNode: {_: v}, _key: '_'}
+	})()
+	element.addEventListener(listener, (e) => {
+		if (kc.length !== 0 && kc.indexOf(e.which) === -1) return
+		if (s) e.stopPropagation()
+		if (i) e.stopImmediatePropagation()
+		if (p) e.preventDefault()
+		if (state.$methods[m]) state.$methods[m]({e, value: dataNode[_key], state})
+		else warn(`Method named '${m}' not found!`)
 	}, false)
 }
 
