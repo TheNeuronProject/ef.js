@@ -3,7 +3,7 @@
 
 (maybe) An elegant HTML template engine & basic framework
 
-ef.js is a static template framework for browsers, which you can write your UI without concerning about the codes, or writing logic without concerning about the UI.
+ef.js is a static template framework for browsers, which you can write your UI without concerning about the logic, or writing logic without concerning about the UI.
 
 ef.js also provides a simple template-engine which helps you create component modules with data binding at ease, but you can also use your favourite template-engine if it can be parsed into ef.js's AST.
 
@@ -13,7 +13,7 @@ Demo:
 
 Related projects:
 + [eft-parser](https://github.com/ClassicOldSong/eft-parser) - Parser for eft templates
-+ [rollup-plugin-eft](https://github.com/ClassicOldSong/rollup-plugin-eft) - Import .eft templates directly from your code, taking the advantage of ef.js into your project with zero configuration.
++ [rollup-plugin-eft](https://github.com/ClassicOldSong/rollup-plugin-eft) - Import .ef and .eft templates directly from your code, taking the advantage of ef.js into your project with zero configuration.
 + [SublimeEFMLHighlighter](https://github.com/ClassicOldSong/SublimeEFMLHighlighter) - EFML syntax highlighter for SublimeText3
 + [VSCodeEFMLHighlighter](https://marketplace.visualstudio.com/items?itemName=ClassicOldSong.efml) - EFML syntax highlighter for VSCode
 + [AtomEFMLHighlighter](https://atom.io/packages/efml) - EFML syntax highlighter for Atom
@@ -28,20 +28,20 @@ import ef from 'ef.js'
 ef.setParser(someparser) // Change the default parser for ef.js so you can use a different type of template
 ef.parseEft('Your awesome template') // Get ef.js ast using default parser
 
-const template = 'Your awesome template'
-const ast = [/* AST parsed by eft-parser */]
+const templateString = 'Your awesome template'
+const ast = [/* AST which supported by ef */]
 
 const data = {
 	$data: {/* Binding data */}
 	$methods: {/* Binding methods */}
 }
 
-const module1 = new ef(template)
-const module2 = new ef(ast)
-const module3 = ef.t`Your awesome template`
+const template1 = new ef(template)
+const template2 = new ef(ast)
+const template3 = ef.t`Your awesome template`
 
-const component1 = module1.render() // Create a component without data
-const component2 = module2.render(data) // Create a component and then updates it's data
+const component1 = template1.render() // Create a component without data
+const component2 = template2.render(data) // Create a component and then updates it's data
 
 component1.$element // The DOM element of component1
 component2.$element // The DOM element of component2
@@ -55,7 +55,7 @@ component2.$methods.someMethod = ({e, value, state}) => {
 
 const logData = val => console.log('Subscribed data updated:', val)
 component1.$subscribe('info.data', logData) // Observe a value
-component2.$unsubscribe('info.data', logData) // Stop observing a value
+component1.$unsubscribe('info.data', logData) // Stop observing a value
 
 component1.$update(data) // Update the whole component state
 component2.$attached // Check if the component has mounted to something
@@ -67,12 +67,18 @@ component1.mountingPoint = null // Detach the mounted component
 
 component1.listMP.push(componet2) // Mount component2 to list 'listMP' mounting point on component1
 
+component1.$destroy() // Destroy the component when not needed for more memory
+
 ```
 
 ## ef.js template language (EFML) format
-ef.js templates are **very strict to indents**. Wrong indents could lead to a parsing error.
+EFML is a completely **logic-free** template language. Just like HTML, there you can do nothing about logic, but EFML provides a easy starting point for data binding and events handling.
 
-Here is an example template.
+Also EFML is the first language that can be parsed into the AST which ef supports.
+
+**Note:** EFML is **very strict to indents**. Wrong indents could lead to a parsing error.
+
+Here is an example.
 
 ```
 Tree structure
