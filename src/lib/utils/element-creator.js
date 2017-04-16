@@ -50,18 +50,29 @@ const addEvent = ({element, event, key, state, subscriber, innerData}) => {
 	 *  v: value                    : string/array/undefined
 	 */
 	const {m, s, i, p, v} = event
-	const [listener, ...k] = key.split('.')
+	const [listener, ...keys] = key.split('.')
 	const kc = []
-	for (let i of k) {
+	const mk = {
+		shift: false,
+		alt: false,
+		ctrl: false,
+		meta: false
+	}
+	for (let i of keys) {
 		const keyCode = parseInt(i, 10)
-		if (!isNaN(keyCode)) kc.push(keyCode)
+		if (isNaN(keyCode)) mk[i] = true
+		else kc.push(keyCode)
 	}
 	const {dataNode, _key} = (() => {
 		if (Array.isArray(v)) return initBinding({bind: v, state, subscriber, innerData})
 		return {dataNode: {_: v}, _key: '_'}
 	})()
 	element.addEventListener(listener, (e) => {
-		if (kc.length !== 0 && kc.indexOf(e.which) === -1) return
+		if (mk.shift !== e.shiftKey ||
+			mk.alt !== e.altKey ||
+			mk.ctrl !== e.ctrlKey ||
+			mk.meta !== e.metaKey ||
+			(kc.length !== 0 && kc.indexOf(e.which) === -1)) return
 		if (s) e.stopPropagation()
 		if (i) e.stopImmediatePropagation()
 		if (p) e.preventDefault()

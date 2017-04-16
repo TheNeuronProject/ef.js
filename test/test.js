@@ -68,6 +68,10 @@ var ast = [
 				t: 'textarea',
 				p: {
 					value: [['style'], 'background-color: #ECECEC']
+				},
+				e: {
+					'keydown.ctrl.13.27': { m: 'key' },
+					'keydown.13.32': { m: 'space' }
 				}
 			}
 		],
@@ -83,7 +87,7 @@ var ast = [
 		{
 			t: 'button',
 			e: {
-				click: {m: 'sendMsg', v: 'some data'}
+				click: { m: 'sendMsg', v: 'some data' }
 			}
 		},
 		'sendMsg'
@@ -91,33 +95,33 @@ var ast = [
 	{ n: 'list', t: 1 }
 ]
 
-var template = 'this is a comment\n' +
-'>div.{{class = some class name}}\n' +
-'	#style = {{attr.style}}\n' +
-'	#id = testdiv\n' +
-'	#some-attr = some text\n' +
-'	#content =\n' +
-'	%title = {{name}}\n' +
-'	%anotherProperty = text\n' +
-'	.Name: {{name}}&nJob: {{job}}\n' +
-'	>br\n' +
-'	-node1\n' +
-'	>p\n' +
-'		#class = some class name\n' +
-'		@click.stop = alertNotice\n' +
-'		/@mousedown = setState:test value\n' +
-'		>span\n' +
-'			.Notice: {{notice}}\n' +
-'		. test\n' +
-'		-node2\n' +
-'		+list1'
+var template = '  this is a comment\n' +
+'  >div.{{class = some class name}}\n' +
+'    #style = {{attr.style}}\n' +
+'    #id = testdiv\n' +
+'  	#some-attr = some text\n' +
+'  	#content =\n' +
+'  	%title = {{name}}\n' +
+'  	%anotherProperty = text\n' +
+'  	.Name: {{name}}&nJob: {{job}}\n' +
+'  	>br\n' +
+'  	-node1\n' +
+'  	>p\n' +
+'  		#class = some class name\n' +
+'  		@click.shift.alt.stop = alertNotice:{{attr.style = color: #666}}\n' +
+'  		/@mousedown = setState\n' +
+'  		>span\n' +
+'  	  	.Notice: {{notice = &u[2F804]]]}}\n' +
+'  		. test\n' +
+'  		-node2\n' +
+'  		+list1'
 
 var data1 = {
 	$data: {
 			class: 'box test class',
 			name: 'Bob',
 			job: 'Assit Alice',
-			notice: 'ooooooops'
+			notice: 'Click here with alt and shift key down. An alert should pop up'
 	},
 	$methods: {
 		alertNotice: function ({state}) {
@@ -147,7 +151,7 @@ state2.$data.root.text = 'component 2'
 state3.$data.class = 'box'
 state3.$data.name = 'Alice'
 state3.$data.job = 'Developer'
-state3.$data.notice = 'N/A'
+// state3.$data.notice = 'N/A'
 state4.$data.job = 'Assiting Alice'
 
 var data2 = {
