@@ -68,10 +68,10 @@ const addEvent = ({element, event, key, state, subscriber, innerData}) => {
 		return {dataNode: {_: v}, _key: '_'}
 	})()
 	element.addEventListener(listener, (e) => {
-		if (mk.shift !== e.shiftKey ||
-			mk.alt !== e.altKey ||
-			mk.ctrl !== e.ctrlKey ||
-			mk.meta !== e.metaKey ||
+		if (mk.shift !== !!e.shiftKey ||
+			mk.alt !== !!e.altKey ||
+			mk.ctrl !== !!e.ctrlKey ||
+			mk.meta !== !!e.metaKey ||
 			(kc.length !== 0 && kc.indexOf(e.which) === -1)) return
 		if (s) e.stopPropagation()
 		if (i) e.stopImmediatePropagation()
