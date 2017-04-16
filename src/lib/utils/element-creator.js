@@ -19,9 +19,11 @@ const updateOthers = ({dataNode, subscriberNode, handler, state, _key, value}) =
 }
 
 const addValListener = ({dataNode, subscriberNode, handler, state, element, key, _key}) => {
+	const _update = () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: element.value})
 	if (key === 'value') {
-		element.addEventListener('input', () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: element.value}), true)
-		element.addEventListener('change', () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: element.value}), true)
+		element.addEventListener('input', _update, true)
+		element.addEventListener('keyup', _update, true)
+		element.addEventListener('change', _update, true)
 	} else element.addEventListener('change', () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: element.checked}), true)
 }
 

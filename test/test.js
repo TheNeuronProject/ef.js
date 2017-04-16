@@ -108,10 +108,10 @@ var template = '  this is a comment\n' +
 '  	-node1\n' +
 '  	>p\n' +
 '  		#class = some class name\n' +
-'  		@click.shift.alt.stop = alertNotice:{{attr.style = color: #666}}\n' +
+'  		@click.shift.meta.stop = alertNotice:{{attr.style = color: #666}}\n' +
 '  		/@mousedown = setState\n' +
 '  		>span\n' +
-'  	  	.Notice: {{notice = &u[2F804]]]}}\n' +
+'  	  	.Notice: {{notice = ]]}}\n' +
 '  		. test\n' +
 '  		-node2\n' +
 '  		+list1'
@@ -121,11 +121,11 @@ var data1 = {
 			class: 'box test class',
 			name: 'Bob',
 			job: 'Assit Alice',
-			notice: 'Click here with alt and shift key down. An alert should pop up'
+			notice: 'Hold shift and alt and then click here. An alert should pop up'
 	},
 	$methods: {
-		alertNotice: function ({state}) {
-			alert(state.$data.notice)
+		alertNotice: function (info) {
+			alert(info.state.$data.notice)
 		}
 	}
 }
@@ -177,7 +177,7 @@ var states = []
 
 state2.$data.style = '10000'
 
-state2.$subscribe('style', (val) => {
+state2.$subscribe('style', function (val) {
 	state2.$data.text = 'Click the button below to run a ' + val + ' components render test.'
 })
 
