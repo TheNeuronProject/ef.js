@@ -108,8 +108,10 @@ this is a comment
 	@mousedown.shift.alt.ctrl.meta = select
 	bind to keys is also easy
 	@keypress.13 = submit
-	use .prevent to preventDefault, .stop to stopPropagation, .stopImmediate to stopImmediatePropagation
-	@keydown.8.prevent.stop = backspace
+	use '.prevent' to preventDefault, '.stop' to stopPropagation, '.stopImmediate' to stopImmediatePropagation
+	@keydown.8.prevent.stop = stopbackspace
+	use '.capture' to capture an event
+	@submit.capture.stopImmediate = submit
 	'.' stands for text nodes
 	.Name: {{name}}&nJob: {{job}}
 	>br

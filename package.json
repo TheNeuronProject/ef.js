@@ -44,6 +44,6 @@
   },
   "dependencies": {
     "deep-assign": "^2.0.0",
-    "eft-parser": "^0.3.2"
+    "eft-parser": "^0.4.1"
   }
 }

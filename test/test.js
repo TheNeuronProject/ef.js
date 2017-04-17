@@ -90,7 +90,7 @@ var ast = [
 				{ l: 'click', m: 'sendMsg', v: 'some data' }
 			]
 		},
-		'sendMsg'
+		[['btnText'], 'sendMsg']
 	],
 	{ n: 'list', t: 1 }
 ]
@@ -117,7 +117,7 @@ var template = '  this is a comment\n' +
 '  		-node2\n' +
 '  		+list1'
 
-var ast2 = ef.parseEft(template)
+var ast2 = ef.parserEft(template)
 
 var data1 = {
 	$data: {
@@ -134,15 +134,15 @@ var data1 = {
 }
 
 var module1 = new ef(ast)
-// var module2 = new ef(ast2)
+var module2 = new ef(ast2)
 
 var state = module1.render()
 var state2 = module1.render()
-// var state3 = module2.render()
-// var state4 = module2.render(data1)
+var state3 = module2.render()
+var state4 = module2.render(data1)
 
-// state3.list1.push(state4)
-// state2.branch = state3
+state3.list1.push(state4)
+state2.branch = state3
 
 // state.$data.text = 'box'
 // state2.$data.text = 'box'
@@ -151,11 +151,11 @@ var state2 = module1.render()
 
 // state.$data.root.text = 'component 1'
 state2.$data.root.text = 'component 2'
-// state3.$data.class = 'box'
-// state3.$data.name = 'Alice'
-// state3.$data.job = 'Developer'
-// // state3.$data.notice = 'N/A'
-// state4.$data.job = 'Assiting Alice'
+state3.$data.class = 'box'
+state3.$data.name = 'Alice'
+state3.$data.job = 'Developer'
+// state3.$data.notice = 'N/A'
+state4.$data.job = 'Assiting Alice'
 
 var data2 = {
 	$data: {
@@ -179,6 +179,8 @@ state.$update(data2)
 var states = []
 
 state2.$data.style = '10000'
+
+state2.$data.btnText = 'Run Test!'
 
 state2.$subscribe('style', function (val) {
 	state2.$data.text = 'Click the button below to run a ' + val + ' components render test.'
