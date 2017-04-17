@@ -35,7 +35,7 @@ const resolve = ({ _path, _key, parentNode, subscriberNode, dataNode }) => {
 		dataNode = resolvePath(_path, dataNode)
 	}
 	if (!subscriberNode[_key]) subscriberNode[_key] = []
-	if (!Object.hasOwnProperty.call(dataNode, _key)) dataNode[_key] = ''
+	if (!Object.prototype.hasOwnProperty.call(dataNode, _key)) dataNode[_key] = ''
 	return { parentNode, subscriberNode: subscriberNode[_key], dataNode }
 }
 

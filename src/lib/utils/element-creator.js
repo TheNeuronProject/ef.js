@@ -43,52 +43,57 @@ const addProp = ({element, prop, key, state, subscriber, innerData}) => {
 	}
 }
 
-const addEvent = ({element, event, key, state, subscriber, innerData}) => {
+const getData = ({v, state, subscriber, innerData}) => {
+	if (Array.isArray(v)) return initBinding({bind: v, state, subscriber, innerData})
+	return {dataNode: {_: v}, _key: '_'}
+}
 
-	/** m: method                   : string
+const addEvent = ({element, event, state, subscriber, innerData}) => {
+
+	/**
+	 *  l: listener									: string
+	 *  m: method                   : string
 	 *  s: stopPropagation          : number/undefined
 	 *  i: stopImmediatePropagation : number/undefined
 	 *  p: preventDefault           : number/undefined
+	 *  h: shiftKey                 : number/undefined
+	 *  a: altKey                   : number/undefined
+	 *  c: ctrlKey                  : number/undefined
+	 *  t: metaKey                  : number/undefined
+	 *  u: capture                  : number/undefined
+	 *  k: keyCodes                 : array/undefined
 	 *  v: value                    : string/array/undefined
 	 */
-	const {m, s, i, p, v} = event
-	const [listener, ...keys] = key.split('.')
-	const kc = []
-	const mk = {
-		shift: false,
-		alt: false,
-		ctrl: false,
-		meta: false
-	}
-	for (let i of keys) {
-		const keyCode = parseInt(i, 10)
-		if (isNaN(keyCode)) mk[i] = true
-		else kc.push(keyCode)
-	}
-	const {dataNode, _key} = (() => {
-		if (Array.isArray(v)) return initBinding({bind: v, state, subscriber, innerData})
-		return {dataNode: {_: v}, _key: '_'}
-	})()
-	element.addEventListener(listener, (e) => {
-		if (mk.shift !== !!e.shiftKey ||
-			mk.alt !== !!e.altKey ||
-			mk.ctrl !== !!e.ctrlKey ||
-			mk.meta !== !!e.metaKey ||
-			(kc.length !== 0 && kc.indexOf(e.which) === -1)) return
+	const {l, m, s, i, p, h, a, c, t, u, k, v} = event
+	const {dataNode, _key} = getData({v, state, subscriber, innerData})
+	element.addEventListener(l, (e) => {
+		if (!!h !== !!e.shiftKey ||
+			!!a !== !!e.altKey ||
+			!!c !== !!e.ctrlKey ||
+			!!t !== !!e.metaKey ||
+			(k && k.indexOf(e.which) === -1)) return
 		if (s) e.stopPropagation()
 		if (i) e.stopImmediatePropagation()
 		if (p) e.preventDefault()
 		if (state.$methods[m]) state.$methods[m]({e, value: dataNode[_key], state})
 		else warn(`Method named '${m}' not found!`)
-	}, false)
+	}, !!u)
 }
 
 const createElement = ({info, state, innerData, nodes, subscriber}) => {
-	const {t: tag, a: attr, p: prop, e: event, n: _name} = info
-	const element = getElement(tag, _name, nodes)
-	for (let i in attr) addAttr({element, attr: attr[i], key: i, state, subscriber, innerData})
-	for (let i in prop) addProp({element, prop: prop[i], key: i, state, subscriber, innerData})
-	for (let i in event) addEvent({element, event: event[i], key: i, state, subscriber, innerData})
+
+	/**
+	 *  t: tag   : string
+	 *  a: attr  : object
+	 *  p: prop  : object
+	 *  e: event : array
+	 *  n: name  : string
+	 */
+	const {t, a, p, e, n} = info
+	const element = getElement(t, n, nodes)
+	for (let i in a) addAttr({element, attr: a[i], key: i, state, subscriber, innerData})
+	for (let i in p) addProp({element, prop: p[i], key: i, state, subscriber, innerData})
+	for (let i in e) addEvent({element, event: e[i], state, subscriber, innerData})
 	return element
 }
 

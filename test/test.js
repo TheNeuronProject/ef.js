@@ -69,10 +69,10 @@ var ast = [
 				p: {
 					value: [['style'], 'background-color: #ECECEC']
 				},
-				e: {
-					'keydown.ctrl.13.27': { m: 'key' },
-					'keydown.13.32': { m: 'space' }
-				}
+				e: [
+					{ l: 'keydown', c: 1, m: 'key', k: [13, 27] },
+					{ l: 'keydown', m: 'space', k: [13, 32] }
+				]
 			}
 		],
 		[
@@ -86,9 +86,9 @@ var ast = [
 	[
 		{
 			t: 'button',
-			e: {
-				click: { m: 'sendMsg', v: 'some data' }
-			}
+			e: [
+				{ l: 'click', m: 'sendMsg', v: 'some data' }
+			]
 		},
 		'sendMsg'
 	],
@@ -108,13 +108,16 @@ var template = '  this is a comment\n' +
 '  	-node1\n' +
 '  	>p\n' +
 '  		#class = some class name\n' +
-'  		@click.shift.meta.stop = alertNotice:{{attr.style = color: #666}}\n' +
-'  		/@mousedown = setState\n' +
+'  		@click.shift.alt.stop = alertNotice:{{attr.style = color: #666}}\n' +
+'  		@mousedown = setState\n' +
+'  		@click.capture.stop = capture\n' +
 '  		>span\n' +
 '  	  	.Notice: {{notice = ]]}}\n' +
 '  		. test\n' +
 '  		-node2\n' +
 '  		+list1'
+
+var ast2 = ef.parseEft(template)
 
 var data1 = {
 	$data: {
@@ -131,15 +134,15 @@ var data1 = {
 }
 
 var module1 = new ef(ast)
-var module2 = new ef(template)
+// var module2 = new ef(ast2)
 
 var state = module1.render()
 var state2 = module1.render()
-var state3 = module2.render()
-var state4 = module2.render(data1)
+// var state3 = module2.render()
+// var state4 = module2.render(data1)
 
-state3.list1.push(state4)
-state2.branch = state3
+// state3.list1.push(state4)
+// state2.branch = state3
 
 // state.$data.text = 'box'
 // state2.$data.text = 'box'
@@ -148,11 +151,11 @@ state2.branch = state3
 
 // state.$data.root.text = 'component 1'
 state2.$data.root.text = 'component 2'
-state3.$data.class = 'box'
-state3.$data.name = 'Alice'
-state3.$data.job = 'Developer'
-// state3.$data.notice = 'N/A'
-state4.$data.job = 'Assiting Alice'
+// state3.$data.class = 'box'
+// state3.$data.name = 'Alice'
+// state3.$data.job = 'Developer'
+// // state3.$data.notice = 'N/A'
+// state4.$data.job = 'Assiting Alice'
 
 var data2 = {
 	$data: {
