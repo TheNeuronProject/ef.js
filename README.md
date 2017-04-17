@@ -104,7 +104,12 @@ this is a comment
 	'@' stands for events
 	contents after ':' are considered as value passed to the handler
 	@click = updateInfo:{{binding.info}}
-	@mousedown = setState
+	modify keys now can be bind easily
+	@mousedown.shift.alt.ctrl.meta = select
+	bind to keys is also easy
+	@keypress.13 = submit
+	use .prevent to preventDefault, .stop to stopPropagation, .stopImmediate to stopImmediatePropagation
+	@keydown.8.prevent.stop = backspace
 	'.' stands for text nodes
 	.Name: {{name}}&nJob: {{job}}
 	>br
