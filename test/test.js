@@ -117,7 +117,7 @@ var template = '  this is a comment\n' +
 '  		-node2\n' +
 '  		+list1'
 
-var ast2 = ef.parserEft(template)
+var ast2 = ef.parseEft(template)
 
 var data1 = {
 	$data: {
