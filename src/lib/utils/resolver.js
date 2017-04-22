@@ -1,4 +1,4 @@
-import deepAssign from 'deep-assign'
+import { assign } from './polyfills.js'
 
 // Resolve an array described path to an object
 const resolvePath = (_path, obj) => {
@@ -18,7 +18,7 @@ const resolveReactivePath = (_path, obj) => {
 					return node
 				},
 				set(data) {
-					deepAssign(node, data)
+					assign(node, data)
 				},
 				enumerable: true
 			})

@@ -3,7 +3,6 @@ import { resolveSubscriber } from './utils/resolver.js'
 import initBinding from './utils/binding.js'
 import ARR from './utils/array-helper.js'
 import { assign } from './utils/polyfills.js'
-import deepAssign from 'deep-assign'
 
 const unsubscribe = (_path, fn, subscriber) => {
 	const subscriberNode = resolveSubscriber(_path, subscriber)
@@ -59,7 +58,7 @@ const render = (ast) => {
 				return data
 			},
 			set(newData) {
-				deepAssign(data, newData)
+				assign(data, newData)
 			},
 			configurable: true
 		},
@@ -68,7 +67,7 @@ const render = (ast) => {
 				return methods
 			},
 			set(newMethods) {
-				deepAssign(methods, newMethods)
+				assign(methods, newMethods)
 			},
 			configurable: true
 		},
