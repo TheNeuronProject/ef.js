@@ -4,11 +4,7 @@ import ARR from './array-helper.js'
 import defineArr from './dom-arr-helper.js'
 import typeOf from './type-of.js'
 import initBinding from './binding.js'
-import { warn, warnAttachment, warnParentNode } from '../debug.js'
-
-// Reserved names
-const reserved = 'attached data element nodes methods subscribe unsubscribe update destroy'
-	.split(' ').map(i => `$${i}`)
+import { warnAttachment, warnParentNode } from '../debug.js'
 
 const bindTextNode = ({node, state, subscriber, innerData, element}) => {
 	// Data binding text node
@@ -83,7 +79,7 @@ const bindMountingList = ({state, name, children, anchor}) => {
 	})
 }
 
-const resolveAST = ({node, nodeType, element, state, innerData, nodes, children, subscriber, create}) => {
+const resolveAST = ({node, nodeType, element, state, innerData, refs, children, subscriber, create}) => {
 	switch (nodeType) {
 		case 'string': {
 			// Static text node
@@ -91,15 +87,11 @@ const resolveAST = ({node, nodeType, element, state, innerData, nodes, children,
 			break
 		}
 		case 'array': {
-			if (typeOf(node[0]) === 'object') DOM.append(element, create({ast: node, state, innerData, nodes, children, subscriber, create}))
+			if (typeOf(node[0]) === 'object') DOM.append(element, create({ast: node, state, innerData, refs, children, subscriber, create}))
 			else bindTextNode({node, state, subscriber, innerData, element})
 			break
 		}
 		case 'object': {
-			if (reserved.indexOf(node.n) !== -1) {
-				warn(`Reserved name '${node.n}' should not be used, ignoring.`)
-				break
-			}
 			const anchor = document.createTextNode('')
 			if (node.t === 0) bindMountingNode({state, name: node.n, children, anchor})
 			else if (node.t === 1) bindMountingList({state, name: node.n, children, anchor})
@@ -119,12 +111,12 @@ const resolveAST = ({node, nodeType, element, state, innerData, nodes, children,
 	}
 }
 
-const create = ({ast, state, innerData, nodes, children, subscriber, create}) => {
+const create = ({ast, state, innerData, refs, children, subscriber, create}) => {
 	// First create an element according to the description
-	const element = createElement({info: ast[0], state, innerData, nodes, subscriber})
+	const element = createElement({info: ast[0], state, innerData, refs, subscriber})
 
 	// Append child nodes
-	for (let i = 1; i < ast.length; i++) resolveAST({node: ast[i], nodeType: typeOf(ast[i]), element, state, innerData, nodes, children, subscriber, create})
+	for (let i = 1; i < ast.length; i++) resolveAST({node: ast[i], nodeType: typeOf(ast[i]), element, state, innerData, refs, children, subscriber, create})
 
 	return element
 }

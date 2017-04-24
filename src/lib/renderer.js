@@ -36,7 +36,7 @@ const destroy = function() {
 	delete this.$element
 	delete this.$data
 	delete this.$methods
-	delete this.$nodes
+	delete this.$refs
 	delete this.$subscribe
 	delete this.$unsubscribe
 	delete this.$attached
@@ -47,7 +47,7 @@ const destroy = function() {
 const render = (ast) => {
 	const state = {}
 	const children = {}
-	const nodes = {}
+	const refs = {}
 	const data = {}
 	const innerData = {}
 	const methods = {}
@@ -71,10 +71,8 @@ const render = (ast) => {
 			},
 			configurable: true
 		},
-		$nodes: {
-			get() {
-				return nodes
-			},
+		$refs: {
+			value: refs,
 			configurable: true
 		},
 		$subscribe: {
@@ -103,7 +101,7 @@ const render = (ast) => {
 			configurable: true
 		}
 	})
-	const element = create({ast, state, innerData, nodes, children, subscriber, create})
+	const element = create({ast, state, innerData, refs, children, subscriber, create})
 	Object.defineProperty(state, '$element', {
 		value: element,
 		configurable: true

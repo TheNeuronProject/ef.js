@@ -22,7 +22,7 @@ var ast = [
 	[
 		{
 			t: 'div',
-			n: 'testAlias',
+			r: 'testRef',
 			a: {
 				style: [['style']]
 			}
