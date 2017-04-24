@@ -60,7 +60,7 @@ component1.$unsubscribe('info.data', logData) // Stop observing a value
 component1.$update(data) // Update the whole component state
 component2.$attached // Check if the component has mounted to something
 
-component1.$nodes // Get all named nodes
+component1.$refs // Get all referenced nodes
 
 component1.mountingPoint = component2 // Mount component2 to 'mountingPoint' on component1
 component1.mountingPoint = null // Detach the mounted component
@@ -119,7 +119,7 @@ this is a comment
 	-node1
 	'.' after a tag name stands for class names for this tag
 	>p.some.class.names
-		'#' at the end of a tag name stands for the name of the node
+		'#' at the end of a tag name stands for the reference name of the node
 		Mustaches after a dot will bind to 'class' automatically
 		>span.{{emergency = emergency}}#notice_box
 			.Notice: {{notice}}

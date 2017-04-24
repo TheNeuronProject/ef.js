@@ -36,7 +36,7 @@ this is a comment
 	-node1
 	'.' after a tag name stands for class names for this tag
 	>p.some.class.names
-		'#' at the end of a tag name stands for the name of the node
+		'#' at the end of a tag name stands for the reference name of the node
 		Mustaches after a dot will bind to 'class' automatically
 		>span.{{emergency = emergency}}#notice_box
 			.Notice: {{notice}}
