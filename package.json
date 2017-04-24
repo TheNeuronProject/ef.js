@@ -43,6 +43,6 @@
     "shelljs": "^0.7.5"
   },
   "dependencies": {
-    "eft-parser": "^0.4.3"
+    "eft-parser": "^0.4.4"
   }
 }
