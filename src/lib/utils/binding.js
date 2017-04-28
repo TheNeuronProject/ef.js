@@ -26,10 +26,10 @@ const initBinding = ({bind, state, handlers, subscribers, innerData}) => {
 	const { parentNode, handlerNode, subscriberNode, dataNode } = resolve({
 		_path,
 		_key,
-		parentNode: state.$data,
-		handlerNode: handlers,
-		subscriberNode: subscribers,
-		dataNode: innerData
+		data: state.$data,
+		handlers,
+		subscribers,
+		innerData
 	})
 
 	// Initlize data binding node if not exist

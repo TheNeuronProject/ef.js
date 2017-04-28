@@ -1,13 +1,20 @@
 import { assign } from './polyfills.js'
 import { inform, exec } from './render-query.js'
 
-// Resolve an array described path to an object
-const resolvePath = (_path, obj) => {
+const resolveAllPath = ({_path, handlers, subscribers, innerData}) => {
 	for (let i of _path) {
-		if (!obj[i]) obj[i] = {}
-		obj = obj[i]
+		if (!handlers[i]) handlers[i] = {}
+		if (!subscribers[i]) subscribers[i] = {}
+		if (!innerData[i]) innerData[i] = {}
+		handlers = handlers[i]
+		subscribers = subscribers[i]
+		innerData[i] = innerData[i]
 	}
-	return obj
+	return {
+		handlerNode: handlers,
+		subscriberNode: subscribers,
+		dataNode: innerData
+	}
 }
 
 const resolveReactivePath = (_path, obj, enume) => {
@@ -32,13 +39,9 @@ const resolveReactivePath = (_path, obj, enume) => {
 	return obj
 }
 
-const resolve = ({ _path, _key, parentNode, handlerNode, subscriberNode, dataNode }) => {
-	if (_path.length > 0) {
-		parentNode = resolveReactivePath(_path, parentNode, true)
-		handlerNode = resolvePath(_path, handlerNode)
-		subscriberNode = resolvePath(_path, subscriberNode)
-		dataNode = resolvePath(_path, dataNode)
-	}
+const resolve = ({ _path, _key, data, handlers, subscribers, innerData }) => {
+	const parentNode = resolveReactivePath(_path, data, true)
+	const {handlerNode, subscriberNode, dataNode} = resolveAllPath({_path, handlers, subscribers, innerData})
 	if (!handlerNode[_key]) handlerNode[_key] = []
 	if (!subscriberNode[_key]) subscriberNode[_key] = []
 	if (!Object.prototype.hasOwnProperty.call(dataNode, _key)) dataNode[_key] = ''
@@ -48,7 +51,11 @@ const resolve = ({ _path, _key, parentNode, handlerNode, subscriberNode, dataNod
 const resolveSubscriber = (_path, subscribers) => {
 	const pathArr = _path.split('.')
 	const key = pathArr.pop()
-	return resolvePath(pathArr, subscribers)[key]
+	for (let i of pathArr) {
+		if (!subscribers[i]) subscribers[i] = {}
+		subscribers = subscribers[i]
+	}
+	return subscribers[key]
 }
 
-export { resolvePath, resolveReactivePath, resolve, resolveSubscriber }
+export { resolveReactivePath, resolve, resolveSubscriber }
