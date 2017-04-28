@@ -8,7 +8,7 @@ const resolveAllPath = ({_path, handlers, subscribers, innerData}) => {
 		if (!innerData[i]) innerData[i] = {}
 		handlers = handlers[i]
 		subscribers = subscribers[i]
-		innerData[i] = innerData[i]
+		innerData = innerData[i]
 	}
 	return {
 		handlerNode: handlers,
