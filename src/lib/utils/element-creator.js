@@ -1,5 +1,7 @@
-import { warn } from '../debug.js'
+import ARR from './array-helper.js'
 import initBinding from './binding.js'
+import { queue, inform, exec } from './render-query.js'
+import { warn } from '../debug.js'
 
 const getElement = (tag, ref, refs) => {
 	const element = document.createElement(tag)
@@ -10,45 +12,48 @@ const getElement = (tag, ref, refs) => {
 	return element
 }
 
-const updateOthers = ({dataNode, subscriberNode, handler, state, _key, value}) => {
+const updateOthers = ({dataNode, handlerNode, subscriberNode, _handler, state, _key, value}) => {
 	if (dataNode[_key] === value) return
 	dataNode[_key] = value
-	for (let i of subscriberNode) {
-		if (i !== handler) i.call(state, value)
-	}
+	const query = ARR.copy(handlerNode)
+	ARR.remove(query, _handler)
+	queue(query)
+	inform()
+	for (let i of subscriberNode) i({state, value})
+	exec()
 }
 
-const addValListener = ({dataNode, subscriberNode, handler, state, element, key, _key}) => {
-	const _update = () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: element.value})
+const addValListener = ({dataNode, handlerNode, subscriberNode, _handler, state, element, key, _key}) => {
+	const _update = () => updateOthers({dataNode, handlerNode, subscriberNode, _handler, state, _key, value: element.value})
 	if (key === 'value') {
 		element.addEventListener('input', _update, true)
 		element.addEventListener('keyup', _update, true)
 		element.addEventListener('change', _update, true)
-	} else element.addEventListener('change', () => updateOthers({dataNode, subscriberNode, handler, state, _key, value: element.checked}), true)
+	} else element.addEventListener('change', () => updateOthers({dataNode, handlerNode, subscriberNode, _handler, state, _key, value: element.checked}), true)
 }
 
-const addAttr = ({element, attr, key, state, subscriber, innerData}) => {
+const addAttr = ({element, attr, key, state, handlers, subscribers, innerData}) => {
 	if (typeof attr === 'string') element.setAttribute(key, attr)
-	else initBinding({bind: attr, state, subscriber, innerData, handler: value => element.setAttribute(key, value)})
+	else initBinding({bind: attr, state, handlers, subscribers, innerData, handler: (dataNode, _key) => element.setAttribute(key, dataNode[_key])})
 }
 
-const addProp = ({element, prop, key, state, subscriber, innerData}) => {
+const addProp = ({element, prop, key, state, handlers, subscribers, innerData}) => {
 	if (typeof prop === 'string') element[key] = prop
 	else {
-		const handler = (value) => {
-			element[key] = value
+		const handler = (dataNode, _key) => {
+			element[key] = dataNode[_key]
 		}
-		const {dataNode, subscriberNode, _key} = initBinding({bind: prop, state, subscriber, innerData, handler})
-		if (key === 'value' || key === 'checked') addValListener({dataNode, subscriberNode, handler, state, element, key, _key})
+		const {dataNode, handlerNode, subscriberNode, _key, _handler} = initBinding({bind: prop, state, handlers, subscribers, innerData, handler})
+		if (key === 'value' || key === 'checked') addValListener({dataNode, handlerNode, subscriberNode, _handler, state, element, key, _key})
 	}
 }
 
-const getData = ({v, state, subscriber, innerData}) => {
-	if (Array.isArray(v)) return initBinding({bind: v, state, subscriber, innerData})
-	return {dataNode: {_: v}, _key: '_'}
+const getData = ({v, state, handlers, subscribers, innerData}) => {
+	if (Array.isArray(v)) return initBinding({bind: v, state, handlers, subscribers, innerData})
+	return {dataNode: {v}, _key: 'v'}
 }
 
-const addEvent = ({element, event, state, subscriber, innerData}) => {
+const addEvent = ({element, event, state, handlers, subscribers, innerData}) => {
 
 	/**
 	 *  l: listener									: string
@@ -65,7 +70,7 @@ const addEvent = ({element, event, state, subscriber, innerData}) => {
 	 *  v: value                    : string/array/undefined
 	 */
 	const {l, m, s, i, p, h, a, c, t, u, k, v} = event
-	const {dataNode, _key} = getData({v, state, subscriber, innerData})
+	const {dataNode, _key} = getData({v, state, handlers, subscribers, innerData})
 	element.addEventListener(l, (e) => {
 		if (!!h !== !!e.shiftKey ||
 			!!a !== !!e.altKey ||
@@ -80,7 +85,7 @@ const addEvent = ({element, event, state, subscriber, innerData}) => {
 	}, !!u)
 }
 
-const createElement = ({info, state, innerData, refs, subscriber}) => {
+const createElement = ({info, state, innerData, refs, handlers, subscribers}) => {
 
 	/**
 	 *  t: tag       : string
@@ -91,9 +96,9 @@ const createElement = ({info, state, innerData, refs, subscriber}) => {
 	 */
 	const {t, a, p, e, r} = info
 	const element = getElement(t, r, refs)
-	for (let i in a) addAttr({element, attr: a[i], key: i, state, subscriber, innerData})
-	for (let i in p) addProp({element, prop: p[i], key: i, state, subscriber, innerData})
-	for (let i in e) addEvent({element, event: e[i], state, subscriber, innerData})
+	for (let i in a) addAttr({element, attr: a[i], key: i, state, handlers, subscribers, innerData})
+	for (let i in p) addProp({element, prop: p[i], key: i, state, handlers, subscribers, innerData})
+	for (let i in e) addEvent({element, event: e[i], state, handlers, subscribers, innerData})
 	return element
 }
 

@@ -6,13 +6,12 @@ import typeOf from './type-of.js'
 import initBinding from './binding.js'
 import { warnAttachment, warnParentNode } from '../debug.js'
 
-const bindTextNode = ({node, state, subscriber, innerData, element}) => {
+const bindTextNode = ({node, state, handlers, subscribers, innerData, element}) => {
 	// Data binding text node
 	const textNode = document.createTextNode('')
-	const handler = (value) => {
-		textNode.textContent = value
-	}
-	initBinding({bind: node, state, subscriber, innerData, handler})
+	initBinding({bind: node, state, handlers, subscribers, innerData, handler: (dataNode, _key) => {
+		textNode.textContent = dataNode[_key]
+	}})
 
 	// Append element to the component
 	DOM.append(element, textNode)
@@ -79,7 +78,7 @@ const bindMountingList = ({state, name, children, anchor}) => {
 	})
 }
 
-const resolveAST = ({node, nodeType, element, state, innerData, refs, children, subscriber, create}) => {
+const resolveAST = ({node, nodeType, element, state, innerData, refs, children, handlers, subscribers, create}) => {
 	switch (nodeType) {
 		case 'string': {
 			// Static text node
@@ -87,8 +86,8 @@ const resolveAST = ({node, nodeType, element, state, innerData, refs, children, 
 			break
 		}
 		case 'array': {
-			if (typeOf(node[0]) === 'object') DOM.append(element, create({ast: node, state, innerData, refs, children, subscriber, create}))
-			else bindTextNode({node, state, subscriber, innerData, element})
+			if (typeOf(node[0]) === 'object') DOM.append(element, create({ast: node, state, innerData, refs, children, handlers, subscribers, create}))
+			else bindTextNode({node, state, handlers, subscribers, innerData, element})
 			break
 		}
 		case 'object': {
@@ -111,12 +110,12 @@ const resolveAST = ({node, nodeType, element, state, innerData, refs, children, 
 	}
 }
 
-const create = ({ast, state, innerData, refs, children, subscriber, create}) => {
+const create = ({ast, state, innerData, refs, children, handlers, subscribers, create}) => {
 	// First create an element according to the description
-	const element = createElement({info: ast[0], state, innerData, refs, subscriber})
+	const element = createElement({info: ast[0], state, innerData, refs, handlers, subscribers})
 
 	// Append child nodes
-	for (let i = 1; i < ast.length; i++) resolveAST({node: ast[i], nodeType: typeOf(ast[i]), element, state, innerData, refs, children, subscriber, create})
+	for (let i = 1; i < ast.length; i++) resolveAST({node: ast[i], nodeType: typeOf(ast[i]), element, state, innerData, refs, children, handlers, subscribers, create})
 
 	return element
 }

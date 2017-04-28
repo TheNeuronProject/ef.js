@@ -7,7 +7,6 @@ const replace = require('rollup-plugin-replace')
 const uglify = require('rollup-plugin-uglify')
 const progress = require('rollup-plugin-progress')
 const json = require('rollup-plugin-json')
-const git = require('git-rev-sync')
 
 module.exports = {
 	moduleName: 'ef',
@@ -31,8 +30,7 @@ module.exports = {
 		commonjs(),
 		json(),
 		replace({
-			ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-			GITVERSION: JSON.stringify(`${git.branch()}.${git.short()}`)
+			ENV: JSON.stringify(process.env.NODE_ENV || 'development')
 		}),
 		buble({
 			transforms: {

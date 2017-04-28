@@ -1,13 +1,12 @@
 import create from './utils/creator.js'
-import { resolveSubscriber } from './utils/resolver.js'
+import { resolveReactivePath, resolveSubscriber } from './utils/resolver.js'
 import initBinding from './utils/binding.js'
 import ARR from './utils/array-helper.js'
 import { assign } from './utils/polyfills.js'
 
-const unsubscribe = (_path, fn, subscriber) => {
-	const subscriberNode = resolveSubscriber(_path, subscriber)
-	const index = subscriberNode.indexOf(fn)
-	if (index === -1) return
+const unsubscribe = (_path, fn, subscribers) => {
+	const pathArr = _path.split('.')
+	const subscriberNode = resolveSubscriber(pathArr, subscribers)
 	ARR.remove(subscriberNode, fn)
 }
 
@@ -48,20 +47,11 @@ const render = (ast) => {
 	const state = {}
 	const children = {}
 	const refs = {}
-	const data = {}
 	const innerData = {}
 	const methods = {}
-	const subscriber = {}
+	const handlers = {}
+	const subscribers = {}
 	Object.defineProperties(state, {
-		$data: {
-			get() {
-				return data
-			},
-			set(newData) {
-				assign(data, newData)
-			},
-			configurable: true
-		},
 		$methods: {
 			get() {
 				return methods
@@ -76,15 +66,15 @@ const render = (ast) => {
 			configurable: true
 		},
 		$subscribe: {
-			value: (pathStr, handler) => {
+			value: (pathStr, subscriber) => {
 				const _path = pathStr.split('.')
-				initBinding({bind: [_path], state, subscriber, innerData, handler})
+				initBinding({bind: [_path], state, handlers, subscribers, innerData, subscriber})
 			},
 			configurable: true
 		},
 		$unsubscribe: {
 			value: (_path, fn) => {
-				unsubscribe(_path, fn, subscriber)
+				unsubscribe(_path, fn, subscribers)
 			},
 			configurable: true
 		},
@@ -101,9 +91,11 @@ const render = (ast) => {
 			configurable: true
 		}
 	})
-	const element = create({ast, state, innerData, refs, children, subscriber, create})
+	// Init root data node
+	resolveReactivePath(['$data'], state, false)
+
 	Object.defineProperty(state, '$element', {
-		value: element,
+		value: create({ast, state, innerData, refs, children, handlers, subscribers, create}),
 		configurable: true
 	})
 	return state

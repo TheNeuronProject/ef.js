@@ -1,5 +1,3 @@
-/* global GITVERSION */
-
 // Import everything
 import { info } from './lib/debug.js'
 import parse from './lib/parser.js'
@@ -7,6 +5,7 @@ import render from './lib/renderer.js'
 import typeOf from './lib/utils/type-of.js'
 import mixStr from './lib/utils/literals-mix.js'
 import eftParser from 'eft-parser'
+import { inform, exec } from './lib/utils/render-query.js'
 import { version } from '../package.json'
 
 // Set parser
@@ -21,12 +20,22 @@ const ef = class {
 
 		const ast = value
 		Object.defineProperty(this, 'render', {
-			value: function (state) {
+			value: (state) => {
+				inform()
 				const result = render(ast)
 				if (state) result.$update(state)
+				exec()
 				return result
 			}
 		})
+	}
+
+	static inform() {
+		return inform()
+	}
+
+	static exec() {
+		return exec()
 	}
 
 	static setPatser(newParser) {
@@ -44,4 +53,4 @@ const ef = class {
 
 export default ef
 
-info(`ef.js v${version}.${GITVERSION} initialized!`)
+info(`ef.js v${version} initialized!`)

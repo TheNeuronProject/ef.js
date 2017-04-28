@@ -182,8 +182,8 @@ state2.$data.style = '10000'
 
 state2.$data.btnText = 'Run Test!'
 
-state2.$subscribe('style', function (val) {
-	state2.$data.text = 'Click the button below to run a ' + val + ' components render test.'
+state2.$subscribe('style', function (info) {
+	state2.$data.text = 'Click the button below to run a ' + info.value + ' components render test.'
 })
 
 state2.$methods.sendMsg = function (info) {
