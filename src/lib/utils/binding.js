@@ -19,7 +19,7 @@ const initDataNode = ({parentNode, dataNode, handlerNode, subscriberNode, state,
 	})
 }
 
-const initBinding = ({bind, state, handlers, subscribers, innerData, handler, subscriber}) => {
+const initBinding = ({bind, state, handlers, subscribers, innerData}) => {
 	const _path = ARR.copy(bind[0])
 	const _default = bind[1]
 	const _key = _path.pop()
@@ -36,19 +36,6 @@ const initBinding = ({bind, state, handlers, subscribers, innerData, handler, su
 	if (!Object.prototype.hasOwnProperty.call(parentNode, _key)) initDataNode({parentNode, dataNode, handlerNode, subscriberNode, state, _key})
 	// Update default value
 	if (_default) parentNode[_key] = _default
-
-	// Execute subscriber immediately
-	if (subscriber) {
-		subscriber({state, value: dataNode[_key]})
-		subscriberNode.push(subscriber)
-	}
-
-	if (handler) {
-		const _handler = handler.bind(null, dataNode, _key)
-		handlerNode.push(_handler)
-		_handler()
-		return {dataNode, handlerNode, subscriberNode, _key, _handler}
-	}
 
 	return {dataNode, handlerNode, subscriberNode, _key}
 }

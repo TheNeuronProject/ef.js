@@ -34,8 +34,8 @@ const ef = class {
 		return inform()
 	}
 
-	static exec() {
-		return exec()
+	static exec(immediate) {
+		return exec(immediate)
 	}
 
 	static setPatser(newParser) {

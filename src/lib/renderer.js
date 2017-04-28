@@ -68,7 +68,10 @@ const render = (ast) => {
 		$subscribe: {
 			value: (pathStr, subscriber) => {
 				const _path = pathStr.split('.')
-				initBinding({bind: [_path], state, handlers, subscribers, innerData, subscriber})
+				const { dataNode, subscriberNode, _key } = initBinding({bind: [_path], state, handlers, subscribers, innerData})
+				// Execute subscriber immediately
+				subscriber({state, value: dataNode[_key]})
+				subscriberNode.push(subscriber)
 			},
 			configurable: true
 		},

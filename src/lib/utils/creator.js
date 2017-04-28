@@ -4,14 +4,18 @@ import ARR from './array-helper.js'
 import defineArr from './dom-arr-helper.js'
 import typeOf from './type-of.js'
 import initBinding from './binding.js'
+import { queue } from './render-query.js'
 import { warnAttachment, warnParentNode } from '../debug.js'
 
 const bindTextNode = ({node, state, handlers, subscribers, innerData, element}) => {
 	// Data binding text node
 	const textNode = document.createTextNode('')
-	initBinding({bind: node, state, handlers, subscribers, innerData, handler: (dataNode, _key) => {
+	const { dataNode, handlerNode, _key } = initBinding({bind: node, state, handlers, subscribers, innerData})
+	const handler = () => {
 		textNode.textContent = dataNode[_key]
-	}})
+	}
+	handlerNode.push(handler)
+	queue([handler])
 
 	// Append element to the component
 	DOM.append(element, textNode)

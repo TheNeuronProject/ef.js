@@ -12,39 +12,46 @@ const getElement = (tag, ref, refs) => {
 	return element
 }
 
-const updateOthers = ({dataNode, handlerNode, subscriberNode, _handler, state, _key, value}) => {
+const updateOthers = ({dataNode, handlerNode, subscriberNode, handler, state, _key, value}) => {
 	if (dataNode[_key] === value) return
 	dataNode[_key] = value
 	const query = ARR.copy(handlerNode)
-	ARR.remove(query, _handler)
+	ARR.remove(query, handler)
 	queue(query)
 	inform()
 	for (let i of subscriberNode) i({state, value})
 	exec()
 }
 
-const addValListener = ({dataNode, handlerNode, subscriberNode, _handler, state, element, key, _key}) => {
-	const _update = () => updateOthers({dataNode, handlerNode, subscriberNode, _handler, state, _key, value: element.value})
+const addValListener = ({dataNode, handlerNode, subscriberNode, handler, state, element, key, _key}) => {
+	const _update = () => updateOthers({dataNode, handlerNode, subscriberNode, handler, state, _key, value: element.value})
 	if (key === 'value') {
 		element.addEventListener('input', _update, true)
 		element.addEventListener('keyup', _update, true)
 		element.addEventListener('change', _update, true)
-	} else element.addEventListener('change', () => updateOthers({dataNode, handlerNode, subscriberNode, _handler, state, _key, value: element.checked}), true)
+	} else element.addEventListener('change', () => updateOthers({dataNode, handlerNode, subscriberNode, handler, state, _key, value: element.checked}), true)
 }
 
 const addAttr = ({element, attr, key, state, handlers, subscribers, innerData}) => {
 	if (typeof attr === 'string') element.setAttribute(key, attr)
-	else initBinding({bind: attr, state, handlers, subscribers, innerData, handler: (dataNode, _key) => element.setAttribute(key, dataNode[_key])})
+	else {
+		const { dataNode, handlerNode, _key } = initBinding({bind: attr, state, handlers, subscribers, innerData})
+		const handler = () => element.setAttribute(key, dataNode[_key])
+		handlerNode.push(handler)
+		queue([handler])
+	}
 }
 
 const addProp = ({element, prop, key, state, handlers, subscribers, innerData}) => {
 	if (typeof prop === 'string') element[key] = prop
 	else {
-		const handler = (dataNode, _key) => {
+		const {dataNode, handlerNode, subscriberNode, _key} = initBinding({bind: prop, state, handlers, subscribers, innerData})
+		const handler = () => {
 			element[key] = dataNode[_key]
 		}
-		const {dataNode, handlerNode, subscriberNode, _key, _handler} = initBinding({bind: prop, state, handlers, subscribers, innerData, handler})
-		if (key === 'value' || key === 'checked') addValListener({dataNode, handlerNode, subscriberNode, _handler, state, element, key, _key})
+		handlerNode.push(handler)
+		if (key === 'value' || key === 'checked') addValListener({dataNode, handlerNode, subscriberNode, handler, state, element, key, _key})
+		queue([handler])
 	}
 }
 

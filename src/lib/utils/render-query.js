@@ -10,13 +10,13 @@ const inform = () => {
 	return count
 }
 
-const exec = () => {
-	if ((count -= 1) > 0) return false
+const exec = (immediate) => {
+	if (!immediate && (count -= 1) > 0) return count
 	count = 0
 	const renderQueue = ARR.unique(query)
 	for (let i of renderQueue) i()
 	ARR.empty(query)
-	return true
+	return count
 }
 
 export { queue, inform, exec }
