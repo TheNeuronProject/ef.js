@@ -1,101 +1,41 @@
-var ast = [
-	{
-		t: 'div',
-		a: {
-			id: 'id1',
-			class: [['class', 'text'], 'box test']
-		}
-	},
-	'text0',
-	[
-		{
-			t: 'br'
-		}
-	],
-	[['root', 'text']],
-	[
-		{
-			t: 'br'
-		}
-	],
-	[['class', 'text']],
-	[
-		{
-			t: 'div',
-			r: 'testRef',
-			a: {
-				style: [['style']]
-			}
-		},
-		'text1',
-		[['info', 'node1']],
-		{ n: 'branch', t: 0 },
-		[
-			{
-				tag: 'br'
-			}
-		],
-		'Message: ',
-		[
-			{
-				tag: 'br'
-			}
-		],
-		[
-			{
-				t: 'input',
-				a: {
-					type: 'text'
-				},
-				p: {
-					value: [['class', 'text']]
-				}
-			}
-		],
-		[
-			{
-				t: 'br'
-			}
-		],
-		'Input style here: ',
-		[
-			{
-				t: 'br'
-			}
-		],
-		[
-			{
-				t: 'textarea',
-				p: {
-					value: [['style'], 'background-color: #ECECEC']
-				},
-				e: [
-					{ l: 'keydown', c: 1, m: 'key', k: [13, 27] },
-					{ l: 'keydown', m: 'space', k: [13, 32] }
-				]
-			}
-		],
-		[
-			{
-				t: 'br'
-			}
-		],
-		[['text']],
-		'text2'
-	],
-	[
-		{
-			t: 'button',
-			e: [
-				{ l: 'click', m: 'sendMsg', v: 'some data' }
-			]
-		},
-		[['btnText'], 'sendMsg']
-	],
-	{ n: 'list', t: 1 }
-]
+var template = '\n\
+>div.{{class.text = box test}}\n\
+	#id = id1\n\
+	.text0\n\
+	>br\n\
+	.{{root.text}}\n\
+	>br\n\
+	.{{class.text}}\n\
+	>div#testRef\n\
+		#style = {{style}}\n\
+		.text1{{info.node1}}\n\
+		-branch\n\
+		>br\n\
+		.Message: \n\
+		>br\n\
+		.Two way binded:\n\
+		>input\n\
+			#type = text\n\
+			%value = {{class.text}}\n\
+		.One way binded:\n\
+		>input\n\
+			#type = text\n\
+			%value = aaa {{class.text}} bbb\n\
+		>br\n\
+		.Input style here: \n\
+		>br\n\
+		>textarea\n\
+			%value = {{style = background-color: #ECECEC}}\n\
+			@keydown.ctrl.13.27 = key\n\
+			@keydown.13.32 = space\n\
+		>br\n\
+		.{{text}}text2\n\
+	>button\n\
+		@click = sendMsg:some data\n\
+		.{{btnText = sendMsg}}\n\
+	+list'
 
-var template = '  this is a comment\n' +
+var template2 = '  this is a comment\n' +
 '  >div.{{class = some class name}}\n' +
 '    #style = {{attr.style}}\n' +
 '    #id = testdiv\n' +
@@ -117,8 +57,6 @@ var template = '  this is a comment\n' +
 '  		-node2\n' +
 '  		+list1'
 
-var ast2 = ef.parseEft(template)
-
 var data1 = {
 	$data: {
 			class: 'box test class',
@@ -133,8 +71,8 @@ var data1 = {
 	}
 }
 
-var module1 = new ef(ast)
-var module2 = new ef(ast2)
+var module1 = new ef(template)
+var module2 = new ef(template2)
 
 var state = module1.render()
 var state2 = module1.render()
