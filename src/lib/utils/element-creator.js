@@ -1,4 +1,5 @@
 import ARR from './array-helper.js'
+import { mixVal } from './literals-mix.js'
 import initBinding from './binding.js'
 import { queue, inform, exec } from './render-query.js'
 import { warn } from '../debug.js'
@@ -12,53 +13,76 @@ const getElement = (tag, ref, refs) => {
 	return element
 }
 
-const updateOthers = ({dataNode, handlerNode, subscriberNode, handler, state, _key, value}) => {
+const regTmpl = ({val, state, handlers, subscribers, innerData, handler}) => {
+	if (Array.isArray(val)) {
+		const [strs, ...exprs] = val
+		const tmpl = [strs]
+		const _handler = () => handler(mixVal(tmpl))
+		tmpl.push(...exprs.map((item) => {
+			const {dataNode, handlerNode, _key} = initBinding({bind: item, state, handlers, subscribers, innerData})
+			handlerNode.push(_handler)
+			return {dataNode, _key}
+		}))
+		return _handler
+	}
+	return () => val
+}
+
+const updateOthers = ({dataNode, handlerNode, subscriberNode, _handler, state, _key, value}) => {
 	if (dataNode[_key] === value) return
 	dataNode[_key] = value
 	const query = ARR.copy(handlerNode)
-	ARR.remove(query, handler)
+	ARR.remove(query, _handler)
 	queue(query)
 	inform()
 	for (let i of subscriberNode) i({state, value})
 	exec()
 }
 
-const addValListener = ({dataNode, handlerNode, subscriberNode, handler, state, element, key, _key}) => {
-	const _update = () => updateOthers({dataNode, handlerNode, subscriberNode, handler, state, _key, value: element.value})
+const addValListener = ({_handler, state, handlers, subscribers, innerData, element, key, expr}) => {
+	const {dataNode, handlerNode, subscriberNode, _key} = initBinding({bind: expr, state, handlers, subscribers, innerData})
+	const _update = () => updateOthers({dataNode, handlerNode, subscriberNode, _handler, state, _key, value: element.value})
 	if (key === 'value') {
 		element.addEventListener('input', _update, true)
 		element.addEventListener('keyup', _update, true)
 		element.addEventListener('change', _update, true)
-	} else element.addEventListener('change', () => updateOthers({dataNode, handlerNode, subscriberNode, handler, state, _key, value: element.checked}), true)
+	} else element.addEventListener('change', () => updateOthers({dataNode, handlerNode, subscriberNode, _handler, state, _key, value: element.checked}), true)
+}
+
+const getAttrHandler = (element, key) => {
+	if (key === 'class') return (val) => {
+		val = val.replace(/\s+/g, ' ').trim()
+		element.setAttribute(key, val)
+	}
+	return val => element.setAttribute(key, val)
 }
 
 const addAttr = ({element, attr, key, state, handlers, subscribers, innerData}) => {
 	if (typeof attr === 'string') element.setAttribute(key, attr)
 	else {
-		const { dataNode, handlerNode, _key } = initBinding({bind: attr, state, handlers, subscribers, innerData})
-		const handler = () => element.setAttribute(key, dataNode[_key])
-		handlerNode.push(handler)
-		queue([handler])
+		const handler = getAttrHandler(element, key)
+		queue([regTmpl({val: attr, state, handlers, subscribers, innerData, handler})])
 	}
 }
 
 const addProp = ({element, prop, key, state, handlers, subscribers, innerData}) => {
 	if (typeof prop === 'string') element[key] = prop
 	else {
-		const {dataNode, handlerNode, subscriberNode, _key} = initBinding({bind: prop, state, handlers, subscribers, innerData})
-		const handler = () => {
-			element[key] = dataNode[_key]
+		const handler = (val) => {
+			element[key] = val
 		}
-		handlerNode.push(handler)
-		if (key === 'value' || key === 'checked') addValListener({dataNode, handlerNode, subscriberNode, handler, state, element, key, _key})
-		queue([handler])
+		const _handler = regTmpl({val: prop, state, handlers, subscribers, innerData, handler})
+		if ((key === 'value' ||
+			key === 'checked') &&
+			prop[0][0] === '' &&
+			prop[0][1] === '' &&
+			prop.length === 2) addValListener({_handler, state, handlers, subscribers, innerData, element, key, expr: prop[1]})
+		queue([_handler])
 	}
 }
 
-const getData = ({v, state, handlers, subscribers, innerData}) => {
-	if (Array.isArray(v)) return initBinding({bind: v, state, handlers, subscribers, innerData})
-	return {dataNode: {v}, _key: 'v'}
-}
+
+const rawHandler = val => val
 
 const addEvent = ({element, event, state, handlers, subscribers, innerData}) => {
 
@@ -77,7 +101,7 @@ const addEvent = ({element, event, state, handlers, subscribers, innerData}) => 
 	 *  v: value                    : string/array/undefined
 	 */
 	const {l, m, s, i, p, h, a, c, t, u, k, v} = event
-	const {dataNode, _key} = getData({v, state, handlers, subscribers, innerData})
+	const _handler = regTmpl({val: v, state, handlers, subscribers, innerData, handler: rawHandler})
 	element.addEventListener(l, (e) => {
 		if (!!h !== !!e.shiftKey ||
 			!!a !== !!e.altKey ||
@@ -87,7 +111,7 @@ const addEvent = ({element, event, state, handlers, subscribers, innerData}) => 
 		if (s) e.stopPropagation()
 		if (i) e.stopImmediatePropagation()
 		if (p) e.preventDefault()
-		if (state.$methods[m]) state.$methods[m]({e, value: dataNode[_key], state})
+		if (state.$methods[m]) state.$methods[m]({e, value: _handler(), state})
 		else warn(`Method named '${m}' not found!`)
 	}, !!u)
 }
