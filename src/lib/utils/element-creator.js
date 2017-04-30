@@ -17,7 +17,7 @@ const regTmpl = ({val, state, handlers, subscribers, innerData, handler}) => {
 	if (Array.isArray(val)) {
 		const [strs, ...exprs] = val
 		const tmpl = [strs]
-		const _handler = () => handler(mixVal(tmpl))
+		const _handler = () => handler(mixVal(...tmpl))
 		tmpl.push(...exprs.map((item) => {
 			const {dataNode, handlerNode, _key} = initBinding({bind: item, state, handlers, subscribers, innerData})
 			handlerNode.push(_handler)
@@ -74,9 +74,7 @@ const addProp = ({element, prop, key, state, handlers, subscribers, innerData}) 
 		const _handler = regTmpl({val: prop, state, handlers, subscribers, innerData, handler})
 		if ((key === 'value' ||
 			key === 'checked') &&
-			prop[0][0] === '' &&
-			prop[0][1] === '' &&
-			prop.length === 2) addValListener({_handler, state, handlers, subscribers, innerData, element, key, expr: prop[1]})
+			!prop[0]) addValListener({_handler, state, handlers, subscribers, innerData, element, key, expr: prop[1]})
 		queue([_handler])
 	}
 }

@@ -13,14 +13,32 @@ var template = '\n\
 		>br\n\
 		.Message: \n\
 		>br\n\
-		.Two way binded:\n\
+		.Two way binded 1: \n\
 		>input\n\
 			#type = text\n\
 			%value = {{class.text}}\n\
-		.One way binded:\n\
+		>br\n\
+		.Two way binded 2: \n\
 		>input\n\
 			#type = text\n\
-			%value = aaa {{class.text}} bbb\n\
+			%value = {{class.text2 = 23333}}\n\
+		>br\n\
+		.One way binded with particle update:\n\
+		>input\n\
+			#type = text\n\
+			%value = 1: {{class.text}} 2: {{class.text2}}\n\
+		>br\n\
+		>input\n\
+			#type = radio\n\
+			#name = testradio\n\
+			%checked = {{testRadio1}}\n\
+		>input\n\
+			#type = radio\n\
+			#name = testradio\n\
+			%checked = {{testRadio2}}\n\
+		>input\n\
+			#type = checkbox\n\
+			%checked = {{testCheck}}\n\
 		>br\n\
 		.Input style here: \n\
 		>br\n\

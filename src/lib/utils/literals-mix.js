@@ -6,8 +6,8 @@ const mixStr = (strs, ...exprs) => {
 
 const getVal = ({dataNode, _key}) => dataNode[_key]
 
-const mixVal = (tmpl) => {
-	const [strs, ...exprs] = tmpl
+const mixVal = (strs, ...exprs) => {
+	if (!strs) return getVal(exprs[0])
 	const template = [strs]
 	template.push(...exprs.map(getVal))
 	return mixStr(...template)

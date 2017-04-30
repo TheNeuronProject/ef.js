@@ -1,13 +1,12 @@
 this is a comment
->div
-	#class = {{class}}
+>div.jji=&x23rwr&u02adwew&ni&u}}ddd}}...#lll{{}}}}s{{dfgrgs#jjj
+	#class = {{class}} {{sdffef=ssef}}
 	#style = {{attr.style = &x23rwr&u02adwew&ni&u}}
 	#id = testdiv
 	#some-attr = some text
 	#content =
 	%title = {{name}}
 	%anotherProperty = text
-	%contentEditable = {{edit}}
 	@click = updateInfo
 	@mousedown = setState
 	.Name: {{name}}&nJob: {{job}}
@@ -20,3 +19,4 @@ this is a comment
 		.some text
 		-node2
 		+list1
+		/#([^}]|}[^}])*$/
