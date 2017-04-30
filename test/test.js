@@ -1,57 +1,57 @@
-var template = '\n\
->div.{{class.text = box test}}\n\
-	#id = id1\n\
-	.text0\n\
-	>br\n\
-	.{{root.text}}\n\
-	>br\n\
-	.{{class.text}}\n\
-	>div#testRef\n\
-		#style = {{style}}\n\
-		.text1{{info.node1}}\n\
-		-branch\n\
-		>br\n\
-		.Message: \n\
-		>br\n\
-		.Two way binded 1: \n\
-		>input\n\
-			#type = text\n\
-			%value = {{class.text}}\n\
-		>br\n\
-		.Two way binded 2: \n\
-		>input\n\
-			#type = text\n\
-			%value = {{class.text2 = 23333}}\n\
-		>br\n\
-		.One way binded with particle update:\n\
-		>input\n\
-			#type = text\n\
-			%value = 1: {{class.text}} 2: {{class.text2}}\n\
-		>br\n\
-		>input\n\
-			#type = radio\n\
-			#name = testradio\n\
-			%checked = {{testRadio1}}\n\
-		>input\n\
-			#type = radio\n\
-			#name = testradio\n\
-			%checked = {{testRadio2}}\n\
-		>input\n\
-			#type = checkbox\n\
-			%checked = {{testCheck}}\n\
-		>br\n\
-		.Input style here: \n\
-		>br\n\
-		>textarea\n\
-			%value = {{style = background-color: #ECECEC}}\n\
-			@keydown.ctrl.13.27 = key\n\
-			@keydown.13.32 = space\n\
-		>br\n\
-		.{{text}}text2\n\
-	>button\n\
-		@click = sendMsg:some data\n\
-		.{{btnText = sendMsg}}\n\
-	+list'
+var template = '\n' +
+'>div.{{class.text = box test}}\n' +
+'	#id = id1\n' +
+'	.text0\n' +
+'	>br\n' +
+'	.{{root.text}}\n' +
+'	>br\n' +
+'	.{{class.text}}\n' +
+'	>div#testRef\n' +
+'		#style = {{style}}\n' +
+'		.text1{{info.node1}}\n' +
+'		-branch\n' +
+'		>br\n' +
+'		.Message: \n' +
+'		>br\n' +
+'		.Two way binded 1: \n' +
+'		>input\n' +
+'			#type = text\n' +
+'			%value = {{class.text}}\n' +
+'		>br\n' +
+'		.Two way binded 2: \n' +
+'		>input\n' +
+'			#type = text\n' +
+'			%value = {{class.text2 = 23333}}\n' +
+'		>br\n' +
+'		.One way binded with particle update:\n' +
+'		>input\n' +
+'			#type = text\n' +
+'			%value = 1: {{class.text}} 2: {{class.text2}}\n' +
+'		>br\n' +
+'		>input\n' +
+'			#type = radio\n' +
+'			#name = testradio\n' +
+'			%checked = {{testRadio1}}\n' +
+'		>input\n' +
+'			#type = radio\n' +
+'			#name = testradio\n' +
+'			%checked = {{testRadio2}}\n' +
+'		>input\n' +
+'			#type = checkbox\n' +
+'			%checked = {{testCheck}}\n' +
+'		>br\n' +
+'		.Input style here: \n' +
+'		>br\n' +
+'		>textarea\n' +
+'			%value = {{style = background-color: #ECECEC}}\n' +
+'			@keydown.ctrl.13.27 = key\n' +
+'			@keydown.13.32 = space\n' +
+'		>br\n' +
+'		.{{text}}text2\n' +
+'	>button\n' +
+'		@click = sendMsg:some data\n' +
+'		.{{btnText = sendMsg}}\n' +
+'	+list'
 
 var template2 = '  this is a comment\n' +
 '  >div.{{class = some class name}}\n' +

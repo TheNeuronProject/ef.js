@@ -38,6 +38,11 @@ const ef = class {
 		return exec(immediate)
 	}
 
+	static bundle(cb) {
+		inform()
+		return exec(cb(inform, exec))
+	}
+
 	static setPatser(newParser) {
 		parser = newParser
 	}
