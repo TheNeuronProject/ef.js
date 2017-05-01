@@ -89,15 +89,15 @@ var data1 = {
 	}
 }
 
-var module1 = new ef(template)
-var module2 = new ef(template2)
+var module1 = ef.create(template)
+var module2 = ef.create(template2)
 
 ef.inform()
 
-var state = module1.render()
-var state2 = module1.render()
-var state3 = module2.render()
-var state4 = module2.render(data1)
+var state = new module1()
+var state2 = new module1()
+var state3 = new module2()
+var state4 = new module2(data1)
 
 state3.list1.push(state4)
 state2.branch = state3
@@ -148,7 +148,7 @@ state2.$methods.sendMsg = function (info) {
 	ef.inform()
 	var count = parseInt(info.state.$data.style)
 	var startTime = Date.now()
-	for (var i = 0; i < count; i++) states.push(module1.render())
+	for (var i = 0; i < count; i++) states.push(new module1())
 	state4.list1.push.apply(state4.list1, states)
 	ef.exec()
 	var endTime = Date.now()

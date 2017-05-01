@@ -1,4 +1,5 @@
 import ARR from './array-helper.js'
+import {info} from '../debug.js'
 
 const query = []
 const domQuery = []
@@ -16,10 +17,16 @@ const inform = () => {
 const exec = (immediate) => {
 	if (!immediate && (count -= 1) > 0) return count
 	count = 0
-	for (let i of ARR.unique(query)) i()
+	const renderQuery = ARR.unique(query)
+
+	if (ENV !== 'production') info(`${query.length} modification operations cached, ${renderQuery.length} executed.`)
+
+	for (let i of renderQuery) i()
 	ARR.empty(query)
 	if (domQuery.length > 0) {
-		for (let i of ARR.rightUnique(domQuery)) i()
+		const domRenderQuery = ARR.rightUnique(domQuery)
+		if (ENV !== 'production') info(`${domQuery.length} DOM operations cached, ${domRenderQuery.length} executed.`)
+		for (let i of domRenderQuery) i()
 		ARR.empty(domQuery)
 	}
 	return count

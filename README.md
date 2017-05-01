@@ -23,25 +23,33 @@ Community project(s):
 
 ## Usage
 ``` javascript
-import ef from 'ef.js'
+import { create, inform, exec, bundle, setParser, parseEft, t, version } from 'ef.js'
+// or you can use import * as ef from 'ef.js'
 
-ef.setParser(someparser) // Change the default parser for ef.js so you can use a different type of template
-ef.parseEft('Your awesome template') // Get ef.js ast using default parser
+version // Version string of ef.js
+
+setParser(someparser) // Change the default parser for ef.js so you can use a different type of template
+parseEft('Your awesome template') // Get ef.js ast using default parser
 
 const templateString = 'Your awesome template'
 const ast = [/* AST which supported by ef */]
 
 const data = {
-	$data: {/* Binding data */}
+	$data: {/* Binding data */},
 	$methods: {/* Binding methods */}
 }
 
-const template1 = new ef(template)
-const template2 = new ef(ast)
-const template3 = ef.t`Your awesome template`
+const template1 = create(template)
+const template2 = create(ast)
+const template3 = t`Your awesome template`
 
-const component1 = template1.render() // Create a component without data
-const component2 = template2.render(data) // Create a component and then updates it's data
+const component1 = new template1() // Create a component without data
+const component2 = new template2(data) // Create a component and then updates it's data
+
+inform() // Tell ef to cache operation **USE WITH CARE**
+exec() // Tell ef to execute all cached operations **USE WITH CARE**
+exec(true) // Force execute cached operations **USE WITH CARE**
+bundle(callback) // Wrapper for inform() and exec()
 
 component1.$element // The DOM element of component1
 component2.$element // The DOM element of component2
@@ -58,7 +66,7 @@ component1.$subscribe('info.data', logData) // Observe a value
 component1.$unsubscribe('info.data', logData) // Stop observing a value
 
 component1.$update(data) // Update the whole component state
-component2.$attached // Check if the component has mounted to something
+component2.$parent // Get where the component is mounted
 
 component1.$refs // Get all referenced nodes
 
@@ -67,6 +75,8 @@ component1.mountingPoint = null // Detach the mounted component
 
 component1.listMP.push(componet2) // Mount component2 to list 'listMP' mounting point on component1
 
+component1.$mount(...) // Mount method called by ef when trying to mount
+compinent1.$umount() // Unmount from parent
 component1.$destroy() // Destroy the component when not needed for more memory
 
 ```
@@ -93,8 +103,8 @@ this is a comment
 	content inside mustaches after '=' stands for the default value for this binding
 	content without mustaches stands for a static data
 	which means that you cannot modify them using ef.js
-	#class = {{class = some class name}}
-	#style = {{attr.style = background: #ECECEC}}
+	#class = {{class.some = some}} {{class.class = class}} {{class.name = name}}
+	#style = background: {{style.background = #ECECEC}};
 	#id = testdiv
 	#some-attr = some text
 	#content
@@ -118,7 +128,7 @@ this is a comment
 	'-' stands for standard mounting point
 	-node1
 	'.' after a tag name stands for class names for this tag
-	>p.some.class.names
+	>p.some.class.names.{{class.binded = binded}}
 		'#' at the end of a tag name stands for the reference name of the node
 		Mustaches after a dot will bind to 'class' automatically
 		>span.{{emergency = emergency}}#notice_box

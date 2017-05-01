@@ -11,51 +11,34 @@ import { version } from '../package.json'
 // Set parser
 let parser = eftParser
 
-// Construct the class
-const ef = class {
-	constructor(value) {
-		const valType = typeOf(value)
-		if (valType === 'string') value = parse(value, parser)
-		else if (valType !== 'array') throw new TypeError('Cannot create new component without proper template or AST!')
+const create = (value) => {
+	const valType = typeOf(value)
+	if (valType === 'string') value = parse(value, parser)
+	else if (valType !== 'array') throw new TypeError('Cannot create new component without proper template or AST!')
 
-		const ast = value
-		Object.defineProperty(this, 'render', {
-			value: (newState) => {
-				inform()
-				const result = new state(ast)
-				if (newState) result.$update(newState)
-				exec()
-				return result
-			}
-		})
+	const ast = value
+	const _ef_ = class extends state {
+		constructor(newState) {
+			inform()
+			super(ast)
+			if (newState) this.$update(newState)
+			exec()
+		}
 	}
-
-	static inform() {
-		return inform()
-	}
-
-	static exec(immediate) {
-		return exec(immediate)
-	}
-
-	static bundle(cb) {
-		inform()
-		return exec(cb(inform, exec))
-	}
-
-	static setPatser(newParser) {
-		parser = newParser
-	}
-
-	static parseEft(template) {
-		return eftParser(template)
-	}
-
-	static t(...strs) {
-		return new ef(mixStr(...strs))
-	}
+	return _ef_
 }
 
-export default ef
+const bundle = (cb) => {
+	inform()
+	return exec(cb(inform, exec))
+}
+
+const setParser = (newParser) => {
+	parser = newParser
+}
+
+const t = (...args) => create(mixStr(...args))
+
+export { create, inform, exec, bundle, setParser, eftParser as parseEft, t, version }
 
 info(`ef.js v${version} initialized!`)
