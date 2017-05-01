@@ -1,7 +1,7 @@
 // Import everything
 import { info } from './lib/debug.js'
 import parse from './lib/parser.js'
-import render from './lib/renderer.js'
+import state from './lib/renderer.js'
 import typeOf from './lib/utils/type-of.js'
 import { mixStr } from './lib/utils/literals-mix.js'
 import eftParser from 'eft-parser'
@@ -20,10 +20,10 @@ const ef = class {
 
 		const ast = value
 		Object.defineProperty(this, 'render', {
-			value: (state) => {
+			value: (newState) => {
 				inform()
-				const result = render(ast)
-				if (state) result.$update(state)
+				const result = new state(ast)
+				if (newState) result.$update(newState)
 				exec()
 				return result
 			}
