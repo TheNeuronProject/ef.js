@@ -49,7 +49,7 @@ const destroy = function() {
 	delete this.$umount
 	delete this.$subscribe
 	delete this.$unsubscribe
-	exec()
+	return exec()
 }
 
 const state = class {

@@ -149,13 +149,14 @@ state2.$methods.sendMsg = function (info) {
 	var count = parseInt(info.state.$data.style)
 	var startTime = Date.now()
 	for (var i = 0; i < count; i++) states.push(module1.render())
-	// state4.list1.push.apply(state4.list1, states)
+	state4.list1.push.apply(state4.list1, states)
 	ef.exec()
 	var endTime = Date.now()
 	var time = endTime - startTime
 	var msg = '' + count + ' components rendered in ' + time + 'ms.'
 	info.state.$data.text = msg
 	console.log(msg)
+	states = []
 	// startTime = Date.now()
 	// for (var i = 0; i < states.length; i++) {
 	// 	states[i].$destroy()

@@ -5,8 +5,9 @@ import { warnAttachment } from '../debug.js'
 
 const DOMARR = {
 	empty() {
+		const list = ARR.copy(this)
 		inform()
-		for (let i of this) i.$destroy()
+		for (let i of list) i.$destroy()
 		exec()
 		ARR.empty(this)
 	},

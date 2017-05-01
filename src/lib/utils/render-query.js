@@ -16,10 +16,8 @@ const inform = () => {
 const exec = (immediate) => {
 	if (!immediate && (count -= 1) > 0) return count
 	count = 0
-	const renderQuery = ARR.unique(query)
-	const domRenderQuery = ARR.rightUnique(domQuery)
-	for (let i of renderQuery) i()
-	for (let i of domRenderQuery) i()
+	for (let i of ARR.unique(query)) i()
+	for (let i of ARR.rightUnique(domQuery)) i()
 	ARR.empty(query)
 	ARR.empty(domQuery)
 	return count
