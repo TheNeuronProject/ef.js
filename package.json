@@ -1,6 +1,6 @@
 {
   "name": "ef.js",
-  "version": "0.2.1-alpha.6",
+  "version": "0.2.2-alpha.1",
   "description": "(maybe) An elegant HTML template engine & basic framework",
   "main": "dist/ef.min.js",
   "module": "src/ef.js",
@@ -42,6 +42,6 @@
     "shelljs": "^0.7.5"
   },
   "dependencies": {
-    "eft-parser": "^0.5.5"
+    "eft-parser": "^0.5.6"
   }
 }
