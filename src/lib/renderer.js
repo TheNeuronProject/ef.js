@@ -2,7 +2,9 @@ import create from './utils/creator.js'
 import { resolveReactivePath, resolveSubscriber } from './utils/resolver.js'
 import initBinding from './utils/binding.js'
 import ARR from './utils/array-helper.js'
+import DOM from './utils/dom-helper.js'
 import { assign } from './utils/polyfills.js'
+import { queueDom, inform, exec } from './utils/render-query.js'
 
 const unsubscribe = (_path, fn, subscribers) => {
 	const pathArr = _path.split('.')
@@ -24,10 +26,18 @@ const update = function(newState) {
 }
 
 const destroy = function() {
+	const {$element, $after, $before} = this
+	inform()
+	this.$umount()
 	for (let i in this) {
 		this[i] = null
 		delete this[i]
 	}
+	queueDom(() => {
+		DOM.remove($element)
+		DOM.remove($after)
+		DOM.remove($before)
+	})
 	delete this.$element
 	delete this.$before
 	delete this.$after
@@ -35,8 +45,11 @@ const destroy = function() {
 	delete this.$data
 	delete this.$methods
 	delete this.$refs
+	delete this.$mount
+	delete this.$umount
 	delete this.$subscribe
 	delete this.$unsubscribe
+	exec()
 }
 
 const state = class {
@@ -47,32 +60,36 @@ const state = class {
 		const methods = {}
 		const handlers = {}
 		const subscribers = {}
-		const domInfo = {
+		const nodeInfo = {
 			before: document.createTextNode(''),
 			after: document.createTextNode('')
 		}
+
+		const safeZone = document.createDocumentFragment()
+		const mount = () => DOM.after(nodeInfo.before, nodeInfo.element)
+
 		Object.defineProperties(this, {
 			$element: {
 				get() {
-					return domInfo.element
+					return nodeInfo.element
 				},
 				configurable: true
 			},
 			$before: {
 				get() {
-					return domInfo.element
+					return nodeInfo.before
 				},
 				configurable: true
 			},
 			$after: {
 				get() {
-					return domInfo.element
+					return nodeInfo.after
 				},
 				configurable: true
 			},
 			$parent: {
 				get() {
-					return domInfo.parent
+					return nodeInfo.parent
 				},
 				configurable: true
 			},
@@ -87,6 +104,41 @@ const state = class {
 			},
 			$refs: {
 				value: refs,
+				configurable: true
+			},
+			$mount: {
+				value: (parent, key, holder) => {
+					nodeInfo.parent = parent
+					nodeInfo.key = key
+					DOM.append(safeZone, nodeInfo.before)
+					DOM.append(safeZone, nodeInfo.after)
+					queueDom(mount)
+					if (holder) {
+						DOM.after(holder, safeZone)
+						inform()
+						return exec()
+					}
+					return safeZone
+				},
+				configurable: true
+			},
+			$umount: {
+				value: function() {
+					const {parent, key} = nodeInfo
+					nodeInfo.parent = null
+					nodeInfo.key = null
+					if (parent && parent[key]) {
+						if (Array.isArray(parent[key])) {
+							parent[key].remove(this)
+						} else parent[key] = null
+						return
+					}
+					DOM.append(safeZone, nodeInfo.before)
+					DOM.append(safeZone, nodeInfo.after)
+					inform()
+					queueDom(mount)
+					return exec()
+				},
 				configurable: true
 			},
 			$subscribe: {
@@ -109,21 +161,13 @@ const state = class {
 		// Init root data node
 		resolveReactivePath(['$data'], this, false)
 
-		domInfo.element = create({ast, state: this, innerData, refs, children, handlers, subscribers, create})
-	}
-
-	get $attached() {
-		return !!this.$element.parentNode
+		nodeInfo.element = create({ast, state: this, innerData, refs, children, handlers, subscribers, create})
 	}
 }
 
 Object.defineProperties(state.prototype, {
-	$update: {
-		value: update
-	},
-	$destroy: {
-		value: destroy
-	}
+	$update: {value: update},
+	$destroy: {value: destroy}
 })
 
 export default state

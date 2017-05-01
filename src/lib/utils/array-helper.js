@@ -31,6 +31,14 @@ const ARR = {
 	reverse(arr) {
 		return proto.reverse.call(arr)
 	},
+	rightUnique(arr) {
+		const newArr = []
+		for (let i = 0; i < arr.length; i++) {
+			for (let j = i + 1; j < arr.length; j++) if (arr[i] === arr[j]) j = i += 1
+			newArr.push(arr[i])
+		}
+		return newArr
+	},
 	shift(arr) {
 		return proto.shift.call(arr)
 	},
@@ -43,19 +51,12 @@ const ARR = {
 	splice(arr, ...args) {
 		return proto.splice.apply(arr, args)
 	},
-	unique(arr) {
-		const newArr = []
-		for (let i = 0; i < arr.length; i++) {
-			for (let j = i + 1; j < arr.length; j++) if (arr[i] === arr[j]) j = i += 1
-			newArr.push(arr[i])
-		}
-		return newArr
-	},
 	unshift(arr, ...items) {
 		return proto.unshift.apply(arr, items)
 	}
 }
 
 if (window.Set) ARR.unique = arr => Array.from(new Set(arr))
+else ARR.unique = ARR.rightUnique
 
 export default ARR

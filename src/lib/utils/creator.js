@@ -4,7 +4,7 @@ import ARR from './array-helper.js'
 import defineArr from './dom-arr-helper.js'
 import typeOf from './type-of.js'
 import initBinding from './binding.js'
-import { queue } from './render-query.js'
+import { queue, inform, exec } from './render-query.js'
 import { warnAttachment, warnParentNode } from '../debug.js'
 
 const bindTextNode = ({node, state, handlers, subscribers, innerData, element}) => {
@@ -21,61 +21,63 @@ const bindTextNode = ({node, state, handlers, subscribers, innerData, element}) 
 	DOM.append(element, textNode)
 }
 
-const updateMountingNode = ({$element, children, name, anchor, value}) => {
-	if (children[name] === value) return
+const updateMountingNode = ({state, children, key, anchor, value}) => {
+	if (children[key] === value) return
 	if (value) {
-		if (value.$attached) warnAttachment(value)
-		if (value.$element.contains($element)) return warnParentNode()
+		if (value.$parent) warnAttachment(value)
+		if (value.$element.contains(state.$element)) return warnParentNode()
 	}
 	// Update component
-	if (children[name]) DOM.remove(children[name].$element)
-	if (value) DOM.after(anchor, value.$element)
+	if (children[key]) children[key].$umount()
 	// Update stored value
-	children[name] = value
+	children[key] = value
+	if (value) value.$mount(state, key, anchor)
 }
 
-const bindMountingNode = ({state, name, children, anchor}) => {
-	Object.defineProperty(state, name, {
+const bindMountingNode = ({state, key, children, anchor}) => {
+	Object.defineProperty(state, key, {
 		get() {
-			return children[name]
+			return children[key]
 		},
 		set(value) {
-			updateMountingNode({$element: state.$element, children, name, anchor, value})
+			updateMountingNode({state, children, key, anchor, value})
 		},
 		enumerable: true,
 		configurable: true
 	})
 }
 
-const updateMountingList = ({$element, children, name, anchor, value}) => {
+const updateMountingList = ({state, children, key, anchor, value}) => {
 	if (value) value = ARR.copy(value)
 	else value = []
 	const fragment = document.createDocumentFragment()
 	// Update components
-	if (children[name]) {
+	inform()
+	if (children[key]) {
 		for (let j of value) {
-			if (j.$element.contains($element)) return warnParentNode()
-			DOM.append(fragment, j.$element)
-			ARR.remove(children[name], j)
+			if (j.$element.contains(state.$element)) return warnParentNode()
+			DOM.append(fragment, j.$mount(state, key))
+			ARR.remove(children[key], j)
 		}
-		for (let j of children[name]) DOM.remove(j.$element)
-	} else for (let j of value) DOM.append(fragment, j.$element)
+		for (let j of children[key]) j.$umount()
+	} else for (let j of value) DOM.append(fragment, j.$mount(state, key))
 	// Update stored value
-	children[name].length = 0
-	ARR.push(children[name], ...value)
+	children[key].length = 0
+	ARR.push(children[key], ...value)
 	// Append to current component
 	DOM.after(anchor, fragment)
+	exec()
 }
 
-const bindMountingList = ({state, name, children, anchor}) => {
-	children[name] = defineArr([], anchor)
-	Object.defineProperty(state, name, {
+const bindMountingList = ({state, key, children, anchor}) => {
+	children[key] = defineArr([], {state, key, anchor})
+	Object.defineProperty(state, key, {
 		get() {
-			return children[name]
+			return children[key]
 		},
 		set(value) {
-			if (children[name] && ARR.equals(children[name], value)) return
-			updateMountingList({$element: state.$element, children, name, anchor, value})
+			if (children[key] && ARR.equals(children[key], value)) return
+			updateMountingList({state, children, key, anchor, value})
 		},
 		enumerable: true,
 		configurable: true
@@ -96,8 +98,8 @@ const resolveAST = ({node, nodeType, element, state, innerData, refs, children, 
 		}
 		case 'object': {
 			const anchor = document.createTextNode('')
-			if (node.t === 0) bindMountingNode({state, name: node.n, children, anchor})
-			else if (node.t === 1) bindMountingList({state, name: node.n, children, anchor})
+			if (node.t === 0) bindMountingNode({state, key: node.n, children, anchor})
+			else if (node.t === 1) bindMountingList({state, key: node.n, children, anchor})
 			else throw new TypeError(`Not a standard ef.js AST: Unknown mounting point type '${node.t}'`)
 			// Append anchor
 			DOM.append(element, anchor)

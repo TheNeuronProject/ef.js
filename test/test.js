@@ -92,6 +92,8 @@ var data1 = {
 var module1 = new ef(template)
 var module2 = new ef(template2)
 
+ef.inform()
+
 var state = module1.render()
 var state2 = module1.render()
 var state3 = module2.render()
@@ -134,7 +136,7 @@ state.$update(data2)
 
 var states = []
 
-state2.$data.style = '10000'
+state2.$data.style = '100'
 
 state2.$data.btnText = 'Run Test!'
 
@@ -143,22 +145,29 @@ state2.$subscribe('style', function (info) {
 })
 
 state2.$methods.sendMsg = function (info) {
+	ef.inform()
 	var count = parseInt(info.state.$data.style)
 	var startTime = Date.now()
 	for (var i = 0; i < count; i++) states.push(module1.render())
 	// state4.list1.push.apply(state4.list1, states)
+	ef.exec()
 	var endTime = Date.now()
-	for (var i = 0; i < states.length; i++) {
-		states[i].$destroy()
-		states[i] = null
-	}
-	states = []
 	var time = endTime - startTime
 	var msg = '' + count + ' components rendered in ' + time + 'ms.'
 	info.state.$data.text = msg
 	console.log(msg)
+	// startTime = Date.now()
+	// for (var i = 0; i < states.length; i++) {
+	// 	states[i].$destroy()
+	// 	states[i] = null
+	// }
+	// endTime = Date.now()
+	// states = []
+	// time = endTime - startTime
+	// msg = '' + count + ' components destroied in ' + time + 'ms.'
+	// console.log(msg)
 }
 
 // state4.$methods.sendMsg = function(thisState) { alert('The message is "\n' + thisState.$data.text + '"!') }
-
+ef.exec()
 document.querySelector('body').appendChild(state.$element)
