@@ -17,9 +17,11 @@ const exec = (immediate) => {
 	if (!immediate && (count -= 1) > 0) return count
 	count = 0
 	for (let i of ARR.unique(query)) i()
-	for (let i of ARR.rightUnique(domQuery)) i()
 	ARR.empty(query)
-	ARR.empty(domQuery)
+	if (domQuery.length > 0) {
+		for (let i of ARR.rightUnique(domQuery)) i()
+		ARR.empty(domQuery)
+	}
 	return count
 }
 
