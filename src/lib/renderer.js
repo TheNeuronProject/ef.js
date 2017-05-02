@@ -5,6 +5,7 @@ import ARR from './utils/array-helper.js'
 import DOM from './utils/dom-helper.js'
 import { assign } from './utils/polyfills.js'
 import { queueDom, inform, exec } from './utils/render-query.js'
+import { warn } from './debug.js'
 
 const unsubscribe = (_path, fn, subscribers) => {
 	const pathArr = _path.split('.')
@@ -122,7 +123,11 @@ const state = class {
 						key = '__DIRECTMOUNT__'
 					}
 
-					if (nodeInfo.parent) this.$umount()
+					inform()
+					if (nodeInfo.parent) {
+						this.$umount()
+						warn(`Component detached from previous mounting point.`)
+					}
 
 					nodeInfo.parent = target
 					nodeInfo.key = key
@@ -132,16 +137,15 @@ const state = class {
 
 					if (target instanceof Element) {
 						DOM.append(target, safeZone)
-						inform()
 						return exec()
 					}
 
 					if (holder) {
 						DOM.after(holder, safeZone)
-						inform()
 						return exec()
 					}
 
+					exec()
 					return safeZone
 				},
 				configurable: true
