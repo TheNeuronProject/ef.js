@@ -14,6 +14,7 @@ const unsubscribe = (_path, fn, subscribers) => {
 }
 
 const update = function(newState) {
+	inform()
 	const tmpState = assign({}, newState)
 	if (tmpState.$data) {
 		assign(this.$data, tmpState.$data)
@@ -24,6 +25,7 @@ const update = function(newState) {
 		delete(tmpState.$methods)
 	}
 	assign(this, tmpState)
+	exec()
 }
 
 const destroy = function() {
