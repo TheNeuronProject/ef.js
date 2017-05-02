@@ -42,6 +42,7 @@ const destroy = function() {
 	delete this.$before
 	delete this.$after
 	delete this.$parent
+	delete this.$key
 	delete this.$data
 	delete this.$methods
 	delete this.$refs
@@ -62,7 +63,9 @@ const state = class {
 		const subscribers = {}
 		const nodeInfo = {
 			before: document.createTextNode(''),
-			after: document.createTextNode('')
+			after: document.createTextNode(''),
+			parent: null,
+			key: null
 		}
 
 		const safeZone = document.createDocumentFragment()
@@ -93,6 +96,12 @@ const state = class {
 				},
 				configurable: true
 			},
+			$key: {
+				get() {
+					return nodeInfo.key
+				},
+				configurable: true
+			},
 			$methods: {
 				get() {
 					return methods
@@ -107,17 +116,32 @@ const state = class {
 				configurable: true
 			},
 			$mount: {
-				value: (parent, key, holder) => {
-					nodeInfo.parent = parent
+				value: function(target, key, holder) {
+					if (typeof target === 'string') {
+						target = document.querySelector(target)
+						key = '__DIRECTMOUNT__'
+					}
+
+					if (nodeInfo.parent) this.$umount()
+
+					nodeInfo.parent = target
 					nodeInfo.key = key
 					DOM.append(safeZone, nodeInfo.before)
 					DOM.append(safeZone, nodeInfo.after)
 					queueDom(mount)
+
+					if (target instanceof Element) {
+						DOM.append(target, safeZone)
+						inform()
+						return exec()
+					}
+
 					if (holder) {
 						DOM.after(holder, safeZone)
 						inform()
 						return exec()
 					}
+
 					return safeZone
 				},
 				configurable: true
@@ -127,7 +151,7 @@ const state = class {
 					const {parent, key} = nodeInfo
 					nodeInfo.parent = null
 					nodeInfo.key = null
-					if (parent && parent[key]) {
+					if (parent && key !== '__DIRECTMOUNT__' && parent[key]) {
 						if (Array.isArray(parent[key])) {
 							parent[key].remove(this)
 						} else parent[key] = null

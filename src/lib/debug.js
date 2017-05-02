@@ -10,8 +10,8 @@ const info = logger.info.bind(null, tag)
 const warn = logger.warn.bind(null, tag)
 const error = logger.error.bind(null, tag)
 
-const warnAttachment = state => error('Detach the component before attaching it to a new component! Component to be detached:', state)
-const warnParentNode = () => error('Cannot mount a component to it\'s child component!')
+const warnAttachment = state => warn('Detach the component before attaching it to a new component! Component to be detached:', state)
+const warnParentNode = () => warn('Cannot mount a component to it\'s child component!')
 
 if (ENV === 'production') {
 	logger.setLevel('error')

@@ -17,12 +17,14 @@ const inform = () => {
 const exec = (immediate) => {
 	if (!immediate && (count -= 1) > 0) return count
 	count = 0
-	const renderQuery = ARR.unique(query)
 
-	if (ENV !== 'production') info(`${query.length} modification operations cached, ${renderQuery.length} executed.`)
+	if (query.length > 0) {
+		const renderQuery = ARR.unique(query)
+		if (ENV !== 'production') info(`${query.length} modification operations cached, ${renderQuery.length} executed.`)
+		for (let i of renderQuery) i()
+		ARR.empty(query)
+	}
 
-	for (let i of renderQuery) i()
-	ARR.empty(query)
 	if (domQuery.length > 0) {
 		const domRenderQuery = ARR.rightUnique(domQuery)
 		if (ENV !== 'production') info(`${domQuery.length} DOM operations cached, ${domRenderQuery.length} executed.`)
