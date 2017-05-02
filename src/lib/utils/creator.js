@@ -56,10 +56,10 @@ const updateMountingList = ({state, children, key, anchor, value}) => {
 	if (children[key]) {
 		for (let j of value) {
 			if (j.$element.contains(state.$element)) return warnParentNode()
+			j.$umount()
 			DOM.append(fragment, j.$mount(state, key))
-			ARR.remove(children[key], j)
 		}
-		for (let j of children[key]) j.$umount()
+		for (let j of ARR.copy(children[key])) j.$umount()
 	} else for (let j of value) DOM.append(fragment, j.$mount(state, key))
 	// Update stored value
 	children[key].length = 0
