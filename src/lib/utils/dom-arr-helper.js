@@ -31,10 +31,8 @@ const DOMARR = {
 		inform()
 		for (let i of items) {
 			const removed = ARR.remove(this, i)
-			if (removed) {
-				removed.$umount()
-				ARR.push(removedItems, removed)
-			}
+			i.$umount()
+			if (removed) ARR.push(removedItems, removed)
 		}
 		exec()
 		return removedItems
