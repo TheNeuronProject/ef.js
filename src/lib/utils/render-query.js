@@ -18,6 +18,13 @@ const exec = (immediate) => {
 	if (!immediate && (count -= 1) > 0) return count
 	count = 0
 
+	if (domQuery.length > 0) {
+		const domRenderQuery = ARR.rightUnique(domQuery)
+		if (ENV !== 'production') info(`${domQuery.length} DOM operations cached, ${domRenderQuery.length} executed.`)
+		for (let i of domRenderQuery) i()
+		ARR.empty(domQuery)
+	}
+
 	if (query.length > 0) {
 		const renderQuery = ARR.unique(query)
 		if (ENV !== 'production') info(`${query.length} modification operations cached, ${renderQuery.length} executed.`)
@@ -25,12 +32,6 @@ const exec = (immediate) => {
 		ARR.empty(query)
 	}
 
-	if (domQuery.length > 0) {
-		const domRenderQuery = ARR.rightUnique(domQuery)
-		if (ENV !== 'production') info(`${domQuery.length} DOM operations cached, ${domRenderQuery.length} executed.`)
-		for (let i of domRenderQuery) i()
-		ARR.empty(domQuery)
-	}
 	return count
 }
 
