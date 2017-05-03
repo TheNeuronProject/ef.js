@@ -24,7 +24,7 @@ const bindTextNode = ({node, state, handlers, subscribers, innerData, element}) 
 const updateMountingNode = ({state, children, key, anchor, value}) => {
 	if (children[key] === value) return
 	if (value) {
-		if (value.$parent) warnAttachment(value)
+		if (value.$parent) warnAttachment()
 		if (value.$element.contains(state.$element)) return warnParentNode()
 	}
 

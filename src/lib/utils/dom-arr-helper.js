@@ -5,9 +5,8 @@ import { warnAttachment } from '../debug.js'
 
 const DOMARR = {
 	empty() {
-		const list = ARR.copy(this)
 		inform()
-		for (let i of list) i.$destroy()
+		for (let i of ARR.copy(this)) i.$destroy()
 		exec()
 		ARR.empty(this)
 	},
@@ -31,23 +30,27 @@ const DOMARR = {
 		inform()
 		for (let i of items) {
 			const removed = ARR.remove(this, i)
-			i.$umount()
-			if (removed) ARR.push(removedItems, removed)
+			if (removed) {
+				removed.$umount()
+				ARR.push(removedItems, removed)
+			}
 		}
 		exec()
 		return removedItems
 	},
-	reverse({state, key}) {
+	reverse({state, key, anchor}) {
 		if (this.length === 0) return this
-		const insertPoint = document.createTextNode('')
-		DOM.before(this[0].$before, insertPoint)
+		const tempArr = ARR.copy(this)
 		const elements = []
 		inform()
-		for (let i = this.length - 1; i >= 0; i--) ARR.push(elements, this[i].$mount(state, key))
-		DOM.after(insertPoint, ...elements)
-		DOM.remove(insertPoint)
+		for (let i = tempArr.length - 1; i >= 0; i--) {
+			tempArr[i].$umount()
+			ARR.push(elements, tempArr[i].$mount(state, key))
+		}
+		ARR.push(this, ...ARR.reverse(tempArr))
+		DOM.after(anchor, ...elements)
 		exec()
-		return ARR.reverse(this)
+		return this
 	},
 	shift() {
 		if (this.length === 0) return
@@ -55,45 +58,38 @@ const DOMARR = {
 		shifted.$umount()
 		return shifted
 	},
-	sort({state, key}, fn) {
+	sort({state, key, anchor}, fn) {
 		if (this.length === 0) return this
-		const insertPoint = document.createTextNode('')
-		DOM.before(this[0].$before, insertPoint)
-		const sorted = ARR.sort(this, fn)
+		const sorted = ARR.copy(ARR.sort(this, fn))
 		const elements = []
 		inform()
-		for (let i of this) ARR.push(elements, i.$mount(state, key))
-		DOM.after(insertPoint, ...elements)
-		DOM.remove(insertPoint)
+		for (let i of sorted) {
+			i.$umount()
+			ARR.push(elements, i.$mount(state, key))
+		}
+		ARR.push(this, ...sorted)
+		DOM.after(anchor, ...elements)
 		exec()
-		return sorted
+		return this
 	},
-	splice({state, key}, ...args) {
+	splice({state, key, anchor}, ...args) {
 		if (this.length === 0) return this
-		const insertPoint = document.createTextNode('')
-		DOM.before(this[0].$before, insertPoint)
-		const spliced = ARR.splice(this, ...args)
-		const elements = []
+		const spliced = ARR.copy(ARR.splice(this, ...args))
 		inform()
 		for (let i of spliced) i.$umount()
-		for (let i of this) ARR.push(elements, i.$mount(state, key))
-		DOM.after(insertPoint, ...elements)
-		DOM.remove(insertPoint)
 		exec()
 		return spliced
 	},
-	unshift({state, key}, ...items) {
+	unshift({state, key, anchor}, ...items) {
 		if (this.length === 0) return this.push(...items).length
-		const insertPoint = document.createTextNode('')
-		DOM.before(this[0].$before, insertPoint)
 		const elements = []
 		inform()
 		for (let i of items) {
-			if (i.$parent) return warnAttachment(i)
+			if (i.$parent) return warnAttachment()
+			i.$umount()
 			ARR.push(elements, i.$mount(state, key))
 		}
-		DOM.after(insertPoint, ...elements)
-		DOM.remove(insertPoint)
+		DOM.after(anchor, ...elements)
 		exec()
 		return ARR.unshift(this, ...items)
 	}

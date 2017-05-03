@@ -29,7 +29,7 @@ const update = function(newState) {
 }
 
 const destroy = function() {
-	const {$element, $after, $before} = this
+	const {$element, $avatar} = this
 	inform()
 	this.$umount()
 	for (let i in this) {
@@ -38,12 +38,10 @@ const destroy = function() {
 	}
 	queueDom(() => {
 		DOM.remove($element)
-		DOM.remove($after)
-		DOM.remove($before)
+		DOM.remove($avatar)
 	})
 	delete this.$element
-	delete this.$before
-	delete this.$after
+	delete this.$avatar
 	delete this.$parent
 	delete this.$key
 	delete this.$data
@@ -65,15 +63,13 @@ const state = class {
 		const handlers = {}
 		const subscribers = {}
 		const nodeInfo = {
-			before: document.createTextNode(''),
-			after: document.createTextNode(''),
+			avatar: document.createTextNode(''),
 			parent: null,
 			key: null
 		}
 
 		const safeZone = document.createDocumentFragment()
-		const tempZone = document.createDocumentFragment()
-		const mount = () => DOM.after(nodeInfo.before, nodeInfo.element)
+		const mount = () => DOM.before(nodeInfo.avatar, nodeInfo.element)
 
 		Object.defineProperties(this, {
 			$element: {
@@ -82,15 +78,9 @@ const state = class {
 				},
 				configurable: true
 			},
-			$before: {
+			$avatar: {
 				get() {
-					return nodeInfo.before
-				},
-				configurable: true
-			},
-			$after: {
-				get() {
-					return nodeInfo.after
+					return nodeInfo.avatar
 				},
 				configurable: true
 			},
@@ -134,22 +124,20 @@ const state = class {
 
 					nodeInfo.parent = target
 					nodeInfo.key = key
-					DOM.append(tempZone, nodeInfo.before)
-					DOM.append(tempZone, nodeInfo.after)
 					queueDom(mount)
 
 					if (target instanceof Element) {
-						DOM.append(target, tempZone)
+						DOM.append(target, nodeInfo.avatar)
 						return exec()
 					}
 
 					if (holder) {
-						DOM.after(holder, tempZone)
+						DOM.after(holder, nodeInfo.avatar)
 						return exec()
 					}
 
 					exec()
-					return tempZone
+					return nodeInfo.avatar
 				},
 				configurable: true
 			},
@@ -166,8 +154,7 @@ const state = class {
 						} else parent[key] = null
 						return exec()
 					}
-					DOM.append(safeZone, nodeInfo.before)
-					DOM.append(safeZone, nodeInfo.after)
+					DOM.append(safeZone, nodeInfo.avatar)
 					queueDom(mount)
 					return exec()
 				},
