@@ -31,7 +31,6 @@ const update = function(newState) {
 const destroy = function() {
 	const {$element, $avatar} = this
 	inform()
-	this.$umount()
 	for (let i in this) {
 		this[i] = null
 		delete this[i]
@@ -71,6 +70,7 @@ const state = class {
 		const safeZone = document.createDocumentFragment()
 		const mount = () => DOM.before(nodeInfo.avatar, nodeInfo.element)
 
+		inform()
 		Object.defineProperties(this, {
 			$element: {
 				get() {
@@ -181,6 +181,9 @@ const state = class {
 		resolveReactivePath(['$data'], this, false)
 
 		nodeInfo.element = create({ast, state: this, innerData, refs, children, handlers, subscribers, create})
+		DOM.append(safeZone, nodeInfo.avatar)
+		queueDom(mount)
+		exec()
 	}
 }
 
