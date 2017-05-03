@@ -149,24 +149,26 @@ state2.$methods.sendMsg = function (info) {
 	var count = parseInt(info.state.$data.style)
 	var startTime = Date.now()
 	for (var i = 0; i < count; i++) states.push(new module1())
-	state4.list1.push.apply(state4.list1, states)
-	ef.exec()
+	// state4.list1.push.apply(state4.list1, states)
+	// ef.exec()
 	var endTime = Date.now()
 	var time = endTime - startTime
 	var msg = '' + count + ' components rendered in ' + time + 'ms.'
 	info.state.$data.text = msg
 	console.log(msg)
-	states = []
-	// startTime = Date.now()
-	// for (var i = 0; i < states.length; i++) {
-	// 	states[i].$destroy()
-	// 	states[i] = null
-	// }
-	// endTime = Date.now()
 	// states = []
-	// time = endTime - startTime
-	// msg = '' + count + ' components destroied in ' + time + 'ms.'
-	// console.log(msg)
+	// ef.inform()
+	startTime = Date.now()
+	for (var i = 0; i < states.length; i++) {
+		states[i].$destroy()
+		states[i] = null
+	}
+	ef.exec()
+	endTime = Date.now()
+	states = []
+	time = endTime - startTime
+	msg = '' + count + ' components destroied in ' + time + 'ms.'
+	console.log(msg)
 }
 
 // state4.$methods.sendMsg = function(thisState) { alert('The message is "\n' + thisState.$data.text + '"!') }
