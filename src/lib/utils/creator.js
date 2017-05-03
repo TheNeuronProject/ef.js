@@ -27,11 +27,14 @@ const updateMountingNode = ({state, children, key, anchor, value}) => {
 		if (value.$parent) warnAttachment(value)
 		if (value.$element.contains(state.$element)) return warnParentNode()
 	}
+
+	inform()
 	// Update component
 	if (children[key]) children[key].$umount()
 	// Update stored value
 	children[key] = value
 	if (value) value.$mount(state, key, anchor)
+	exec()
 }
 
 const bindMountingNode = ({state, key, children, anchor}) => {

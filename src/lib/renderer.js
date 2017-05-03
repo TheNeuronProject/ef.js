@@ -72,6 +72,7 @@ const state = class {
 		}
 
 		const safeZone = document.createDocumentFragment()
+		const tempZone = document.createDocumentFragment()
 		const mount = () => DOM.after(nodeInfo.before, nodeInfo.element)
 
 		Object.defineProperties(this, {
@@ -133,22 +134,22 @@ const state = class {
 
 					nodeInfo.parent = target
 					nodeInfo.key = key
-					DOM.append(safeZone, nodeInfo.before)
-					DOM.append(safeZone, nodeInfo.after)
+					DOM.append(tempZone, nodeInfo.before)
+					DOM.append(tempZone, nodeInfo.after)
 					queueDom(mount)
 
 					if (target instanceof Element) {
-						DOM.append(target, safeZone)
+						DOM.append(target, tempZone)
 						return exec()
 					}
 
 					if (holder) {
-						DOM.after(holder, safeZone)
+						DOM.after(holder, tempZone)
 						return exec()
 					}
 
 					exec()
-					return safeZone
+					return tempZone
 				},
 				configurable: true
 			},
@@ -157,15 +158,16 @@ const state = class {
 					const {parent, key} = nodeInfo
 					nodeInfo.parent = null
 					nodeInfo.key = null
+
+					inform()
 					if (parent && key !== '__DIRECTMOUNT__' && parent[key]) {
 						if (Array.isArray(parent[key])) {
 							parent[key].remove(this)
 						} else parent[key] = null
-						return
+						return exec()
 					}
 					DOM.append(safeZone, nodeInfo.before)
 					DOM.append(safeZone, nodeInfo.after)
-					inform()
 					queueDom(mount)
 					return exec()
 				},
