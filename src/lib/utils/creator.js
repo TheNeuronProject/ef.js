@@ -33,7 +33,7 @@ const updateMountingNode = ({state, children, key, anchor, value}) => {
 	if (children[key]) children[key].$umount()
 	// Update stored value
 	children[key] = value
-	if (value) value.$mount({target: anchor, parent: state, option: 'after', key})
+	if (value) value.$mount({target: anchor, parent: state, option: 'before', key})
 	exec()
 }
 
