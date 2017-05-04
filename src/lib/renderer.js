@@ -75,7 +75,7 @@ const state = class {
 				for (let i of nodeInfo.replace) DOM.remove(i)
 				ARR.empty(nodeInfo.replace)
 			}
-			DOM.after(nodeInfo.avatar, nodeInfo.element)
+			DOM.before(nodeInfo.avatar, nodeInfo.element)
 		}
 
 		inform()
