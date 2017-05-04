@@ -5,7 +5,6 @@ import ARR from './utils/array-helper.js'
 import DOM from './utils/dom-helper.js'
 import { assign } from './utils/polyfills.js'
 import { queueDom, inform, exec } from './utils/render-query.js'
-import { warn } from './debug.js'
 
 const unsubscribe = (_path, fn, subscribers) => {
 	const pathArr = _path.split('.')
@@ -124,7 +123,7 @@ const state = class {
 					inform()
 					if (nodeInfo.parent) {
 						this.$umount()
-						warn('Component detached from previous mounting point.')
+						if (ENV !== 'production') console.warn('Component detached from previous mounting point.')
 					}
 
 					if (!parent) parent = target

@@ -159,7 +159,7 @@ $ npm run build
 ```
 Then you can get the fresh-built `ef.min.js` in the `dist` folder.
 
-**Note:** All debugging messages are disabled in the production version, but you can enable them using `localStorage.setItem('loglevel:ef', 'TRACE')`
+**Note:** All debugging messages are disabled in the production version.
 
 ## License
 [MIT](http://cos.mit-license.org/)

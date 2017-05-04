@@ -2,7 +2,6 @@ import ARR from './array-helper.js'
 import { mixVal } from './literals-mix.js'
 import initBinding from './binding.js'
 import { queue, inform, exec } from './render-query.js'
-import { warn } from '../debug.js'
 
 const getElement = (tag, ref, refs) => {
 	const element = document.createElement(tag)
@@ -110,7 +109,7 @@ const addEvent = ({element, event, state, handlers, subscribers, innerData}) => 
 		if (i) e.stopImmediatePropagation()
 		if (p) e.preventDefault()
 		if (state.$methods[m]) state.$methods[m]({e, value: _handler(), state})
-		else warn(`Method named '${m}' not found!`)
+		else if (ENV !== 'production') console.warn(`[EF] Method named '${m}' not found!`)
 	}, !!u)
 }
 

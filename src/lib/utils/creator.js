@@ -5,7 +5,6 @@ import defineArr from './dom-arr-helper.js'
 import typeOf from './type-of.js'
 import initBinding from './binding.js'
 import { queue, inform, exec } from './render-query.js'
-import { warnAttachment, warnParentNode } from '../debug.js'
 
 const bindTextNode = ({node, state, handlers, subscribers, innerData, element}) => {
 	// Data binding text node
@@ -24,8 +23,11 @@ const bindTextNode = ({node, state, handlers, subscribers, innerData, element}) 
 const updateMountingNode = ({state, children, key, anchor, value}) => {
 	if (children[key] === value) return
 	if (value) {
-		if (value.$parent) warnAttachment()
-		if (value.$element.contains(state.$element)) return warnParentNode()
+		if (value.$parent && ENV !== 'production') console.warn('[EF] Better detach the component before attaching it to a new component!')
+		if (value.$element.contains(state.$element)) {
+			if (ENV !== 'production') console.warn('[EF] Cannot mount a component to it\'s child component!')
+			return
+		}
 	}
 
 	inform()
@@ -58,7 +60,10 @@ const updateMountingList = ({state, children, key, anchor, value}) => {
 	inform()
 	if (children[key]) {
 		for (let j of value) {
-			if (j.$element.contains(state.$element)) return warnParentNode()
+			if (j.$element.contains(state.$element)) {
+				if (ENV !== 'production') console.warn('[EF] Cannot mount a component to it\'s child component!')
+				return
+			}
 			j.$umount()
 			DOM.append(fragment, j.$mount({parent: state, key}))
 		}

@@ -1,7 +1,6 @@
 import DOM from './dom-helper.js'
 import ARR from './array-helper.js'
 import { inform, exec } from './render-query.js'
-import { warnAttachment } from '../debug.js'
 
 const DOMARR = {
 	empty() {
@@ -85,7 +84,10 @@ const DOMARR = {
 		const elements = []
 		inform()
 		for (let i of items) {
-			if (i.$parent) return warnAttachment()
+			if (i.$parent) {
+				if (ENV !== 'production') console.warn('[EF] Better detach the component before attaching it to a new component!')
+				return
+			}
 			i.$umount()
 			ARR.push(elements, i.$mount({parent: state, key}))
 		}

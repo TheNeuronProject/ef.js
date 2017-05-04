@@ -1,5 +1,4 @@
 // Import everything
-import { info } from './lib/debug.js'
 import parse from './lib/parser.js'
 import state from './lib/renderer.js'
 import typeOf from './lib/utils/type-of.js'
@@ -41,4 +40,4 @@ const t = (...args) => create(mixStr(...args))
 
 export { create, inform, exec, bundle, setParser, eftParser as parseEft, t, version }
 
-info(`ef.js v${version} initialized!`)
+if (ENV !== 'production') console.info(`ef.js v${version} initialized!`)
