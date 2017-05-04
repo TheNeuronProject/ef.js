@@ -85,7 +85,7 @@ const DOMARR = {
 		inform()
 		for (let i of items) {
 			if (i.$parent) {
-				if (ENV !== 'production') console.warn('[EF] Better detach the component before attaching it to a new component!')
+				if (ENV !== 'production') console.warn('[EF]', 'Better detach the component before attaching it to a new component!')
 				return
 			}
 			i.$umount()

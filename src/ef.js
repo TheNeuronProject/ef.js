@@ -40,4 +40,4 @@ const t = (...args) => create(mixStr(...args))
 
 export { create, inform, exec, bundle, setParser, eftParser as parseEft, t, version }
 
-if (ENV !== 'production') console.info(`ef.js v${version} initialized!`)
+if (ENV !== 'production') console.info('[EF]', `ef.js v${version} initialized!`)

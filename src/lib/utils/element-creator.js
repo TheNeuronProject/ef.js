@@ -109,7 +109,7 @@ const addEvent = ({element, event, state, handlers, subscribers, innerData}) => 
 		if (i) e.stopImmediatePropagation()
 		if (p) e.preventDefault()
 		if (state.$methods[m]) state.$methods[m]({e, value: _handler(), state})
-		else if (ENV !== 'production') console.warn(`[EF] Method named '${m}' not found!`)
+		else if (ENV !== 'production') console.warn('[EF]', `Method named '${m}' not found!`)
 	}, !!u)
 }
 

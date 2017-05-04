@@ -19,14 +19,14 @@ const exec = (immediate) => {
 
 	if (query.length > 0) {
 		const renderQuery = ARR.unique(query)
-		if (ENV !== 'production') console.info(`[EF] ${query.length} modification operations cached, ${renderQuery.length} executed.`)
+		if (ENV !== 'production') console.info('[EF]', `${query.length} modification operations cached, ${renderQuery.length} executed.`)
 		for (let i of renderQuery) i()
 		ARR.empty(query)
 	}
 
 	if (domQuery.length > 0) {
 		const domRenderQuery = ARR.rightUnique(domQuery)
-		if (ENV !== 'production') console.info(`[EF] ${domQuery.length} DOM operations cached, ${domRenderQuery.length} executed.`)
+		if (ENV !== 'production') console.info('[EF]', `${domQuery.length} DOM operations cached, ${domRenderQuery.length} executed.`)
 		for (let i of domRenderQuery) i()
 		ARR.empty(domQuery)
 	}

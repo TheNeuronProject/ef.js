@@ -123,7 +123,7 @@ const state = class {
 					inform()
 					if (nodeInfo.parent) {
 						this.$umount()
-						if (ENV !== 'production') console.warn('Component detached from previous mounting point.')
+						if (ENV !== 'production') console.warn('[EF]', 'Component detached from previous mounting point.')
 					}
 
 					if (!parent) parent = target
