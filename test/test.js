@@ -149,7 +149,7 @@ state2.$methods.sendMsg = function (info) {
 	var count = parseInt(info.state.$data.style)
 	var startTime = Date.now()
 	for (var i = 0; i < count; i++) states.push(new module1())
-	// state4.list1.push.apply(state4.list1, states)
+	state4.list1.push.apply(state4.list1, states)
 	// ef.exec()
 	var endTime = Date.now()
 	var time = endTime - startTime
@@ -161,7 +161,6 @@ state2.$methods.sendMsg = function (info) {
 	startTime = Date.now()
 	for (var i = 0; i < states.length; i++) {
 		states[i].$destroy()
-		states[i] = null
 	}
 	ef.exec()
 	endTime = Date.now()
@@ -172,5 +171,5 @@ state2.$methods.sendMsg = function (info) {
 }
 
 // state4.$methods.sendMsg = function(thisState) { alert('The message is "\n' + thisState.$data.text + '"!') }
+state.$mount({target: document.body})
 ef.exec()
-document.querySelector('body').appendChild(state.$element)

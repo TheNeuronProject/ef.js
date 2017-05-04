@@ -33,7 +33,7 @@ const updateMountingNode = ({state, children, key, anchor, value}) => {
 	if (children[key]) children[key].$umount()
 	// Update stored value
 	children[key] = value
-	if (value) value.$mount(state, key, anchor)
+	if (value) value.$mount({target: anchor, parent: state, option: 'before', key})
 	exec()
 }
 
@@ -60,10 +60,10 @@ const updateMountingList = ({state, children, key, anchor, value}) => {
 		for (let j of value) {
 			if (j.$element.contains(state.$element)) return warnParentNode()
 			j.$umount()
-			DOM.append(fragment, j.$mount(state, key))
+			DOM.append(fragment, j.$mount({parent: state, key}))
 		}
 		for (let j of ARR.copy(children[key])) j.$umount()
-	} else for (let j of value) DOM.append(fragment, j.$mount(state, key))
+	} else for (let j of value) DOM.append(fragment, j.$mount({parent: state, key}))
 	// Update stored value
 	children[key].length = 0
 	ARR.push(children[key], ...value)

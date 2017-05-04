@@ -19,9 +19,9 @@ const DOMARR = {
 	push({state, key, anchor}, ...items) {
 		const elements = []
 		inform()
-		for (let i of items) ARR.push(elements, i.$mount(state, key))
+		for (let i of items) ARR.push(elements, i.$mount({parent: state, key}))
 		if (this.length === 0) DOM.after(anchor, ...elements)
-		else DOM.after(this[this.length - 1].$after, ...elements)
+		else DOM.after(this[this.length - 1].$avatar, ...elements)
 		exec()
 		return ARR.push(this, ...items)
 	},
@@ -45,7 +45,7 @@ const DOMARR = {
 		inform()
 		for (let i = tempArr.length - 1; i >= 0; i--) {
 			tempArr[i].$umount()
-			ARR.push(elements, tempArr[i].$mount(state, key))
+			ARR.push(elements, tempArr[i].$mount({parent: state, key}))
 		}
 		ARR.push(this, ...ARR.reverse(tempArr))
 		DOM.after(anchor, ...elements)
@@ -65,7 +65,7 @@ const DOMARR = {
 		inform()
 		for (let i of sorted) {
 			i.$umount()
-			ARR.push(elements, i.$mount(state, key))
+			ARR.push(elements, i.$mount({parent: state, key}))
 		}
 		ARR.push(this, ...sorted)
 		DOM.after(anchor, ...elements)
@@ -87,7 +87,7 @@ const DOMARR = {
 		for (let i of items) {
 			if (i.$parent) return warnAttachment()
 			i.$umount()
-			ARR.push(elements, i.$mount(state, key))
+			ARR.push(elements, i.$mount({parent: state, key}))
 		}
 		DOM.after(anchor, ...elements)
 		exec()

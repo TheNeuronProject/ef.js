@@ -17,7 +17,7 @@ const create = (value) => {
 	else if (valType !== 'array') throw new TypeError('Cannot create new component without proper template or AST!')
 
 	const ast = value
-	const _ef_ = class extends state {
+	const ef = class extends state {
 		constructor(newState) {
 			inform()
 			super(ast)
@@ -25,7 +25,7 @@ const create = (value) => {
 			exec()
 		}
 	}
-	return _ef_
+	return ef
 }
 
 const bundle = (cb) => {

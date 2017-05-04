@@ -31,6 +31,7 @@ const update = function(newState) {
 const destroy = function() {
 	const {$element, $avatar} = this
 	inform()
+	this.$umount()
 	for (let i in this) {
 		this[i] = null
 		delete this[i]
@@ -63,12 +64,19 @@ const state = class {
 		const subscribers = {}
 		const nodeInfo = {
 			avatar: document.createTextNode(''),
+			replace: [],
 			parent: null,
 			key: null
 		}
 
 		const safeZone = document.createDocumentFragment()
-		const mount = () => DOM.before(nodeInfo.avatar, nodeInfo.element)
+		const mount = () => {
+			if (nodeInfo.replace.length > 0) {
+				for (let i of nodeInfo.replace) DOM.remove(i)
+				ARR.empty(nodeInfo.replace)
+			}
+			DOM.after(nodeInfo.avatar, nodeInfo.element)
+		}
 
 		inform()
 		Object.defineProperties(this, {
@@ -110,34 +118,45 @@ const state = class {
 				configurable: true
 			},
 			$mount: {
-				value: function(target, key, holder) {
-					if (typeof target === 'string') {
-						target = document.querySelector(target)
-						key = '__DIRECTMOUNT__'
-					}
+				value: function({target, option, parent, key}) {
+					if (typeof target === 'string') target = document.querySelector(target)
 
 					inform()
 					if (nodeInfo.parent) {
 						this.$umount()
-						warn(`Component detached from previous mounting point.`)
+						warn('Component detached from previous mounting point.')
 					}
 
-					nodeInfo.parent = target
+					if (!parent) parent = target
+					if (!key) key = '__DIRECTMOUNT__'
+					nodeInfo.parent = parent
 					nodeInfo.key = key
 					queueDom(mount)
 
-					if (target instanceof Element) {
-						DOM.append(target, nodeInfo.avatar)
-						return exec()
+					if (!target) {
+						exec()
+						return nodeInfo.avatar
 					}
 
-					if (holder) {
-						DOM.after(holder, nodeInfo.avatar)
-						return exec()
+					switch (option) {
+						case 'before': {
+							DOM.before(target, nodeInfo.avatar)
+							break
+						}
+						case 'after': {
+							DOM.after(target, nodeInfo.avatar)
+							break
+						}
+						case 'replace': {
+							DOM.before(target, nodeInfo.avatar)
+							nodeInfo.replace.push(target)
+							break
+						}
+						default: {
+							DOM.append(target, nodeInfo.avatar)
+						}
 					}
-
-					exec()
-					return nodeInfo.avatar
+					return exec()
 				},
 				configurable: true
 			},
