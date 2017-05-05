@@ -9,7 +9,7 @@ ef.js also provides a simple template-engine which helps you create component mo
 
 Demo:
 + [TodoMVC](https://classicoldsong.github.io/todomvc-efjs/) - [repo](https://github.com/ClassicOldSong/todomvc-efjs)
-+ [dbmon](https://classicoldsong.github.io/js-repaint-perfs/ef/index.html) - [repo](https://github.com/ClassicOldSong/js-repaint-perfs)
++ [dbmon](https://classicoldsong.github.io/js-repaint-perfs/ef/opt.html) - [repo](https://github.com/ClassicOldSong/js-repaint-perfs)
 
 Related projects:
 + [eft-parser](https://github.com/ClassicOldSong/eft-parser) - Parser for eft templates
