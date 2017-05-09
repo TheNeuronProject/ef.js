@@ -35,7 +35,7 @@ this is a comment
 	'-' stands for standard mounting point
 	-node1
 	'.' after a tag name stands for class names for this tag
-	>p.some.{{binding}}.class.names
+	>p.some.{{binding.class}}.class.names
 		'#' at the end of a tag name stands for the reference name of the node
 		Mustaches after a dot will bind to 'class' automatically
 		>span.{{emergency = emergency}}#notice_box
