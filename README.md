@@ -103,17 +103,17 @@ this is a comment
 	content inside mustaches after '=' stands for the default value for this binding
 	content without mustaches stands for a static data
 	which means that you cannot modify them using ef.js
-	#class = {{class.some = some}} {{class.class = class}} {{class.name = name}}
-	#style = background: {{style.background = #ECECEC}};
+	#class = {{class = some class name}}
+	#style = {{attr.style = background: #ECECEC}}
 	#id = testdiv
 	#some-attr = some text
 	#content
 	'%' stands for properties
-	%title = {{name}}
+	%title = Welcome, {{name}}
 	%anotherProperty = text
 	'@' stands for events
 	contents after ':' are considered as value passed to the handler
-	@click = updateInfo:{{binding.info}}
+	@click = updateInfo:{{binding.value}} and static value
 	modify keys now can be bind easily
 	@mousedown.shift.alt.ctrl.meta = select
 	bind to keys is also easy
@@ -128,7 +128,7 @@ this is a comment
 	'-' stands for standard mounting point
 	-node1
 	'.' after a tag name stands for class names for this tag
-	>p.some.class.names.{{class.binded = binded}}
+	>p.some.{{binding}}.class.names
 		'#' at the end of a tag name stands for the reference name of the node
 		Mustaches after a dot will bind to 'class' automatically
 		>span.{{emergency = emergency}}#notice_box

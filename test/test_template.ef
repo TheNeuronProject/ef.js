@@ -16,11 +16,11 @@ this is a comment
 	#some-attr = some text
 	#content
 	'%' stands for properties
-	%title = {{name}}
+	%title = Welcome, {{name}}
 	%anotherProperty = text
 	'@' stands for events
 	contents after ':' are considered as value passed to the handler
-	@click = updateInfo:{{binding.info}}
+	@click = updateInfo:{{binding.value}} and static value
 	modify keys now can be bind easily
 	@mousedown.shift.alt.ctrl.meta = select
 	bind to keys is also easy
@@ -35,7 +35,7 @@ this is a comment
 	'-' stands for standard mounting point
 	-node1
 	'.' after a tag name stands for class names for this tag
-	>p.some.class.names
+	>p.some.{{binding}}.class.names
 		'#' at the end of a tag name stands for the reference name of the node
 		Mustaches after a dot will bind to 'class' automatically
 		>span.{{emergency = emergency}}#notice_box
