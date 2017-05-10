@@ -68,6 +68,8 @@ const state = class {
 			key: null
 		}
 
+		if (ENV !== 'production') nodeInfo.avatar = document.createComment('AVATAR OF COMPONENT')
+
 		const safeZone = document.createDocumentFragment()
 		const mount = () => {
 			if (nodeInfo.replace.length > 0) {
@@ -167,10 +169,11 @@ const state = class {
 
 					inform()
 					if (parent && key !== '__DIRECTMOUNT__' && parent[key]) {
-						if (Array.isArray(parent[key])) {
-							parent[key].remove(this)
-						} else parent[key] = null
-						return exec()
+						if (Array.isArray(parent[key])) ARR.remove(parent[key], this)
+						else {
+							parent[key] = null
+							return exec()
+						}
 					}
 					DOM.append(safeZone, nodeInfo.avatar)
 					queueDom(mount)

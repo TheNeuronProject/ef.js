@@ -24,18 +24,10 @@ const DOMARR = {
 		exec()
 		return ARR.push(this, ...items)
 	},
-	remove(...items) {
-		const removedItems = []
-		inform()
-		for (let i of items) {
-			const removed = ARR.remove(this, i)
-			if (removed) {
-				removed.$umount()
-				ARR.push(removedItems, removed)
-			}
-		}
-		exec()
-		return removedItems
+	remove(item) {
+		if (this.indexOf(item) === -1) return
+		item.$umount()
+		return item
 	},
 	reverse({state, key, anchor}) {
 		if (this.length === 0) return this
@@ -73,7 +65,7 @@ const DOMARR = {
 	},
 	splice({state, key, anchor}, ...args) {
 		if (this.length === 0) return this
-		const spliced = ARR.copy(ARR.splice(this, ...args))
+		const spliced = ARR.splice(ARR.copy(this), ...args)
 		inform()
 		for (let i of spliced) i.$umount()
 		exec()
