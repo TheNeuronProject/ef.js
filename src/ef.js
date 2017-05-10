@@ -3,12 +3,12 @@ import parse from './lib/parser.js'
 import state from './lib/renderer.js'
 import typeOf from './lib/utils/type-of.js'
 import { mixStr } from './lib/utils/literals-mix.js'
-import eftParser from 'eft-parser'
+import parseEft from 'eft-parser'
 import { inform, exec } from './lib/utils/render-query.js'
 import { version } from '../package.json'
 
 // Set parser
-let parser = eftParser
+let parser = parseEft
 
 const create = (value) => {
 	const valType = typeOf(value)
@@ -38,6 +38,6 @@ const setParser = (newParser) => {
 
 const t = (...args) => create(mixStr(...args))
 
-export { create, inform, exec, bundle, setParser, eftParser as parseEft, t, version }
+export { create, inform, exec, bundle, setParser, parseEft, t, version }
 
 if (ENV !== 'production') console.info('[EF]', `ef.js v${version} initialized!`)
