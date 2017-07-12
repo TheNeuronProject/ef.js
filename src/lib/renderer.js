@@ -7,8 +7,7 @@ import { assign } from './utils/polyfills.js'
 import { queueDom, inform, exec } from './utils/render-query.js'
 
 const unsubscribe = (_path, fn, subscribers) => {
-	const pathArr = _path.split('.')
-	const subscriberNode = resolveSubscriber(pathArr, subscribers)
+	const subscriberNode = resolveSubscriber(_path, subscribers)
 	ARR.remove(subscriberNode, fn)
 }
 
