@@ -50,7 +50,7 @@ const addValListener = ({_handler, state, handlers, subscribers, innerData, elem
 
 const getAttrHandler = (element, key) => {
 	if (key === 'class') return (val) => {
-		val = val.replace(/\s+/g, ' ').trim()
+		val = `${val}`.replace(/\s+/g, ' ').trim()
 		element.setAttribute(key, val)
 	}
 	return val => element.setAttribute(key, val)
