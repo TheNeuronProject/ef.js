@@ -1,6 +1,6 @@
 {
   "name": "ef.js",
-  "version": "0.3.3-alpha.4",
+  "version": "0.3.3-alpha.5",
   "description": "(maybe) An elegant HTML template engine & basic framework",
   "main": "dist/ef.min.js",
   "module": "src/ef.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ClassicOldSong/ef.js.git"
+    "url": "git+https://github.com/TheNeuronProject/ef.js.git"
   },
   "keywords": [
     "template",
@@ -22,9 +22,9 @@
   "author": "ClassicOldSong",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ClassicOldSong/ef.js/issues"
+    "url": "https://github.com/TheNeuronProject/ef.js/issues"
   },
-  "homepage": "https://github.com/ClassicOldSong/ef.js#readme",
+  "homepage": "https://github.com/TheNeuronProject/ef.js#readme",
   "devDependencies": {
     "browser-sync": "^2.17.5",
     "eslint": "^3.9.1",
