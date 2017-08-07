@@ -1,5 +1,7 @@
 var template = '\n' +
 '>div.{{class.text = box test}}\n' +
+'	#testattr\n' +
+' #emptyattr = {{empty}}\n'+
 '	#id = id1\n' +
 '	.text0\n' +
 '	>br\n' +

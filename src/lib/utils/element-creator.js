@@ -42,6 +42,7 @@ const addValListener = ({_handler, state, handlers, subscribers, innerData, elem
 	const {dataNode, handlerNode, subscriberNode, _key} = initBinding({bind: expr, state, handlers, subscribers, innerData})
 	const _update = () => updateOthers({dataNode, handlerNode, subscriberNode, _handler, state, _key, value: element.value})
 	if (key === 'value') {
+		// Listen to input, keyup and change events in order to work in most browsers.
 		element.addEventListener('input', _update, true)
 		element.addEventListener('keyup', _update, true)
 		element.addEventListener('change', _update, true)
@@ -51,9 +52,15 @@ const addValListener = ({_handler, state, handlers, subscribers, innerData, elem
 const getAttrHandler = (element, key) => {
 	if (key === 'class') return (val) => {
 		val = `${val}`.replace(/\s+/g, ' ').trim()
+		// Remove attribute when value is empty
+		if (!val) return element.removeAttribute(key)
 		element.setAttribute(key, val)
 	}
-	return val => element.setAttribute(key, val)
+	return (val) => {
+		// Remove attribute when value is empty
+		if (val === '') return element.removeAttribute(key)
+		element.setAttribute(key, val)
+	}
 }
 
 const addAttr = ({element, attr, key, state, handlers, subscribers, innerData}) => {
