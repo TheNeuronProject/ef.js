@@ -1,9 +1,19 @@
 script: npm run build
 language: node_js
 node_js:
-  - "7"
+- '8'
+env:
+- BUILD_ENV=CI
 cache:
   directories:
-    - node_modules
+  - node_modules
 notifications:
   webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
+deploy:
+  provider: releases
+  api_key:
+    secure: sHmU/NhAzRpZ8TkC1yDEyZ7FaPdDOxDIi3oq4QgU+6PAQRROdr14N52hz15EuvF4Rh2tKdcjv8y6M+Q6zOjzLVBcfKdTVchp9yOSctzReJd3rmZngv/6vxSyBT1/7LWRmqPJXClvP4Z3OTrCFE/FYrcQuW/SBeb1hPOFT1Jnj7m63zXvwUtl0xMwG7grEvHV3so3RkyVFSEXnImv2BCrWMW7h04mBWUfDitSyUen9/G4FSTF/D8kPi95Ra2qK7o5P13CfDjAvPGhQGRG3++53PiBUJCsqucFKNhwW9yM8OWKYc21QsGQEBcvHu++iEGxUqaaPNwvC/BHOXM/kceWT/q/E9ZEL0p9YjtjHrTj7y/xFGe+eujlUyeckSt6kyxQj9VNq/uJMD2qgUoFH1tWX+gETcLXnKK/4WkgUjRIPSeGpcpTJtTF45fmV1Zd5HxoN3zl1iOfvedCXGIzkqeMhaw3irlZTCypISa5eXv2l+JeizZA7t7dI3Ir43G55oWPzIiNfoS+Xzmb4+HefA66Jp5o0Fi0IFSATYVcyEscj+ooT/O7vT1bPgGxGnjd+Clc4fJAGy/1wtNjVas41/xklwsmiZROQKmAE1FTE6XQv/kGONeaZwm9ReMBsTih/l7YFB/mAOWz5cXZtNcLiZUN4RmwXkJF3kXlllAy1f4HjE8=
+  file: dist/ef.min.js
+  skip_cleanup: true
+  on:
+    tags: true
