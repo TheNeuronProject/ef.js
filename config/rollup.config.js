@@ -8,13 +8,40 @@ const uglify = require('rollup-plugin-uglify')
 const progress = require('rollup-plugin-progress')
 const json = require('rollup-plugin-json')
 
+// Log build environment
+switch (process.env.BUILD_ENV) {
+	case 'DEV': {
+		console.log(`
++---------------+
+| DEVELOP BUILD |
++---------------+
+`)
+		break
+	}
+	case 'CI': {
+		console.log(`
++----------+
+| CI BUILD |
++----------+
+`)
+		break
+	}
+	default: {
+		console.log(`
++--------------+
+| NORMAL BUILD |
++--------------+
+`)
+	}
+}
+
 module.exports = {
 	moduleName: 'ef',
 	entry: 'src/ef.js',
 	devDest: 'test/ef.dev.js',
 	proDest: 'dist/ef.min.js',
 	format: 'umd',
-	sourceMap: 'inline',
+	sourceMap: true,
 	plugins: [
 		progress({
 			clearLine: false

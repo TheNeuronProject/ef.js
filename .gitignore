@@ -17,6 +17,7 @@ temp/
 # Project files
 dist/*
 test/ef.dev.js
+test/ef.dev.js.map
 
 # node modules
 node_modules/

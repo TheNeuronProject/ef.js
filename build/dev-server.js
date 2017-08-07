@@ -1,5 +1,9 @@
 console.log('[RD]', 'Build starting...')
 
+
+require('shelljs/global')
+env.BUILD_ENV = 'DEV'
+
 const rollup = require('rollup').rollup
 const watch = require('node-watch')
 const {
