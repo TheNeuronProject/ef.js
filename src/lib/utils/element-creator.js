@@ -2,6 +2,7 @@ import ARR from './array-helper.js'
 import { mixVal } from './literals-mix.js'
 import initBinding from './binding.js'
 import { queue, inform, exec } from './render-query.js'
+import getEvent from './event-helper.js'
 
 const getElement = (tag, ref, refs) => {
 	const element = document.createElement(tag)
@@ -46,7 +47,27 @@ const addValListener = ({_handler, state, handlers, subscribers, innerData, elem
 		element.addEventListener('input', _update, true)
 		element.addEventListener('keyup', _update, true)
 		element.addEventListener('change', _update, true)
-	} else element.addEventListener('change', () => updateOthers({dataNode, handlerNode, subscriberNode, _handler, state, _key, value: element.checked}), true)
+	} else {
+		element.addEventListener('change', () => {
+			// Trigger change to the element it-self
+			element.dispatchEvent(getEvent('ef-change-event'))
+			if (element.tagName === 'INPUT' && element.type === 'radio' && element.name !== '') {
+				// Trigger change to the the same named radios
+				const radios = document.querySelectorAll(`input[name=${element.name}]`)
+				if (radios) {
+					const selected = Array.from(radios)
+					ARR.remove(selected, element)
+
+					/* Event triggering could cause unwanted render triggers
+					 * no better ways came up at the moment
+					 */
+					for (let i of selected) i.dispatchEvent(getEvent('ef-change-event'))
+				}
+			}
+		}, true)
+		// Use custom event to avoid loops and conflicts
+		element.addEventListener('ef-change-event', () => updateOthers({dataNode, handlerNode, subscriberNode, _handler, state, _key, value: element.checked}))
+	}
 }
 
 const getAttrHandler = (element, key) => {
