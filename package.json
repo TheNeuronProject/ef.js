@@ -24,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/TheNeuronProject/ef.js/issues"
   },
-  "homepage": "https://github.com/TheNeuronProject/ef.js#readme",
+  "homepage": "https://ef.js.org",
   "devDependencies": {
     "browser-sync": "^2.18.13",
     "eslint": "^3.19.0",
