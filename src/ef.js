@@ -4,7 +4,7 @@ import state from './lib/renderer.js'
 import typeOf from './lib/utils/type-of.js'
 import { mixStr } from './lib/utils/literals-mix.js'
 import parseEft from 'eft-parser'
-import { inform, exec } from './lib/utils/render-query.js'
+import { onRender, inform, exec, bundle } from './lib/utils/render-query.js'
 import { version } from '../package.json'
 
 // Set parser
@@ -27,17 +27,13 @@ const create = (value) => {
 	return ef
 }
 
-const bundle = (cb) => {
-	inform()
-	return exec(cb(inform, exec))
-}
-
+// Change parser
 const setParser = (newParser) => {
 	parser = newParser
 }
 
 const t = (...args) => create(mixStr(...args))
 
-export { create, inform, exec, bundle, setParser, parseEft, t, version }
+export { create, onRender, inform, exec, bundle, setParser, parseEft, t, version }
 
 if (ENV !== 'production') console.info('[EF]', `ef.js v${version} initialized!`)

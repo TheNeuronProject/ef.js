@@ -52,6 +52,9 @@ const destroy = function() {
 	return exec()
 }
 
+// All detatched components will be put in the safe zone zone
+const safeZone = document.createDocumentFragment()
+
 const state = class {
 	constructor (ast) {
 		const children = {}
@@ -69,7 +72,6 @@ const state = class {
 
 		if (ENV !== 'production') nodeInfo.avatar = document.createComment('AVATAR OF COMPONENT')
 
-		const safeZone = document.createDocumentFragment()
 		const mount = () => {
 			if (nodeInfo.replace.length > 0) {
 				for (let i of nodeInfo.replace) DOM.remove(i)
