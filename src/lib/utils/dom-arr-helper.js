@@ -63,7 +63,7 @@ const DOMARR = {
 		exec()
 		return this
 	},
-	splice({state, key, anchor}, ...args) {
+	splice(...args) {
 		if (this.length === 0) return this
 		const spliced = ARR.splice(ARR.copy(this), ...args)
 		inform()
@@ -98,7 +98,7 @@ const defineArr = (arr, info) => {
 		reverse: {value: DOMARR.reverse.bind(arr, info)},
 		shift: {value: DOMARR.shift},
 		sort: {value: DOMARR.sort.bind(arr, info)},
-		splice: {value: DOMARR.splice.bind(arr, info)},
+		splice: {value: DOMARR.splice},
 		unshift: {value: DOMARR.unshift.bind(arr, info)}
 	})
 	return arr
