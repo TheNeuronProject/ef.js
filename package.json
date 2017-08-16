@@ -1,6 +1,6 @@
 {
   "name": "ef.js",
-  "version": "0.3.4-beta.2",
+  "version": "0.3.4-beta.3",
   "description": "(maybe) An elegant HTML template engine & basic framework",
   "main": "dist/ef.min.js",
   "module": "src/ef.js",
@@ -29,7 +29,7 @@
     "browser-sync": "^2.18.13",
     "eslint": "^4.4.1",
     "node-watch": "^0.5.5",
-    "rollup": "^0.47.2",
+    "rollup": "^0.47.4",
     "rollup-plugin-buble": "^0.15.0",
     "rollup-plugin-commonjs": "^8.1.0",
     "rollup-plugin-eslint": "^4.0.0",
@@ -41,6 +41,6 @@
     "shelljs": "^0.7.8"
   },
   "dependencies": {
-    "eft-parser": "^0.5.8"
+    "eft-parser": "^0.5.9"
   }
 }

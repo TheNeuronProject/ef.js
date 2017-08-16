@@ -27,7 +27,7 @@ const update = function(newState) {
 }
 
 const destroy = function() {
-	const {$element, $avatar} = this
+	const {$element, __EFAVATAR__} = this
 	inform()
 	this.$umount()
 	for (let i in this) {
@@ -36,7 +36,7 @@ const destroy = function() {
 	}
 	queueDom(() => {
 		DOM.remove($element)
-		DOM.remove($avatar)
+		DOM.remove(__EFAVATAR__)
 	})
 	delete this.$element
 	delete this.$avatar
@@ -52,9 +52,6 @@ const destroy = function() {
 	return exec()
 }
 
-// All detatched components will be put in the safe zone zone
-const safeZone = document.createDocumentFragment()
-
 const state = class {
 	constructor (ast) {
 		const children = {}
@@ -69,6 +66,12 @@ const state = class {
 			parent: null,
 			key: null
 		}
+
+		/* Detatched components will be put in the safe zone
+		 * Split safe zone to each component
+		 * in order to make the component memory recycleable
+		 */
+		const safeZone = document.createDocumentFragment()
 
 		if (ENV !== 'production') nodeInfo.avatar = document.createComment('AVATAR OF COMPONENT')
 
@@ -88,7 +91,7 @@ const state = class {
 				},
 				configurable: true
 			},
-			$avatar: {
+			__EFAVATAR__: {
 				get() {
 					return nodeInfo.avatar
 				},

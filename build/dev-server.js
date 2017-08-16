@@ -27,7 +27,7 @@ const bundleWrite = (bundle) => {
 }
 
 const startWatch = () => {
-	watch('src', (filename) => {
+	watch('src', {recursive: true}, (evt, filename) => {
 		console.log('[RD]', 'File changed:', filename)
 		rollup({
 			entry,
