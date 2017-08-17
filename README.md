@@ -30,7 +30,7 @@ Community project(s):
 
 ## Usage
 ``` javascript
-import { create, onRender, inform, exec, bundle, setParser, parseEft, t, version } from 'ef.js'
+import { create, onNextRender, inform, exec, bundle, setParser, parseEft, t, version } from 'ef.js'
 // or you can use import * as ef from 'ef.js'
 
 version // Version string of ef.js
@@ -53,7 +53,7 @@ const template3 = t`Your awesome template`
 const component1 = new template1() // Create a component without data
 const component2 = new template2(data) // Create a component and then updates it's data
 
-onRender(callback) // Cache operations to execute on next render
+onNextRender(callback) // Cache operations to execute on next render
 inform() // Tell ef to cache operations **USE WITH CARE**
 exec() // Tell ef to execute all cached operations **USE WITH CARE**
 exec(true) // Force execute cached operations **USE WITH CARE**
