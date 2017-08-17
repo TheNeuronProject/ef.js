@@ -7,11 +7,18 @@ let count = 0
 
 const queue = handlers => query.push(...handlers)
 const queueDom = handler => domQuery.push(handler)
-const onRender = handler => userQuery.push(handler)
+const onNextRender = handler => userQuery.push(handler)
 
 const inform = () => {
 	count += 1
 	return count
+}
+
+const execUserQuery = () => {
+	const userFnQuery = ARR.unique(userQuery)
+	for (let i of userFnQuery) i()
+	if (ENV !== 'production') console.info('[EF]', `${userQuery.length} user operations cached, ${userFnQuery.length} executed.`)
+	ARR.empty(userQuery)
 }
 
 const exec = (immediate) => {
@@ -32,12 +39,9 @@ const exec = (immediate) => {
 		ARR.empty(domQuery)
 	}
 
-	if (userQuery.length > 0) {
-		const userFnQuery = ARR.unique(userQuery)
-		for (let i of userFnQuery) i()
-		if (ENV !== 'production') console.info('[EF]', `${userQuery.length} user operations cached, ${userFnQuery.length} executed.`)
-		ARR.empty(userQuery)
-	}
+	// Execute user query after DOM update
+	if (userQuery.length > 0) setTimeout(execUserQuery, 0)
+
 	return count
 }
 
@@ -46,4 +50,4 @@ const bundle = (cb) => {
 	return exec(cb(inform, exec))
 }
 
-export { queue, queueDom, onRender, inform, exec, bundle }
+export { queue, queueDom, onNextRender, inform, exec, bundle }
