@@ -27,19 +27,22 @@ const update = function(newState) {
 }
 
 const destroy = function() {
-	const {$element, __EFAVATAR__} = this
+	const {$element, __EFPLACEHOLDER__} = this
 	inform()
 	this.$umount()
 	for (let i in this) {
 		this[i] = null
 		delete this[i]
 	}
+	// Push DOM removement operation to query
 	queueDom(() => {
 		DOM.remove($element)
-		DOM.remove(__EFAVATAR__)
+		DOM.remove(__EFPLACEHOLDER__)
 	})
+
+	// Remove all references for memory recycling
 	delete this.$element
-	delete this.$avatar
+	delete this.__EFPLACEHOLDER__
 	delete this.$parent
 	delete this.$key
 	delete this.$data
@@ -49,6 +52,7 @@ const destroy = function() {
 	delete this.$umount
 	delete this.$subscribe
 	delete this.$unsubscribe
+	// Render
 	return exec()
 }
 
@@ -61,26 +65,26 @@ const state = class {
 		const handlers = {}
 		const subscribers = {}
 		const nodeInfo = {
-			avatar: document.createTextNode(''),
+			placeholder: document.createTextNode(''),
 			replace: [],
 			parent: null,
 			key: null
 		}
 
-		/* Detatched components will be put in the safe zone
-		 * Split safe zone to each component
-		 * in order to make the component memory recycleable
+		/* Detatched components will be put in the safe zone.
+		 * Split safe zone to each component in order to make
+		 * the component memory recycleable when lost reference
 		 */
 		const safeZone = document.createDocumentFragment()
 
-		if (ENV !== 'production') nodeInfo.avatar = document.createComment('AVATAR OF COMPONENT')
+		if (ENV !== 'production') nodeInfo.placeholder = document.createComment('EF COMPONENT PLACEHOLDER')
 
 		const mount = () => {
 			if (nodeInfo.replace.length > 0) {
 				for (let i of nodeInfo.replace) DOM.remove(i)
 				ARR.empty(nodeInfo.replace)
 			}
-			DOM.before(nodeInfo.avatar, nodeInfo.element)
+			DOM.before(nodeInfo.placeholder, nodeInfo.element)
 		}
 
 		inform()
@@ -91,9 +95,9 @@ const state = class {
 				},
 				configurable: true
 			},
-			__EFAVATAR__: {
+			__EFPLACEHOLDER__: {
 				get() {
-					return nodeInfo.avatar
+					return nodeInfo.placeholder
 				},
 				configurable: true
 			},
@@ -140,25 +144,25 @@ const state = class {
 
 					if (!target) {
 						exec()
-						return nodeInfo.avatar
+						return nodeInfo.placeholder
 					}
 
 					switch (option) {
 						case 'before': {
-							DOM.before(target, nodeInfo.avatar)
+							DOM.before(target, nodeInfo.placeholder)
 							break
 						}
 						case 'after': {
-							DOM.after(target, nodeInfo.avatar)
+							DOM.after(target, nodeInfo.placeholder)
 							break
 						}
 						case 'replace': {
-							DOM.before(target, nodeInfo.avatar)
+							DOM.before(target, nodeInfo.placeholder)
 							nodeInfo.replace.push(target)
 							break
 						}
 						default: {
-							DOM.append(target, nodeInfo.avatar)
+							DOM.append(target, nodeInfo.placeholder)
 						}
 					}
 					return exec()
@@ -179,7 +183,7 @@ const state = class {
 							return exec()
 						}
 					}
-					DOM.append(safeZone, nodeInfo.avatar)
+					DOM.append(safeZone, nodeInfo.placeholder)
 					queueDom(mount)
 					return exec()
 				},
@@ -206,12 +210,13 @@ const state = class {
 		resolveReactivePath(['$data'], this, false)
 
 		nodeInfo.element = create({ast, state: this, innerData, refs, children, handlers, subscribers, create})
-		DOM.append(safeZone, nodeInfo.avatar)
+		DOM.append(safeZone, nodeInfo.placeholder)
 		queueDom(mount)
 		exec()
 	}
 }
 
+// Add $update and $destroy method
 Object.defineProperties(state.prototype, {
 	$update: {value: update},
 	$destroy: {value: destroy}
