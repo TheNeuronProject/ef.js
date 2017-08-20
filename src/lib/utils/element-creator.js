@@ -4,8 +4,14 @@ import initBinding from './binding.js'
 import { queue, inform, exec } from './render-query.js'
 import getEvent from './event-helper.js'
 
-const getElement = (tag, ref, refs) => {
-	const element = document.createElement(tag)
+// SVG tags require namespace to work properly
+const createByTag = (tag, svg) => {
+	if (svg) return document.createElementNS('http://www.w3.org/2000/svg', tag)
+	return document.createElement(tag)
+}
+
+const getElement = ({tag, ref, refs, svg}) => {
+	const element = createByTag(tag, svg)
 	if (ref) Object.defineProperty(refs, ref, {
 		value: element,
 		enumerable: true
@@ -141,7 +147,7 @@ const addEvent = ({element, event, state, handlers, subscribers, innerData}) => 
 	}, !!u)
 }
 
-const createElement = ({info, state, innerData, refs, handlers, subscribers}) => {
+const createElement = ({info, state, innerData, refs, handlers, subscribers, svg}) => {
 
 	/**
 	 *  t: tag       : string
@@ -151,7 +157,7 @@ const createElement = ({info, state, innerData, refs, handlers, subscribers}) =>
 	 *  r: reference : string
 	 */
 	const {t, a, p, e, r} = info
-	const element = getElement(t, r, refs)
+	const element = getElement({tag: t, ref: r, refs, svg})
 	for (let i in a) addAttr({element, attr: a[i], key: i, state, handlers, subscribers, innerData})
 	for (let i in p) addProp({element, prop: p[i], key: i, state, handlers, subscribers, innerData})
 	for (let i in e) addEvent({element, event: e[i], state, handlers, subscribers, innerData})

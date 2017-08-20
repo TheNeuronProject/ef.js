@@ -209,7 +209,7 @@ const state = class {
 		// Init root data node
 		resolveReactivePath(['$data'], this, false)
 
-		nodeInfo.element = create({ast, state: this, innerData, refs, children, handlers, subscribers, create})
+		nodeInfo.element = create({node: ast, state: this, innerData, refs, children, handlers, subscribers, svg: false, create})
 		DOM.append(safeZone, nodeInfo.placeholder)
 		queueDom(mount)
 		exec()

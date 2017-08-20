@@ -92,7 +92,7 @@ const bindMountingList = ({state, key, children, anchor}) => {
 	})
 }
 
-const resolveAST = ({node, nodeType, element, state, innerData, refs, children, handlers, subscribers, create}) => {
+const resolveAST = ({node, nodeType, element, state, innerData, refs, children, handlers, subscribers, svg, create}) => {
 	switch (nodeType) {
 		case 'string': {
 			// Static text node
@@ -100,7 +100,7 @@ const resolveAST = ({node, nodeType, element, state, innerData, refs, children, 
 			break
 		}
 		case 'array': {
-			if (typeOf(node[0]) === 'object') DOM.append(element, create({ast: node, state, innerData, refs, children, handlers, subscribers, create}))
+			if (typeOf(node[0]) === 'object') DOM.append(element, create({node, state, innerData, refs, children, handlers, subscribers, svg, create}))
 			else bindTextNode({node, state, handlers, subscribers, innerData, element})
 			break
 		}
@@ -124,12 +124,14 @@ const resolveAST = ({node, nodeType, element, state, innerData, refs, children, 
 	}
 }
 
-const create = ({ast, state, innerData, refs, children, handlers, subscribers, create}) => {
+const create = ({node, state, innerData, refs, children, handlers, subscribers, svg, create}) => {
+	const [info, ...childNodes] = node
+	if (!svg && info.t === 'svg') svg = true
 	// First create an element according to the description
-	const element = createElement({info: ast[0], state, innerData, refs, handlers, subscribers})
+	const element = createElement({info, state, innerData, refs, handlers, subscribers, svg})
 
 	// Append child nodes
-	for (let i = 1; i < ast.length; i++) resolveAST({node: ast[i], nodeType: typeOf(ast[i]), element, state, innerData, refs, children, handlers, subscribers, create})
+	for (let i = 0; i < childNodes.length; i++) resolveAST({node: childNodes[i], nodeType: typeOf(childNodes[i]), element, state, innerData, refs, children, handlers, subscribers, svg, create})
 
 	return element
 }
