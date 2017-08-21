@@ -12,10 +12,18 @@ gen/
 .fuse_*
 yarn.lock
 cache/
+temp/
 
 # Project files
-plugins/
+build/
+config/
 test/
+
+# Hidden files
+.*
 
 # node modules
 node_modules/
+
+# local tools
+publish

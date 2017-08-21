@@ -1,27 +1,30 @@
-/* global VERSION */
-
 // Import everything
-import { info } from './debug.js'
-import { _ast } from './share.js'
-// import parse from './lib/parser.js'
-import render from './lib/renderer.js'
+import parse from './lib/parser.js'
+import typeOf from 'ef-core/src/lib/utils/type-of.js'
+import { mixStr } from 'ef-core/src/lib/utils/literals-mix.js'
+import parseEft from 'eft-parser'
+import { version } from '../package.json'
+// Import core components
+import {create as createComponent, onNextRender, inform, exec, bundle} from 'ef-core'
 
-// Construct the class
-const ef = class {
-	// constructor(template) {
-	// 	if (!template) throw new Error('Cannot create new component without template!')
-	// 	_ast.set(this, parse(template))
-	// }
+// Set parser
+let parser = parseEft
 
-	constructor(ast) {
-		_ast.set(this, ast)
-	}
+const create = (value) => {
+	const valType = typeOf(value)
+	if (valType === 'string') value = parse(value, parser)
+	else if (valType !== 'array') throw new TypeError('Cannot create new component without proper template or AST!')
 
-	$render(data) {
-		return render(this, data)
-	}
+	return createComponent(value)
 }
 
-export default ef
+// Change parser
+const setParser = (newParser) => {
+	parser = newParser
+}
 
-info(`ef.js v${VERSION} initialized!`)
+const t = (...args) => create(mixStr(...args))
+
+export { create, onNextRender, inform, exec, bundle, setParser, parseEft, t, version }
+
+if (ENV !== 'production') console.info('[EF]', `ef.js v${version} initialized!`)
