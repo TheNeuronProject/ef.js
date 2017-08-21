@@ -56,7 +56,7 @@ const ARR = {
 	}
 }
 
-if (window.Set) ARR.unique = arr => Array.from(new Set(arr))
+if (window.Set && Array.from) ARR.unique = arr => Array.from(new Set(arr))
 else ARR.unique = ARR.rightUnique
 
 export default ARR

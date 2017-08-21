@@ -61,7 +61,7 @@ const addValListener = ({_handler, state, handlers, subscribers, innerData, elem
 				// Trigger change to the the same named radios
 				const radios = document.querySelectorAll(`input[name=${element.name}]`)
 				if (radios) {
-					const selected = Array.from(radios)
+					const selected = ARR.copy(radios)
 					ARR.remove(selected, element)
 
 					/* Event triggering could cause unwanted render triggers
