@@ -1,5 +1,5 @@
 // Rollup plugins
-const babel = require('rollup-plugin-babel')
+const buble = require('rollup-plugin-buble')
 const eslint = require('rollup-plugin-eslint')
 const resolve = require('rollup-plugin-node-resolve')
 const commonjs = require('rollup-plugin-commonjs')
@@ -7,21 +7,48 @@ const replace = require('rollup-plugin-replace')
 const uglify = require('rollup-plugin-uglify')
 const progress = require('rollup-plugin-progress')
 const json = require('rollup-plugin-json')
-const git = require('git-rev-sync')
-const { version } = require('../package.json')
+
+// Log build environment
+switch (process.env.BUILD_ENV) {
+	case 'DEV': {
+		console.log(`
++---------------+
+| DEVELOP BUILD |
++---------------+
+`)
+		break
+	}
+	case 'CI': {
+		console.log(`
++----------+
+| CI BUILD |
++----------+
+`)
+		break
+	}
+	default: {
+		console.log(`
++--------------+
+| NORMAL BUILD |
++--------------+
+`)
+	}
+}
 
 module.exports = {
 	moduleName: 'ef',
 	entry: 'src/ef.js',
 	devDest: 'test/ef.dev.js',
 	proDest: 'dist/ef.min.js',
-	format: 'iife',
-	sourceMap: 'inline',
+	format: 'umd',
+	sourceMap: true,
 	plugins: [
 		progress({
 			clearLine: false
 		}),
-		eslint(),
+		eslint({
+			exclude: ['*.json', '**/*.json']
+		}),
 		resolve({
 			jsnext: true,
 			main: true,
@@ -30,12 +57,14 @@ module.exports = {
 		commonjs(),
 		json(),
 		replace({
-			ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-			VERSION: JSON.stringify(`${version}.${git.branch()}.${git.short()}`)
+			ENV: JSON.stringify(process.env.NODE_ENV || 'development')
 		}),
-		babel({
-			exclude: 'node_modules/**',
-			runtimeHelpers: true
+		buble({
+			transforms: {
+				modules: false,
+				dangerousForOf: true
+			},
+			objedtAssign: 'Object.assign'
 		}),
 		(process.env.NODE_ENV === 'production' && uglify())
 	]

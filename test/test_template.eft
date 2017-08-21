@@ -1,0 +1,22 @@
+this is a comment
+>div.jji=&x23rwr&u02adwew&ni&u}}ddd}}...#lll{{}}}}s{{dfgrgs#jjj
+	#class = {{class}} {{sdffef=ssef}}
+	#style = {{attr.style = &x23rwr&u02adwew&ni&u}}
+	#id = testdiv
+	#some-attr = some text
+	#content =
+	%title = {{name}}
+	%anotherProperty = text
+	@click = updateInfo
+	@mousedown = setState
+	.Name: {{name}}&nJob: {{job}}
+	>br
+	-node1
+	>p
+		#class = some class name
+		>span
+			.Notice: {{notice}}&x23rwr&u02adwew&nfgrfi&u90
+		.some text
+		-node2
+		+list1
+		/#([^}]|}[^}])*$/

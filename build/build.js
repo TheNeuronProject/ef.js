@@ -9,7 +9,8 @@ const {
 	entry,
 	proDest: dest,
 	format,
-	plugins
+	plugins,
+	sourceMap
 } = require('../config/rollup.config')
 
 console.log('Building...')
@@ -20,6 +21,6 @@ rollup({
 })
 .then((bundle) => {
 	console.log('Writing bundle...')
-	bundle.write({ dest, moduleName, format })
+	bundle.write({ dest, moduleName, format, sourceMap: env.BUILD_ENV === 'CI' ? sourceMap : false })
 })
 .then(() => console.log('Build successful!'))
