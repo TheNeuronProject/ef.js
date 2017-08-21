@@ -131,7 +131,7 @@ const create = ({node, state, innerData, refs, children, handlers, subscribers, 
 	const element = createElement({info, state, innerData, refs, handlers, subscribers, svg})
 
 	// Append child nodes
-	for (let i = 0; i < childNodes.length; i++) resolveAST({node: childNodes[i], nodeType: typeOf(childNodes[i]), element, state, innerData, refs, children, handlers, subscribers, svg, create})
+	for (let i of childNodes) resolveAST({node: i, nodeType: typeOf(i), element, state, innerData, refs, children, handlers, subscribers, svg, create})
 
 	return element
 }
