@@ -4,11 +4,6 @@
 	(factory((global.ef = {})));
 }(this, (function (exports) { 'use strict';
 
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
-
-var escapeParser = createCommonjsModule(function (module) {
 // Set the escape character
 var char = '&';
 
@@ -19,7 +14,7 @@ var uni = new RegExp(("\\" + char + "u.{0,4}"), 'g');
 var hex = new RegExp(("\\" + char + "x.{0,2}"), 'g');
 var esc = new RegExp(("\\" + char), 'g');
 var b = new RegExp(("\\" + char + "b"), 'g');
-var t = new RegExp(("\\" + char + "t"), 'g');
+var t$1 = new RegExp(("\\" + char + "t"), 'g');
 var n = new RegExp(("\\" + char + "n"), 'g');
 var v = new RegExp(("\\" + char + "v"), 'g');
 var f = new RegExp(("\\" + char + "f"), 'g');
@@ -73,7 +68,7 @@ var ESCAPE = function (string) {
 			.replace(uni, U2C)
 			.replace(hex, X2C)
 			.replace(b, '\b')
-			.replace(t, '\t')
+			.replace(t$1, '\t')
 			.replace(n, '\n')
 			.replace(v, '\v')
 			.replace(f, '\f')
@@ -85,10 +80,6 @@ var ESCAPE = function (string) {
 	// Return escaped string
 	return escaped.join(char)
 };
-
-// export default ESCAPE
-module.exports = ESCAPE;
-});
 
 var typeSymbols = '>#%@.-+'.split('');
 var reserved = '__EFPLACEHOLDER__ $parent $key $data $element $refs $methods $mount $umount $subscribe $unsubscribe $update $destroy __DIRECTMOUNT__'.split(' ');
@@ -153,17 +144,17 @@ var splitDefault = function (string) {
 	var _path = ref[0];
 	var _default = ref.slice(1);
 	var pathArr = _path.trim().split('.');
-	var defaultVal = escapeParser(_default.join('=').trim());
+	var defaultVal = ESCAPE(_default.join('=').trim());
 	if (defaultVal) { return [pathArr, defaultVal] }
 	return [pathArr]
 };
 
 var splitLiterals = function (string) {
 	var strs = string.split(mustache);
-	if (strs.length === 1) { return escapeParser(string) }
+	if (strs.length === 1) { return ESCAPE(string) }
 	var tmpl = [];
 	if (strs.length === 2 && !strs[0] && !strs[1]) { tmpl.push(0); }
-	else { tmpl.push(strs.map(escapeParser)); }
+	else { tmpl.push(strs.map(ESCAPE)); }
 	var mustaches = string.match(mustache);
 	if (mustaches) { tmpl.push.apply(tmpl, mustaches.map(splitDefault)); }
 	return tmpl
@@ -1303,7 +1294,7 @@ var updateMountingNode = function (ref) {
 
 	if (children[key] === value) { return }
 	if (value) {
-		if (value.$parent && "development" !== 'production') { console.warn('[EF]', 'Better detach the component before attaching it to a new component!'); }
+		if (value.$parent && 'development' !== 'production') { console.warn('[EF]', 'Better detach the component before attaching it to a new component!'); }
 		if (value.$element.contains(state.$element)) {
 			{ console.warn('[EF]', 'Cannot mount a component to it\'s child component!'); }
 			return

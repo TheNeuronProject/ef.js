@@ -12,7 +12,7 @@
  |
  |
  */
-module.exports = {
+export default {
     "ui": false,
     "files": "test/index.html",
     "watchOptions": {},
