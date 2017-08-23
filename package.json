@@ -1,12 +1,12 @@
 {
   "name": "ef.js",
-  "version": "0.4.0-beta.2",
+  "version": "0.4.0-beta.3",
   "description": "(maybe) An elegant HTML template engine & basic framework",
   "main": "dist/ef.min.js",
   "module": "src/ef.js",
   "scripts": {
     "dev": "rollup -c ./config/rollup.dev.js -w",
-    "build": "NODE_ENV=production rollup -c ./config/rollup.build.js",
+    "build": "NODE_ENV=production rollup -c ./config/rollup.prod.js",
     "lint": "eslint --ext .js src"
   },
   "repository": {
@@ -32,7 +32,7 @@
     "rollup": "^0.48.2",
     "rollup-plugin-browsersync": "^0.2.4",
     "rollup-plugin-buble": "^0.15.0",
-    "rollup-plugin-commonjs": "^8.1.0",
+    "rollup-plugin-commonjs": "^8.2.0",
     "rollup-plugin-eslint": "^4.0.0",
     "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-resolve": "^3.0.0",
@@ -41,7 +41,7 @@
     "rollup-plugin-uglify": "^2.0.1"
   },
   "dependencies": {
-    "ef-core": "^0.4.0-beta.1",
+    "ef-core": "^0.4.0-beta.3",
     "eft-parser": "^0.5.12"
   }
 }
