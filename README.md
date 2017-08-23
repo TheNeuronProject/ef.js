@@ -16,9 +16,10 @@ Demo:
 + The [official website](https://github.com/ClassicOldSong/ef.js.org) is also written with ef.js
 
 Related projects:
++ [ef-core](https://github.com/TheNeuronProject/ef-core) - Core of ef.js (without parser)
 + [Neonclear](https://neon.atm.re) - An ef.js based progressive UI framework (WIP)
 + [bPlayer-ef](https://bplayer-ef.ccoooss.com) - The ef.js based web audio player
-+ [eft-parser](https://github.com/ClassicOldSong/eft-parser) - Parser for eft templates
++ [eft-parser](https://github.com/TheNeuronProject/eft-parser) - Parser for eft templates
 + [rollup-plugin-eft](https://github.com/ClassicOldSong/rollup-plugin-eft) - Import .ef and .eft templates directly from your code, taking the advantage of ef.js into your project with zero configuration.
 + [SublimeEFMLHighlighter](https://github.com/ClassicOldSong/SublimeEFMLHighlighter) - EFML syntax highlighter for SublimeText3
 + [VSCodeEFMLHighlighter](https://marketplace.visualstudio.com/items?itemName=ClassicOldSong.efml) - EFML syntax highlighter for VSCode
