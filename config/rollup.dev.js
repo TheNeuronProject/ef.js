@@ -5,7 +5,7 @@ import bsConfig from './bs-config'
 // Import dev plugins
 import browsersync from 'rollup-plugin-browsersync'
 
-base.output.file = base.devDest
+base.output.file = `${base.devPath}/${base.bundle}.dev.js`
 base.plugins.push(browsersync(bsConfig))
 base.watch = {
 	chokidar: true,

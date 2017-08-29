@@ -164,7 +164,7 @@ Then you can test it out in the opening browser window.
 $ git clone https://github.com/ClassicOldSong/ef.js.git
 $ cd ef.js
 $ npm install
-$ npm run build
+$ npm run build && npm run prod
 ```
 Then you can get the fresh-built `ef.min.js` in the `dist` folder.
 

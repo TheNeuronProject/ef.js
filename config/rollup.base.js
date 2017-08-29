@@ -10,8 +10,6 @@ import uglify from 'rollup-plugin-uglify'
 import progress from 'rollup-plugin-progress'
 import json from 'rollup-plugin-json'
 
-// Log build environment
-console.log('Target:', chalk.bold.green(process.env.NODE_ENV || 'development'))
 switch (process.env.BUILD_ENV) {
 	case 'DEV': {
 		console.log(chalk.cyan`
@@ -38,6 +36,9 @@ switch (process.env.BUILD_ENV) {
 	}
 }
 
+// Log build environment
+console.log('Build Target:', chalk.bold.green(process.env.BUILD_TARGET || 'development'))
+
 export default {
 	input: 'src/ef.js',
 	output: {
@@ -45,8 +46,9 @@ export default {
 		format: 'umd',
 		sourcemap: true
 	},
-	devDest: 'test/ef.dev.js',
-	proDest: 'dist/ef.min.js',
+	bundle: 'ef',
+	devPath: 'test',
+	proPath: 'dist',
 	plugins: [
 		progress({
 			clearLine: false
@@ -62,7 +64,7 @@ export default {
 		commonjs(),
 		json(),
 		replace({
-			ENV: `'${process.env.NODE_ENV || 'development'}'`
+			ENV: `'${process.env.BUILD_TARGET || 'development'}'`
 		}),
 		buble({
 			transforms: {
@@ -71,6 +73,6 @@ export default {
 			},
 			objectAssign: 'Object.assign'
 		}),
-		(process.env.NODE_ENV === 'production' && uglify())
+		(process.env.BUILD_TARGET === 'production' && uglify())
 	]
 }
