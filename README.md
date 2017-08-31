@@ -29,6 +29,21 @@ Related projects:
 Community project(s):
 + [EFML.vim](https://github.com/deluxghost/EFML.vim) by [deluxghost](https://github.com/deluxghost) - EFML (*.ef, *.eft) syntax highlighting for Vim
 
+## CDN
+With CDNJS:
+```
+https://cdnjs.cloudflare.com/ajax/libs/ef.js/0.4.1-beta.1/ef.dev.js
+https://cdnjs.cloudflare.com/ajax/libs/ef.js/0.4.1-beta.1/ef.dev.js.map
+https://cdnjs.cloudflare.com/ajax/libs/ef.js/0.4.1-beta.1/ef.min.js
+https://cdnjs.cloudflare.com/ajax/libs/ef.js/0.4.1-beta.1/ef.min.js.map
+```
+
+With unpkg:
+```
+https://unpkg.com/ef.js@latest
+https://unpkg.com/ef.js@0.4.1-beta.1/dist/ef.dev.js
+```
+
 ## Usage
 ``` javascript
 import { create, onNextRender, inform, exec, bundle, setParser, parseEft, t, version } from 'ef.js'
