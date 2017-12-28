@@ -30,19 +30,11 @@ Community project(s):
 + [EFML.vim](https://github.com/deluxghost/EFML.vim) by [deluxghost](https://github.com/deluxghost) - EFML (*.ef, *.eft) syntax highlighting for Vim
 
 ## CDN
-With CDNJS:
-```
-https://cdnjs.cloudflare.com/ajax/libs/ef.js/0.4.1-beta.1/ef.dev.js
-https://cdnjs.cloudflare.com/ajax/libs/ef.js/0.4.1-beta.1/ef.dev.js.map
-https://cdnjs.cloudflare.com/ajax/libs/ef.js/0.4.1-beta.1/ef.min.js
-https://cdnjs.cloudflare.com/ajax/libs/ef.js/0.4.1-beta.1/ef.min.js.map
-```
+[CDNJS](https://cdnjs.com/libraries/ef.js) | [UNPKG](https://unpkg.com/ef.js) | [jsDeliver](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.min.js)
 
-With unpkg:
-```
-https://unpkg.com/ef.js@latest
-https://unpkg.com/ef.js@0.4.1-beta.1/dist/ef.dev.js
-```
+For dev versions:
+
+[CDNJS](https://cdnjs.com/libraries/ef.js) | [UNPKG](https://unpkg.com/ef.js/dist/ef.dev.js) | [jsDeliver](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.dev.js)
 
 ## Usage
 ``` javascript
@@ -166,20 +158,20 @@ this is a comment
 For standalone eft parser see [eft-parser](https://github.com/ClassicOldSong/eft-parser).
 
 ## Run a test
-```
-$ git clone https://github.com/ClassicOldSong/ef.js.git
-$ cd ef.js
-$ npm install
-$ npm run dev
+``` bash
+git clone https://github.com/ClassicOldSong/ef.js.git
+cd ef.js
+npm install
+npm run dev
 ```
 Then you can test it out in the opening browser window.
 
 ## Build from source
-```
-$ git clone https://github.com/ClassicOldSong/ef.js.git
-$ cd ef.js
-$ npm install
-$ npm run build && npm run prod
+``` bash
+git clone https://github.com/ClassicOldSong/ef.js.git
+cd ef.js
+npm install
+npm run build && npm run prod
 ```
 Then you can get the fresh-built `ef.min.js` in the `dist` folder.
 
