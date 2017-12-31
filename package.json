@@ -43,7 +43,7 @@
     "rollup-plugin-uglify": "^2.0.1"
   },
   "dependencies": {
-    "ef-core": "^0.4.1-beta.2",
-    "eft-parser": "^0.5.12"
+    "ef-core": "^0.6.0-beta.1",
+    "eft-parser": "^0.6.0"
   }
 }
