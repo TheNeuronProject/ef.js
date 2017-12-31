@@ -5,7 +5,7 @@
         "es6": true
     },
     "globals": {
-        "ENV": true
+        "process": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -165,7 +165,7 @@
                 "allowForLoopAfterthoughts": true
             }
         ],
-        "no-process-env": "error",
+        "no-process-env": "off",
         "no-process-exit": "error",
         "no-proto": "error",
         "no-prototype-builtins": "error",
