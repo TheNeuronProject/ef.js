@@ -12,27 +12,15 @@ import json from 'rollup-plugin-json'
 
 switch (process.env.BUILD_ENV) {
 	case 'DEV': {
-		console.log(chalk.cyan`
-+---------------+
-| DEVELOP BUILD |
-+---------------+
-`)
+		console.log(chalk.cyan('+--------------=+| DEVELOP BUILD |+=--------------+'))
 		break
 	}
 	case 'CI': {
-		console.log(chalk.green`
-+----------+
-| CI BUILD |
-+----------+
-`)
+		console.log(chalk.green('+--------------=+| CI BUILD |+=--------------+'))
 		break
 	}
 	default: {
-		console.log(chalk.yellow`
-+--------------+
-| NORMAL BUILD |
-+--------------+
-`)
+		console.log(chalk.yellow('+--------------=+| NORMAL BUILD |+=--------------+'))
 	}
 }
 
@@ -64,7 +52,7 @@ export default {
 		commonjs(),
 		json(),
 		replace({
-			ENV: `'${process.env.BUILD_TARGET || 'development'}'`
+			'process.env.NODE_ENV': `'${process.env.BUILD_TARGET || 'development'}'`
 		}),
 		buble({
 			transforms: {
