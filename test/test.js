@@ -1,8 +1,9 @@
 var template = '\n' +
-'>div.{{class.text = box test}}\n' +
+'>div.{{class.text = box test}}#root\n' +
 '	#testattr\n' +
 ' #emptyattr = {{empty}}\n' +
 '	#id = id1\n' +
+'	@my&.awesome&.event = showAlert\n' +
 '	.text0\n' +
 '	>br\n' +
 '	.{{root.text}}\n' +
@@ -59,7 +60,7 @@ var template = '\n' +
 '	+list'
 
 var template2 = '  this is a comment\n' +
-'  >div.{{class = some class name}}\n' +
+'  >div.{{class = some class name}}&.testClassName&#fakeRef\n' +
 '    #style = {{attr.style}}\n' +
 '    #id = testdiv\n' +
 '  	#some-attr = some text\n' +
@@ -123,6 +124,7 @@ state4.$data.job = 'Assiting Alice'
 var data2 = {
 	$data: {
 		text: 'box',
+		btnText: 'Send Message with custon event',
 		root: {
 			text: 'On this node that button works.'
 		}
@@ -131,7 +133,12 @@ var data2 = {
 		sendMsg: function (info) {
 			console.log('Event triggered:', info.e)
 			console.log('Value passed:', info.value)
-			alert('The message is \n"' + info.state.$data.class.text + '"!')
+			var evt = new CustomEvent('my.awesome.event', { detail: info.state.$data.class.text })
+			info.state.$refs.root.dispatchEvent(evt)
+		},
+		showAlert: function (info) {
+			console.log('Event triggered:', info.e)
+			alert('The message is \n"' + info.e.detail + '"!')
 		}
 	},
 	list: [state2]
