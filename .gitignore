@@ -13,6 +13,7 @@ gen/
 yarn.lock
 cache/
 temp/
+.DS_Store
 
 # Project files
 dist/*
