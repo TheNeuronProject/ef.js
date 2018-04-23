@@ -26,8 +26,9 @@ Related projects:
 + [AtomEFMLHighlighter](https://atom.io/packages/efml) - EFML syntax highlighter for Atom
 + [PrismEFMLSyntax](https://github.com/ClassicOldSong/PrismEFMLSyntax) - EFML syntax for [Prism](http://prismjs.com/)
 
-Community project(s):
+Community projects:
 + [EFML.vim](https://github.com/deluxghost/EFML.vim) by [deluxghost](https://github.com/deluxghost) - EFML (*.ef, *.eft) syntax highlighting for Vim
++ [Kefjs](https://github.com/cubesky/Kefjs) by [cubesky](https://github.com/cubesky) - A Kotlin/JS Wrapper for ef.js
 
 ## CDN
 [CDNJS](https://cdnjs.com/libraries/ef.js) | [UNPKG](https://unpkg.com/ef.js) | [jsDeliver](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.min.js)
