@@ -35,7 +35,7 @@ Community projects:
 
 For dev versions:
 
-[CDNJS](https://cdnjs.com/libraries/ef.js) | [UNPKG](https://unpkg.com/ef.js/dist/ef.dev.js) | [jsDeliver](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.dev.js)
+[CDNJS](https://cdnjs.com/libraries/ef.js) | [jsDeliver](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.dev.js) | [UNPKG](https://unpkg.com/ef.js/dist/ef.dev.js)
 
 ## Usage
 ``` javascript
