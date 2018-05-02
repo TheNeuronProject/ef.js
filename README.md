@@ -31,7 +31,7 @@ Community projects:
 + [Kefjs](https://github.com/cubesky/Kefjs) by [cubesky](https://github.com/cubesky) - A Kotlin/JS Wrapper for ef.js
 
 ## CDN
-[CDNJS](https://cdnjs.com/libraries/ef.js) | [UNPKG](https://unpkg.com/ef.js) | [jsDeliver](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.min.js)
+[CDNJS](https://cdnjs.com/libraries/ef.js) | [jsDeliver](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.min.js) | [UNPKG](https://unpkg.com/ef.js)
 
 For dev versions:
 
