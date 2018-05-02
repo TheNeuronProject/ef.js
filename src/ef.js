@@ -5,7 +5,15 @@ import { mixStr } from 'ef-core/src/lib/utils/literals-mix.js'
 import parseEft from 'eft-parser'
 import { version } from '../package.json'
 // Import core components
-import {create as createComponent, onNextRender, inform, exec, bundle} from 'ef-core'
+import {
+	create as createComponent,
+	onNextRender,
+	inform,
+	exec,
+	bundle,
+	isPaused,
+	mountOptions
+} from 'ef-core'
 
 // Set parser
 let parser = parseEft
@@ -25,6 +33,18 @@ const setParser = (newParser) => {
 
 const t = (...args) => create(mixStr(...args))
 
-export { create, onNextRender, inform, exec, bundle, setParser, parseEft, t, version }
+export {
+	t,
+	create,
+	onNextRender,
+	inform,
+	exec,
+	bundle,
+	isPaused,
+	setParser,
+	parseEft,
+	mountOptions,
+	version
+}
 
 if (process.env.NODE_ENV !== 'production') console.info('[EF]', `ef.js v${version} initialized!`)
