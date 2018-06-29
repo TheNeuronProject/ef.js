@@ -9,6 +9,12 @@ var template = '\n' +
 '	.{{root.text}}\n' +
 '	>br\n' +
 '	.{{class.text}}\n' +
+'	>pre\n' +
+'		|Line 1\n' +
+'		|Line 2\n' +
+'		|Line 3, section 1,\n' +
+'		. section 2\n' +
+'		|Line 4\n' +
 '	>div#testRef\n' +
 '		#style = {{style}}\n' +
 '		.text1{{info.node1}}\n' +
