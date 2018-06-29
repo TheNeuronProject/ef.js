@@ -110,7 +110,7 @@ Here is an example.
 
 ```
 Tree structure
-Lines not started with >#%@.+- are considered as comments
+Lines not started with >#%@.|+- are considered as comments
 The escape character of eft is '&', for prevention of the conflict with js escapes.
 Except for the change of the character, all the usage should be the same.
 this is a comment
@@ -142,6 +142,11 @@ this is a comment
 	@submit.capture.stopImmediate = submit
 	'.' stands for text nodes
 	.Name: {{name}}&nJob: {{job}}
+	>pre
+		'|' stands for multiline text
+		|Line 1
+		|Line 2
+		|Line 3
 	>br
 	'-' stands for standard mounting point
 	-node1
