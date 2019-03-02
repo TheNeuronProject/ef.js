@@ -47,4 +47,4 @@ export {
 	version
 }
 
-if (process.env.NODE_ENV !== 'production') console.info('[EF]', `ef.js v${version} initialized!`)
+if (process.env.NODE_ENV !== 'production') console.info(`[EF] ef.js v${version} initialized!`)
