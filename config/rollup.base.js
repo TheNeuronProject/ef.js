@@ -45,8 +45,6 @@ export default {
 			exclude: ['*.json', '**/*.json']
 		}),
 		resolve({
-			jsnext: true,
-			main: true,
 			browser: true,
 		}),
 		commonjs(),
