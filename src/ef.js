@@ -7,6 +7,9 @@ import { version } from '../package.json'
 // Import core components
 import {
 	create as createComponent,
+	createElement,
+	TextFragment,
+	Fragment,
 	onNextRender,
 	inform,
 	exec,
@@ -36,6 +39,9 @@ const t = (...args) => create(mixStr(...args))
 export {
 	t,
 	create,
+	createElement,
+	TextFragment,
+	Fragment,
 	onNextRender,
 	inform,
 	exec,
