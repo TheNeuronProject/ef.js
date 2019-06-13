@@ -1,7 +1,7 @@
 script: npm run build && npm run prod
 language: node_js
 node_js:
-- '9'
+- '12'
 env:
   matrix:
   - BUILD_ENV=CI
