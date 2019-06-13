@@ -8,6 +8,7 @@ import { version } from '../package.json'
 import {
 	create as createComponent,
 	createElement,
+	registerProps,
 	TextFragment,
 	Fragment,
 	onNextRender,
@@ -40,6 +41,7 @@ export {
 	t,
 	create,
 	createElement,
+	registerProps,
 	TextFragment,
 	Fragment,
 	onNextRender,
