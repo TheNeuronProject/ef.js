@@ -1,5 +1,5 @@
 var template = '\n' +
-'>div.{{class.text = box test}}#root\n' +
+'>div.{{class.lv1.lv2.lv3.test = box test}}#root\n' +
 '	#testattr\n' +
 ' #emptyattr = {{empty}}\n' +
 '	#id = id1\n' +
@@ -8,7 +8,7 @@ var template = '\n' +
 '	>br\n' +
 '	.{{root.text}}\n' +
 '	>br\n' +
-'	.{{class.text}}\n' +
+'	.{{class.lv1.lv2.lv3.test}}\n' +
 '	>pre\n' +
 '		|Line 1\n' +
 '		|Line 2\n' +
@@ -25,17 +25,17 @@ var template = '\n' +
 '		.Two way binded 1: \n' +
 '		>input\n' +
 '			#type = text\n' +
-'			%value = {{class.text}}\n' +
+'			%value = {{class.lv1.lv2.lv3.test}}\n' +
 '		>br\n' +
 '		.Two way binded 2: \n' +
 '		>input\n' +
 '			#type = text\n' +
-'			%value = {{class.text2 = 23333}}\n' +
+'			%value = {{class.lv1.lv2.lv3.test2 = 23333}}\n' +
 '		>br\n' +
 '		.One way binded with particle update:\n' +
 '		>input\n' +
 '			#type = text\n' +
-'			%value = 1: {{class.text}} 2: {{class.text2}}\n' +
+'			%value = 1: {{class.lv1.lv2.lv3.test}} 2: {{class.lv1.lv2.lv3.test2}}\n' +
 '		>br\n' +
 '		>input\n' +
 '			#type = radio\n' +
@@ -139,7 +139,7 @@ var data2 = {
 		sendMsg: function (info) {
 			console.log('Event triggered:', info.e)
 			console.log('Value passed:', info.value)
-			var evt = new CustomEvent('my.awesome.event', { detail: info.state.$data.class.text })
+			var evt = new CustomEvent('my.awesome.event', { detail: info.state.$data.class.lv1.lv2.lv3.test })
 			info.state.$refs.root.dispatchEvent(evt)
 		},
 		showAlert: function (info) {
