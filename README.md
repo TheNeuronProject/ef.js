@@ -27,9 +27,10 @@ Related projects:
 + [PrismEFMLSyntax](https://github.com/ClassicOldSong/PrismEFMLSyntax) - EFML syntax for [Prism](http://prismjs.com/)
 
 Community projects:
-+ [EFML.vim](https://github.com/deluxghost/EFML.vim) by [deluxghost](https://github.com/deluxghost) - EFML (*.ef, *.eft) syntax highlighting for Vim
++ [EFML.vim](https://github.com/deluxghost/EFML.vim) by [deluxghost](https://github.com/deluxghost) - EFML (\*.ef, \*.eft) syntax highlighting for Vim
 + [Kefjs](https://github.com/cubesky/Kefjs) by [cubesky](https://github.com/cubesky) - A Kotlin/JS Wrapper for ef.js
 + [parcel-plugin-eft](https://github.com/oott123/parcel-plugin-eft) by [oott123](https://github.com/oott123) - Add ef.js template support for parcel bundler
++ [xml2efml](https://github.com/tcdw/xml2efml) - by [tcdw](https://github.com/tcdw) - Convert XML/HTML snippets to EFML
 
 ## CDN
 [CDNJS](https://cdnjs.com/libraries/ef.js) | [jsDeliver](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.min.js) | [UNPKG](https://unpkg.com/ef.js)
@@ -99,7 +100,7 @@ component1.$destroy() // Destroy the component when not needed for more memory
 
 ```
 
-## ef.js template language (EFML) format
+### ef.js template language (EFML) format
 EFML is a completely **logic-free** template language. Just like HTML, there you can do nothing about logic, but EFML provides a easy starting point for data binding and events handling.
 
 Also EFML is the first language that can be parsed into the AST which ef supports.
@@ -163,6 +164,76 @@ this is a comment
 ```
 
 For standalone eft parser see [eft-parser](https://github.com/ClassicOldSong/eft-parser).
+
+### Fragments
+
+After version 0.9.0, ef.js now supports fragments, which requires eft-parser to be v0.9.0 and above. A normal template could only have one entry tag, while fragment templates can have multiple, even mounting poings can be put at root level:
+
+```
+>div
+	.A root level tag
+-rootLevelMountingPoint
+>p
+ .Another root level tag
++rootLevelListMountingPoint
+.Root level text node
+```
+
+You can use them just like normal templates, behaviors are always the same. Also, a single text node will be treated as fragments as well.
+
+### Helpers
+
+ef.js also provides some helpers for creating `Fragments` and `TextFragments`.
+
+```typescript
+new ef.Fragment(Array<EFComponents | string>)
+```
+creats a fragment containing given ef components, while
+
+```typescript
+new ef.TextFragment(string)
+```
+creats a single `TextFragment` which contains only the given text. Text on `TextFragment` components can be modified with `.text` property.
+
+### Property Mapping
+
+ef.js components are not always that easy to use, so after v0.9.5, a stable version of property mapping helper is bundled with ef.js. For documents, please reference to the [comments](https://github.com/TheNeuronProject/ef-core/blob/master/src/lib/register-props.js#L53-L61) for now. It would be extremely useful when using with JSX.
+
+## JSX
+
+ef.js now comes with JSX support after v0.9.0. Demo [here](https://codepan.net/gist/192a1870d23e05d775d3667389162e63).
+
+### JSX Fragments
+
+ef.js comes with support for JSX fragments. You can create fragments just like what you do in React:
+```jsx
+<>
+	<h1>Hello JSX!</h1>
+	<MyCustomComponent>Now ef.js comes with JSX fragment support!</MyCustomComponent>
+</>
+```
+
+Note that JSX fragments are not always the same from ef fragments. No ef bindings can be set on JSX fragments in the mean time.
+
+### With Transpilers
+
+**Babel:** As documented [here](https://babeljs.io/docs/en/babel-preset-react), you can customize your jsx pragama when using babel. For example:
+```json
+{
+	"presets": [
+		[
+			"@babel/preset-react",
+			{
+				"pragma": "ef.createElement", // default pragma is React.createElement
+				"pragmaFrag": "ef.Fragment", // default is React.Fragment
+				"throwIfNamespace": false // defaults to true
+			}
+		]
+	]
+}
+```
+
+**Buble:** Currently buble can only set custom `createElement` pragama, so you need to import `ef.js` as `React` currently in order to have JSX Fragment support. A [pull request on custom `Fragment` pragama](https://github.com/bublejs/buble/pull/199) has been merged but not yet released.
 
 ## Run a test
 ``` bash
