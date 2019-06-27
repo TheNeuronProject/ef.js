@@ -53,8 +53,8 @@ const templateString = 'Your awesome template'
 const ast = [/* AST which supported by ef */]
 
 const data = {
-	$data: {/* Binding data */},
-	$methods: {/* Binding methods */}
+  $data: {/* Binding data */},
+  $methods: {/* Binding methods */}
 }
 
 const template1 = create(template)
@@ -75,9 +75,9 @@ component2.$element // The DOM element of component2
 
 component1.$data.something = 'something new' // Update the binding data 'something'
 component2.$methods.someMethod = ({e, value, state}) => {
-	state.$data.something = 'something new'
-	console.log('Event target', e.target)
-	console.log('Value passed', value)
+  state.$data.something = 'something new'
+  console.log('Event target', e.target)
+  console.log('Value passed', value)
 } // Update binding method
 
 const logData = val => console.log('Subscribed data updated:', val)
@@ -117,50 +117,50 @@ Except for the change of the character, all the usage should be the same.
 this is a comment
 '>' stands for tag name
 >div
-	'#' stands for attributes
-	Mustaches stands for binding data
-	content inside mustaches after '=' stands for the default value for this binding
-	content without mustaches stands for a static data
-	which means that you cannot modify them using ef.js
-	#class = {{class = some class name}}
-	#style = {{attr.style = background: #ECECEC}}
-	#id = testdiv
-	#some-attr = some text
-	#content
-	'%' stands for properties
-	%title = Welcome, {{name}}
-	%anotherProperty = text
-	'@' stands for events
-	contents after ':' are considered as value passed to the handler
-	@click = updateInfo:{{binding.value}} and static value
-	modify keys now can be bind easily
-	@mousedown.shift.alt.ctrl.meta = select
-	bind to keys is also easy
-	@keypress.13 = submit
-	use '.prevent' to preventDefault, '.stop' to stopPropagation, '.stopImmediate' to stopImmediatePropagation
-	@keydown.8.prevent.stop = stopbackspace
-	use '.capture' to capture an event
-	@submit.capture.stopImmediate = submit
-	'.' stands for text nodes
-	.Name: {{name}}&nJob: {{job}}
-	>pre
-		'|' stands for multiline text
-		|Line 1
-		|Line 2
-		|Line 3
-	>br
-	'-' stands for standard mounting point
-	-node1
-	'.' after a tag name stands for class names for this tag
-	>p.some.{{binding.class}}.class.names
-		'#' at the end of a tag name stands for the reference name of the node
-		Mustaches after a dot will bind to 'class' automatically
-		>span.{{emergency = emergency}}#notice_box
-			.Notice: {{notice}}
-		.some text
-		-node2
-		'+' stands for list mounting point
-		+list1
+  '#' stands for attributes
+  Mustaches stands for binding data
+  content inside mustaches after '=' stands for the default value for this binding
+  content without mustaches stands for a static data
+  which means that you cannot modify them using ef.js
+  #class = {{class = some class name}}
+  #style = {{attr.style = background: #ECECEC}}
+  #id = testdiv
+  #some-attr = some text
+  #content
+  '%' stands for properties
+  %title = Welcome, {{name}}
+  %anotherProperty = text
+  '@' stands for events
+  contents after ':' are considered as value passed to the handler
+  @click = updateInfo:{{binding.value}} and static value
+  modify keys now can be bind easily
+  @mousedown.shift.alt.ctrl.meta = select
+  bind to keys is also easy
+  @keypress.13 = submit
+  use '.prevent' to preventDefault, '.stop' to stopPropagation, '.stopImmediate' to stopImmediatePropagation
+  @keydown.8.prevent.stop = stopbackspace
+  use '.capture' to capture an event
+  @submit.capture.stopImmediate = submit
+  '.' stands for text nodes
+  .Name: {{name}}&nJob: {{job}}
+  >pre
+    '|' stands for multiline text
+    |Line 1
+    |Line 2
+    |Line 3
+  >br
+  '-' stands for standard mounting point
+  -node1
+  '.' after a tag name stands for class names for this tag
+  >p.some.{{binding.class}}.class.names
+    '#' at the end of a tag name stands for the reference name of the node
+    Mustaches after a dot will bind to 'class' automatically
+    >span.{{emergency = emergency}}#notice_box
+      .Notice: {{notice}}
+    .some text
+    -node2
+    '+' stands for list mounting point
+    +list1
 ```
 
 For standalone eft parser see [eft-parser](https://github.com/ClassicOldSong/eft-parser).
@@ -171,10 +171,10 @@ After version 0.9.0, ef.js now supports fragments, which requires eft-parser to 
 
 ```
 >div
-	.A root level tag
+  .A root level tag
 -rootLevelMountingPoint
 >p
- .Another root level tag
+  .Another root level tag
 +rootLevelListMountingPoint
 .Root level text node
 ```
@@ -208,8 +208,8 @@ ef.js now comes with JSX support after v0.9.0. Demo [here](https://codepan.net/g
 ef.js comes with support for JSX fragments. You can create fragments just like what you do in React:
 ```jsx
 <>
-	<h1>Hello JSX!</h1>
-	<MyCustomComponent>Now ef.js comes with JSX fragment support!</MyCustomComponent>
+  <h1>Hello JSX!</h1>
+  <MyCustomComponent>Now ef.js comes with JSX fragment support!</MyCustomComponent>
 </>
 ```
 
@@ -218,18 +218,18 @@ Note that JSX fragments are not always the same from ef fragments. No ef binding
 ### With Transpilers
 
 **Babel:** As documented [here](https://babeljs.io/docs/en/babel-preset-react), you can customize your jsx pragama when using babel. For example:
-```json
+```cson
 {
-	"presets": [
-		[
-			"@babel/preset-react",
-			{
-				"pragma": "ef.createElement", // default pragma is React.createElement
-				"pragmaFrag": "ef.Fragment", // default is React.Fragment
-				"throwIfNamespace": false // defaults to true
-			}
-		]
-	]
+  "presets": [
+    [
+      "@babel/preset-react",
+      {
+        "pragma": "ef.createElement", // default pragma is React.createElement
+        "pragmaFrag": "ef.Fragment", // default is React.Fragment
+        "throwIfNamespace": false // defaults to true
+      }
+    ]
+  ]
 }
 ```
 

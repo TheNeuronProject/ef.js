@@ -13,3 +13,6 @@ indent_style = space
 
 [.travis.yml]
 indent_style = space
+
+[README.md]
+indent_style = space
