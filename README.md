@@ -33,11 +33,11 @@ Community projects:
 + [xml2efml](https://github.com/tcdw/xml2efml) - by [tcdw](https://github.com/tcdw) - Convert XML/HTML snippets to EFML
 
 ## CDN
-[CDNJS](https://cdnjs.com/libraries/ef.js) | [jsDeliver](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.min.js) | [UNPKG](https://unpkg.com/ef.js)
+[CDNJS](https://cdnjs.com/libraries/ef.js) | [jsDelivr](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.min.js) | [UNPKG](https://unpkg.com/ef.js)
 
 For dev versions:
 
-[CDNJS](https://cdnjs.com/libraries/ef.js) | [jsDeliver](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.dev.js) | [UNPKG](https://unpkg.com/ef.js/dist/ef.dev.js)
+[CDNJS](https://cdnjs.com/libraries/ef.js) | [jsDelivr](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.dev.js) | [UNPKG](https://unpkg.com/ef.js/dist/ef.dev.js)
 
 ## Usage
 ``` javascript
@@ -85,7 +85,6 @@ component1.$subscribe('info.data', logData) // Observe a value
 component1.$unsubscribe('info.data', logData) // Stop observing a value
 
 component1.$update(data) // Update the whole component state
-component2.$parent // Get where the component is mounted
 
 component1.$refs // Get all referenced nodes
 
@@ -112,44 +111,45 @@ Here is an example.
 ```
 Tree structure
 Lines not started with >#%@.|+- are considered as comments
-The escape character of eft is '&', for prevention of the conflict with js escapes.
-Except for the change of the character, all the usage should be the same.
+The escape character of EFML is '&', for prevention of conflicts with js escapes.
+Except for changes of the characters, all the usage should remain the same on all versions.
 this is a comment
-'>' stands for tag name
+Lines start with '>' stands for a new tag
 >div
-  '#' stands for attributes
-  Mustaches stands for binding data
-  content inside mustaches after '=' stands for the default value for this binding
-  content without mustaches stands for a static data
-  which means that you cannot modify them using ef.js
+  Lines with exactly one indent after a tag definition are considered to be all things belongs to the defined tag
+  Lines start with '#' stands for attributes
+  Mustaches are used for binding data
+  Content inside mustaches after '=' stands for the default value for this binding
+  Content without mustaches stands for a static data,
+  which means that you can not modify them using ef.js
   #class = {{class = some class name}}
   #style = {{attr.style = background: #ECECEC}}
   #id = testdiv
   #some-attr = some text
   #content
-  '%' stands for properties
+  Lines start with '%' stands for properties
   %title = Welcome, {{name}}
   %anotherProperty = text
-  '@' stands for events
-  contents after ':' are considered as value passed to the handler
+  Lines start with '@' stands for events
+  Contents after ':' are considered as value passed to the handler
   @click = updateInfo:{{binding.value}} and static value
-  modify keys now can be bind easily
+  modifier keys now can bind easily
   @mousedown.shift.alt.ctrl.meta = select
   bind to keys is also easy
   @keypress.13 = submit
-  use '.prevent' to preventDefault, '.stop' to stopPropagation, '.stopImmediate' to stopImmediatePropagation
+  use '.prevent' to `preventDefault`, '.stop' to `stopPropagation`, '.stopImmediate' to `stopImmediatePropagation`
   @keydown.8.prevent.stop = stopbackspace
   use '.capture' to capture an event
   @submit.capture.stopImmediate = submit
-  '.' stands for text nodes
+  Lines start with '.' stands for text nodes
   .Name: {{name}}&nJob: {{job}}
   >pre
-    '|' stands for multiline text
+    Lines start with '|' stands for multiline text
     |Line 1
     |Line 2
     |Line 3
   >br
-  '-' stands for standard mounting point
+  Lines start with '-' stands for single node mounting point
   -node1
   '.' after a tag name stands for class names for this tag
   >p.some.{{binding.class}}.class.names
@@ -158,9 +158,9 @@ this is a comment
     >span.{{emergency = emergency}}#notice_box
       .Notice: {{notice}}
     .some text
-    -node2
-    '+' stands for list mounting point
-    +list1
+  -node2
+  Lines start with '+' stands for multi node mounting point
+  +list1
 ```
 
 For standalone eft parser see [eft-parser](https://github.com/ClassicOldSong/eft-parser).
