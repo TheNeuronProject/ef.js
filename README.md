@@ -59,10 +59,15 @@ const data = {
 
 const template1 = create(template)
 const template2 = create(ast)
-const template3 = t`Your awesome template`
+const template3 = t`
+>component1
+>component2
+.Your awesome template
+`
 
 const component1 = new template1() // Create a component without data
 const component2 = new template2(data) // Create a component and then updates it's data
+const component3 = new template3(data, {component1, component2}) // Use component1 and component2 as custom components in template3
 
 onNextRender(callback) // Cache operations to execute on next render
 inform() // Tell ef to cache operations **USE WITH CARE**

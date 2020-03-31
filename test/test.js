@@ -9,6 +9,10 @@ var template = '\n' +
 '	.{{root.text}}\n' +
 '	>br\n' +
 '	.{{class.lv1.lv2.lv3.test}}\n' +
+'	>br\n' +
+'	.Custom input event:\n' +
+'	>input\n' +
+'		%value = {{value}}\n' +
 '	>pre\n' +
 '		|Line 1\n' +
 '		|Line 2\n' +
@@ -63,7 +67,8 @@ var template = '\n' +
 '	>button\n' +
 '		@click = sendMsg:some data\n' +
 '		.{{btnText = sendMsg}}\n' +
-'	+list'
+'	+list\n' +
+'	+children'
 
 var template2 = '  this is a comment\n' +
 '  >div.{{class = some class name}}&.testClassName&#fakeRef\n' +
@@ -87,6 +92,23 @@ var template2 = '  this is a comment\n' +
 '  		-node2\n' +
 '  		+list1'
 
+var template3 =
+'>module1' +
+'\n  %value = {{aaa}}' +
+'\n  @testevent = test:{{aaa}}' +
+'\n  %root.text = {{aaa}}' +
+'\n  #branch = {{branch}}' +
+'\n  .{{aaa = 12345}}' +
+'\n  >input' +
+'\n    %value = {{aaa}}' +
+'\n  >button' +
+'\n    @click = click:{{aaa}}' +
+'\n    .button' +
+'\n  -mount' +
+'\n  +list' +
+'\n>module2' +
+'\n.{{aaa}}'
+
 var data1 = {
 	$data: {
 			class: 'box test class',
@@ -103,6 +125,18 @@ var data1 = {
 
 var module1 = ef.create(template)
 var module2 = ef.create(template2)
+var module3 = ef.create(template3)
+
+ef.registerProps(module1, {value: {key: 'value'}})
+
+class module1_1 extends module1 {
+	constructor(...args) {
+		super(...args)
+		this.$subscribe('value', ({value}) => {
+			this.$emit('input')
+		})
+	}
+}
 
 ef.inform()
 
@@ -110,6 +144,7 @@ var state = new module1()
 var state2 = new module1()
 var state3 = new module2()
 var state4 = new module2(data1)
+var state5 = new module3(null, {module1: module1_1, module2: module2})
 
 state3.list1.push(state4)
 state2.branch = state3
@@ -190,4 +225,5 @@ state2.$methods.sendMsg = function (info) {
 
 // state4.$methods.sendMsg = function(thisState) { alert('The message is "\n' + thisState.$data.text + '"!') }
 state.$mount({target: document.body})
+state5.$mount({target: document.body})
 ef.exec()
