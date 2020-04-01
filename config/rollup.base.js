@@ -1,14 +1,14 @@
 import chalk from 'chalk'
 
 // Rollup plugins
-import buble from 'rollup-plugin-buble'
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
-import replace from 'rollup-plugin-replace'
-import progress from 'rollup-plugin-progress'
-import json from 'rollup-plugin-json'
 import {eslint} from 'rollup-plugin-eslint'
 import {uglify} from 'rollup-plugin-uglify'
+import json from '@rollup/plugin-json'
+import buble from '@rollup/plugin-buble'
+import replace from '@rollup/plugin-replace'
+import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
+import progress from 'rollup-plugin-progress'
 
 switch (process.env.BUILD_ENV) {
 	case 'DEV': {

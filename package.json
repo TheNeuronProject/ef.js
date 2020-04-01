@@ -33,17 +33,17 @@
     "eslint": "^6.8.0",
     "rollup": "^2.3.2",
     "rollup-plugin-browsersync": "^1.1.0",
-    "rollup-plugin-buble": "^0.19.8",
-    "rollup-plugin-commonjs": "^10.1.0",
+    "@rollup/plugin-buble": "^0.21.1",
+    "@rollup/plugin-commonjs": "^11.0.2",
     "rollup-plugin-eslint": "^7.0.0",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
+    "@rollup/plugin-json": "^4.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
     "rollup-plugin-progress": "^1.1.1",
-    "rollup-plugin-replace": "^2.2.0",
+    "@rollup/plugin-replace": "^2.3.1",
     "rollup-plugin-uglify": "^6.0.4"
   },
   "dependencies": {
-    "ef-core": "^0.10.0",
-    "eft-parser": "^0.9.6"
+    "ef-core": "^0.10.1",
+    "eft-parser": "^0.10.1"
   }
 }
