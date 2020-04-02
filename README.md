@@ -4,9 +4,9 @@
 
 (maybe) An elegant HTML template engine & basic framework
 
-ef.js is a static template framework for browsers, which you can write your UI without concerning about the logic, or writing logic without concerning about the UI.
+ef.js is a static template framework for browsers, with which you can write your UI without concerning about the logic, or writing logic without concerning about the UI.
 
-ef.js also provides a simple template-engine which helps you create component modules with data binding at ease, but you can also use your favourite template-engine if it can be parsed into ef.js's AST.
+ef.js also provides a simple template-engine which helps you create component modules with data binding at ease, but you can also use your favourite template-engine which is compatible with ef.js's AST.
 
 [Official Website (WIP)](https://ef.js.org)
 
@@ -31,6 +31,9 @@ Community projects:
 + [Kefjs](https://github.com/cubesky/Kefjs) by [cubesky](https://github.com/cubesky) - A Kotlin/JS Wrapper for ef.js
 + [parcel-plugin-eft](https://github.com/oott123/parcel-plugin-eft) by [oott123](https://github.com/oott123) - Add ef.js template support for parcel bundler
 + [xml2efml](https://github.com/tcdw/xml2efml) - by [tcdw](https://github.com/tcdw) - Convert XML/HTML snippets to EFML
+
+Implementation in other languages:
++ [ef.qt](https://github.com/TheNeuronProject/ef.qt) Writing Qt applications using the concept of ef
 
 ## CDN
 [CDNJS](https://cdnjs.com/libraries/ef.js) | [jsDelivr](https://cdn.jsdelivr.net/npm/ef.js/dist/ef.min.js) | [UNPKG](https://unpkg.com/ef.js)
@@ -75,9 +78,6 @@ exec() // Tell ef to execute all cached operations **USE WITH CARE**
 exec(true) // Force execute cached operations **USE WITH CARE**
 bundle(callback) // Wrapper for inform() and exec()
 
-component1.$element // The DOM element of component1
-component2.$element // The DOM element of component2
-
 component1.$data.something = 'something new' // Update the binding data 'something'
 component2.$methods.someMethod = ({e, value, state}) => {
   state.$data.something = 'something new'
@@ -113,30 +113,34 @@ Also EFML is the first language that can be parsed into the AST which ef support
 
 Here is an example.
 
-```
+```efml
 Tree structure
 Lines not started with >#%@.|+- are considered as comments
 The escape character of EFML is '&', for prevention of conflicts with js escapes.
 Except for changes of the characters, all the usage should remain the same on all versions.
 this is a comment
-Lines start with '>' stands for a new tag
+
+Lines starting with '>' stand for a new tag
 >div
   Lines with exactly one indent after a tag definition are considered to be all things belongs to the defined tag
-  Lines start with '#' stands for attributes
+
+  Lines starting with '#' stand for attributes
   Mustaches are used for binding data
-  Content inside mustaches after '=' stands for the default value for this binding
-  Content without mustaches stands for a static data,
-  which means that you can not modify them using ef.js
+  Contents inside mustaches after '=' stand for the default value for this binding
+  Contents without mustaches stand for static data,
+  which means that you can not modify them through ef.js
   #class = {{class = some class name}}
   #style = {{attr.style = background: #ECECEC}}
   #id = testdiv
   #some-attr = some text
   #content
-  Lines start with '%' stands for properties
+
+  Lines starting with '%' stand for properties
   %title = Welcome, {{name}}
   %anotherProperty = text
-  Lines start with '@' stands for events
-  Contents after ':' are considered as value passed to the handler
+
+  Lines starting with '@' stand for events
+  Contents after ':' are considered as value to be passed to the handler
   @click = updateInfo:{{binding.value}} and static value
   modifier keys now can bind easily
   @mousedown.shift.alt.ctrl.meta = select
@@ -146,26 +150,30 @@ Lines start with '>' stands for a new tag
   @keydown.8.prevent.stop = stopbackspace
   use '.capture' to capture an event
   @submit.capture.stopImmediate = submit
-  Lines start with '.' stands for text nodes
+
+  Lines starting with '.' stand for text nodes
   .Name: {{name}}&nJob: {{job}}
   >pre
-    Lines start with '|' stands for multiline text
+    Lines starting with '|' stand for multiline text
     |Line 1
     |Line 2
     |Line 3
   >br
-  Lines start with '-' stands for single node mounting point
+
+  Lines starting with '-' stand for single node mounting point
   -node1
-  '.' after a tag name stands for class names for this tag
+
+  Lines starting with '+' stand for multi node mounting point
+  +list1
+
+  '.' after a tag name stand for class names for this tag
   >p.some.{{binding.class}}.class.names
-    '#' at the end of a tag name stands for the reference name of the node
+
+    '#' at the end of a tag name stand for the reference name of the node
     Mustaches after a dot will bind to 'class' automatically
     >span.{{emergency = emergency}}#notice_box
       .Notice: {{notice}}
     .some text
-  -node2
-  Lines start with '+' stands for multi node mounting point
-  +list1
 ```
 
 For standalone eft parser see [eft-parser](https://github.com/ClassicOldSong/eft-parser).
@@ -188,29 +196,171 @@ You can use them just like normal templates, behaviors are always the same. Also
 
 ### Helpers
 
-ef.js also provides some helpers for creating `Fragments` and `TextFragments`.
+ef.js also provides some helpers for creating `Fragments` and `EFTextFragments`, or transform almost anything into an ef component.
 
 ```typescript
-new ef.Fragment(Array<EFComponents | string>)
+// Creats a fragment containing given ef components, non ef components will be automatically transtormed into ef components.
+new ef.Fragment(Array<Any>)
 ```
-creats a fragment containing given ef components, while
 
 ```typescript
-new ef.TextFragment(string)
+// Creats a single `TextFragment` which contains only the given text. Text on `EFTextFragment` components can be modified with `.text` property.
+new ef.EFTextFragment(string)
 ```
-creats a single `TextFragment` which contains only the given text. Text on `TextFragment` components can be modified with `.text` property.
 
-### Property Mapping
+```typescript
+// Converts almost anything into an ef component
+ef.toEFComponent(Any)
+```
+### Attribute Mapping
 
-ef.js components are not always that easy to use, so after v0.9.5, a stable version of property mapping helper is bundled with ef.js. For documents, please reference to the [comments](https://github.com/TheNeuronProject/ef-core/blob/master/src/lib/register-props.js#L53-L61) for now. It would be extremely useful when using with JSX.
+Data on ef.js components are not always that easy to access, so since v0.10.4, a stable version of attribute mapping helper is bundled with ef.js. For documents, please refer to the [comments](https://github.com/TheNeuronProject/ef-core/blob/master/src/lib/map-attrs.js#L50-L67) for now. It would be extremely useful when using with custom components and JSX.
+
+## Custom Components
+
+ef.js can handle custom components in templates since v0.10.4. Demo will be added soon.
+
+### Scoping
+
+Scoping is not done in templates. You can write your template as normal, using whatever tag name you desire for your custom component, like:
+
+```efml
+App.eft
+
+>div#root
+  >MyComponent#myComponent
+  >MyOtherComponent
+```
+
+Then you may pass the scope in your script:
+
+```js
+import App from 'App.eft'
+import MyComponent from 'MyComponent.eft'
+import MyOtherComponent from 'MyOtherComponent.eft'
+
+const scope = {MyComponent, MyOtherComponent}
+const app = new App(null, scope)
+```
+
+If `scope` is not given at initializing the component, ef will treat these custom tags as normal HTML tags.
+
+Note that if you reference a custom component, you'll get the component instance instead of the component's DOM object:
+
+```js
+app.$refs.root // DOM object
+app.$refs.myComponent // ef component
+```
+
+### Attributes
+
+Attributes on custom components are mapped to `component[key]`, single way:
+
+```efml
+App.eft
+>MyComponent#myComponent
+  #myAttribute = {{customAttr}}
+```
+
+```js
+app.$data.customAttr = 'Lorem ipsum...' // This will actually set app.$refs.myComponent.myAttribute
+```
+
+### Properties
+
+Properties on custom components are mappde to `component.$data[key]`, single way:
+
+```efml
+App.eft
+>MyComponent#myComponent
+  %my.Property = {{customProperty}}
+```
+
+```js
+app.$data.customProperty = 'Lorem ipsum...' // This will actually set app.$refs.myComponent.$data.my.Property
+```
+
+### Events
+
+Event handling only works on custom emitted events on custom component:
+
+```efml
+App.eft
+>MyComponent#myComponent
+  @myEvent = handleMyEvent
+```
+
+```js
+app.$refs.myComponent.$emit('myEvent') // This will trigger `handleMyEvent`
+```
+
+Note that modifier keys are no longer able to precent on custom emitted events, so dont attach modifier key on them.
+
+### Automatic Two Way Binding
+
+Just like what ef requires HTML elements to do to get custom two way binding, a `value` or `checked` attribute should precent on a custom component, together with an `input` or `keyup` or `change` event been emitted when value has been changed. When binding `checked`, only `changd` event shoule be emitted.
+
+```efml
+App.eft
+>MyComponent
+  %value = {{value}}
+```
+
+```efml
+MyComponent.etf
+>input
+  #type = text
+  @input = handleInput
+```
+
+```js
+import {mapAttrs} from 'ef.js'
+import App from 'App.eft'
+import _MyComponent from 'MyComponent.eft'
+
+const MyComponent = class extends _MyComponent {
+  constructor(...args) {
+    super(...args)
+    this.$methods.handleInput = ({state}) => {
+      state.$emit('input')
+    }
+  }
+}
+
+mapAttrs(MyComponent, {value: {}})
+
+const app = new App(null, {MyComponent}) // $data.value will automatically updats with what was changed in MyComponent
+```
+
+### Children
+
+You can write custom components with children just like what you do with normal HTML elements:
+
+```efml
+>MyComponent
+  >div
+  >MyOtherComponent
+  -mountingPoint
+  +listMountingPoint
+```
+
+but with one requirement: the custom component that handles children should have a list mounting point or an attribute named `children`:
+
+```efml
+MyComponent.eft
+>div.my-field-set
+  >span
+    .{{legend}}
+  +children
+```
 
 ## JSX
 
-ef.js now comes with JSX support after v0.9.0. Demo [here](https://codepan.net/gist/192a1870d23e05d775d3667389162e63).
+ef.js now comes with JSX support since v0.9.0. Demo [here](https://codepan.net/gist/192a1870d23e05d775d3667389162e63).
 
 ### JSX Fragments
 
-ef.js comes with support for JSX fragments. You can create fragments just like what you do in React:
+ef.js supports JSX fragments. You can create fragments just like what you do in React:
 ```jsx
 <>
   <h1>Hello JSX!</h1>
@@ -218,11 +368,11 @@ ef.js comes with support for JSX fragments. You can create fragments just like w
 </>
 ```
 
-Note that JSX fragments are not always the same from ef fragments. No ef bindings can be set on JSX fragments in the mean time.
+Note that JSX fragments are not always the same from ef fragments. No ef bindings can be set on JSX fragments in the meantime.
 
 ### With Transpilers
 
-**Babel:** As documented [here](https://babeljs.io/docs/en/babel-preset-react), you can customize your jsx pragama when using babel. For example:
+**Babel:** As documented [here](https://babeljs.io/docs/en/babel-preset-react), you can customize your jsx pragma when using babel. For example:
 ```cson
 {
   "presets": [
@@ -238,7 +388,18 @@ Note that JSX fragments are not always the same from ef fragments. No ef binding
 }
 ```
 
-**Buble:** Currently buble can only set custom `createElement` pragama, so you need to import `ef.js` as `React` currently in order to have JSX Fragment support. A [pull request on custom `Fragment` pragama](https://github.com/bublejs/buble/pull/199) has been merged but not yet released.
+**Buble:** A [pull request on custom `Fragment` pragma](https://github.com/bublejs/buble/pull/199) has been merged but not yet properly [documented](https://buble.surge.sh/guide/#using-the-javascript-api). Below is a correct example:
+```js
+var output = buble.transform( input, {
+  ...
+
+  // custom JSX pragma
+  jsx: 'ef.createElement',
+  jsxFragment: 'ef.Fragment',
+
+  ...
+}
+```
 
 ## Run a test
 ``` bash
