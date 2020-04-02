@@ -8,7 +8,7 @@ import { version } from '../package.json'
 import {
 	create as createComponent,
 	createElement,
-	registerProps,
+	mapAttrs,
 	EFNodeWrapper,
 	EFTextFragment,
 	Fragment,
@@ -43,7 +43,7 @@ export {
 	t,
 	create,
 	createElement,
-	registerProps,
+	mapAttrs,
 	EFNodeWrapper,
 	EFTextFragment,
 	Fragment,
