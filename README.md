@@ -4,9 +4,9 @@
 
 (maybe) An elegant HTML template engine & basic framework
 
-ef.js is a static template framework for browsers, which you can write your UI without concerning about the logic, or writing logic without concerning about the UI.
+ef.js is a static template framework for browsers with which you can write your UI without concerning about the logic, or writing logic without concerning about the UI.
 
-ef.js also provides a simple template-engine which helps you create component modules with data binding at ease, but you can also use your favourite template-engine if it can be parsed into ef.js's AST.
+ef.js also provides a simple template-engine assisting you in creating component modules with data binding at ease, while you may also apply your favourite template-engine compatible with ef.js's AST.
 
 [Official Website (WIP)](https://ef.js.org)
 
@@ -105,40 +105,39 @@ component1.$destroy() // Destroy the component when not needed for more memory
 ```
 
 ### ef.js template language (EFML) format
-EFML is a completely **logic-free** template language. Just like HTML, there you can do nothing about logic, but EFML provides a easy starting point for data binding and events handling.
+EFML is a completely **logic-free** template language where no logic code is allowed, just as HTML does. EFML provides easy entry points in data binding and events handling.
 
-Also EFML is the first language that can be parsed into the AST which ef supports.
+EFML is the first language to be parsed into the ef-supporting AST.
 
-**Note:** EFML is **very strict to indents**. Wrong indents could lead to a parsing error.
+**Note:** EFML is **strict to indents**. Wrong indents lead to a parsing error.
 
 Here is an example.
 
 ```
 Tree structure
-Lines not started with >#%@.|+- are considered as comments
+Lines not starting with >#%@.|+- are considered as comments
 The escape character of EFML is '&', for prevention of conflicts with js escapes.
-Except for changes of the characters, all the usage should remain the same on all versions.
+Except for changes of the characters, all the usages remain the same in all versions.
 this is a comment
-Lines start with '>' stands for a new tag
+Lines starting with '>' stand for a new tag
 >div
-  Lines with exactly one indent after a tag definition are considered to be all things belongs to the defined tag
-  Lines start with '#' stands for attributes
-  Mustaches are used for binding data
-  Content inside mustaches after '=' stands for the default value for this binding
-  Content without mustaches stands for a static data,
-  which means that you can not modify them using ef.js
+  Lines with exactly one indent after a tag definition are considered all the things belonging to the defined tag
+  Lines starting with '#' represent attributes
+  Mustaches are used for data-bindings
+  Content inside mustaches after '=' is to be the default value for the binding
+  Content without mustaches stands for static data which you can not modify through ef.js
   #class = {{class = some class name}}
   #style = {{attr.style = background: #ECECEC}}
   #id = testdiv
   #some-attr = some text
   #content
-  Lines start with '%' stands for properties
+  Here comes a example of properties, lines starting with '%'
   %title = Welcome, {{name}}
   %anotherProperty = text
-  Lines start with '@' stands for events
+  Lines starting with '@' stand for events
   Contents after ':' are considered as value passed to the handler
   @click = updateInfo:{{binding.value}} and static value
-  modifier keys now can bind easily
+  modifier keys now can be bound easily
   @mousedown.shift.alt.ctrl.meta = select
   bind to keys is also easy
   @keypress.13 = submit
@@ -146,25 +145,25 @@ Lines start with '>' stands for a new tag
   @keydown.8.prevent.stop = stopbackspace
   use '.capture' to capture an event
   @submit.capture.stopImmediate = submit
-  Lines start with '.' stands for text nodes
+  Lines starting with '.' stand for text nodes
   .Name: {{name}}&nJob: {{job}}
   >pre
-    Lines start with '|' stands for multiline text
+    Lines starting with '|' stand for multiline text
     |Line 1
     |Line 2
     |Line 3
   >br
-  Lines start with '-' stands for single node mounting point
+  Lines starting with '-' stand for single node mounting point
   -node1
-  '.' after a tag name stands for class names for this tag
+  '.' after a tag name stands for class names for the tag
   >p.some.{{binding.class}}.class.names
     '#' at the end of a tag name stands for the reference name of the node
-    Mustaches after a dot will bind to 'class' automatically
+    Mustaches after a dot will be bound to 'class' automatically
     >span.{{emergency = emergency}}#notice_box
       .Notice: {{notice}}
     .some text
   -node2
-  Lines start with '+' stands for multi node mounting point
+  Lines starting with '+' stand for multi node mounting points
   +list1
 ```
 
@@ -172,7 +171,7 @@ For standalone eft parser see [eft-parser](https://github.com/ClassicOldSong/eft
 
 ### Fragments
 
-After version 0.9.0, ef.js now supports fragments, which requires eft-parser to be v0.9.0 and above. A normal template could only have one entry tag, while fragment templates can have multiple, even mounting poings can be put at root level:
+Since the version 0.9.0, ef.js has supported fragments. A normal template could only have one entry tag, while fragment templates can have multiple, and mounting points can even be put at root level:
 
 ```
 >div
@@ -184,7 +183,7 @@ After version 0.9.0, ef.js now supports fragments, which requires eft-parser to 
 .Root level text node
 ```
 
-You can use them just like normal templates, behaviors are always the same. Also, a single text node will be treated as fragments as well.
+Use them just like normal templates, and behaviors are always the same. A single text node will be treated as fragments as well.
 
 ### Helpers
 
@@ -193,20 +192,20 @@ ef.js also provides some helpers for creating `Fragments` and `TextFragments`.
 ```typescript
 new ef.Fragment(Array<EFComponents | string>)
 ```
-creats a fragment containing given ef components, while
+This line creates a fragment containing given ef components, while
 
 ```typescript
 new ef.TextFragment(string)
 ```
-creats a single `TextFragment` which contains only the given text. Text on `TextFragment` components can be modified with `.text` property.
+this line creates a single `TextFragment` which only contains the given text. Text on `TextFragment` components can be modified with `.text` property.
 
 ### Property Mapping
 
-ef.js components are not always that easy to use, so after v0.9.5, a stable version of property mapping helper is bundled with ef.js. For documents, please reference to the [comments](https://github.com/TheNeuronProject/ef-core/blob/master/src/lib/register-props.js#L53-L61) for now. It would be extremely useful when using with JSX.
+ef.js components are not always that easy to use, so after v0.9.5, a stable version of property mapping helper is bundled with ef.js. For documents, refer to [the comments](https://github.com/TheNeuronProject/ef-core/blob/master/src/lib/register-props.js#L53-L61) for now. It would be extremely useful when being used with JSX.
 
 ## JSX
 
-ef.js now comes with JSX support after v0.9.0. Demo [here](https://codepan.net/gist/192a1870d23e05d775d3667389162e63).
+JSX support has been attached to ef.js, since v0.9.0. Demo [here](https://codepan.net/gist/192a1870d23e05d775d3667389162e63).
 
 ### JSX Fragments
 
@@ -218,7 +217,7 @@ ef.js comes with support for JSX fragments. You can create fragments just like w
 </>
 ```
 
-Note that JSX fragments are not always the same from ef fragments. No ef bindings can be set on JSX fragments in the mean time.
+Note that JSX fragments are not the same as ef fragments. No ef bindings can be set on JSX fragments in the meantime.
 
 ### With Transpilers
 
@@ -238,7 +237,7 @@ Note that JSX fragments are not always the same from ef fragments. No ef binding
 }
 ```
 
-**Buble:** Currently buble can only set custom `createElement` pragama, so you need to import `ef.js` as `React` currently in order to have JSX Fragment support. A [pull request on custom `Fragment` pragama](https://github.com/bublejs/buble/pull/199) has been merged but not yet released.
+**Buble:** Currently buble can only set custom `createElement` pragma, so you need to import `ef.js` as `React` currently in order to have JSX Fragment support. A [pull request on custom `Fragment` pragma](https://github.com/bublejs/buble/pull/199) has been merged but not yet released.
 
 ## Run a test
 ``` bash
@@ -247,7 +246,7 @@ cd ef.js
 npm install
 npm run dev
 ```
-Then you can test it out in the opening browser window.
+Then you can test it out in the opened browser window.
 
 ## Build from source
 ``` bash
