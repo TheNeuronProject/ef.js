@@ -24,6 +24,16 @@ import {
 // Set parser
 let parser = parseEft
 
+/**
+ * @typedef {import('ef-core/src/lib/renderer.js').EFAST} EFAST
+ * @typedef {import('ef-core/src/ef-core.js').EFComponent} EFComponent
+ */
+
+/**
+ * Return a brand new class for the new component
+ * @param {string|EFAST} value - Template or AST for the component
+ * @returns {EFComponent} - Created component class from AST
+ */
 const create = (value) => {
 	const valType = typeOf(value)
 	if (valType === 'string') value = parse(value, parser)
@@ -32,11 +42,20 @@ const create = (value) => {
 	return createComponent(value)
 }
 
-// Change parser
+/**
+ * Change parser
+ * @param {Function} newParser - Parser you want to change with
+ * @returns {void}
+ */
 const setParser = (newParser) => {
 	parser = newParser
 }
 
+/**
+ * Tagged template to quickly create an inline ef component class
+ * @param {...*} args - String literal
+ * @returns {EFComponent} - Created ef component class
+ */
 const t = (...args) => create(mixStr(...args))
 
 export {

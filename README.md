@@ -218,7 +218,7 @@ Data on ef.js components are not always that easy to access, so since v0.10.4, a
 
 ## Custom Components
 
-ef.js can handle custom components in templates since v0.10.4. Demo will be added soon.
+ef.js can handle custom components in templates since v0.10.4. [Demo on writing logic within ef template using custom component](https://codepen.io/ClassicOldSong/pen/zYGXLyy)
 
 ### Scoping
 
@@ -226,7 +226,6 @@ Scoping is not done in templates. You can write your template as normal, using w
 
 ```efml
 App.eft
-
 >div#root
   >MyComponent#myComponent
   >MyOtherComponent
@@ -294,11 +293,11 @@ App.eft
 app.$refs.myComponent.$emit('myEvent') // This will trigger `handleMyEvent`
 ```
 
-Note that modifier keys are no longer able to precent on custom emitted events, so dont attach modifier key on them.
+Note that modifier keys are no longer able to present on custom emitted events, so dont attach modifier key on them.
 
 ### Automatic Two Way Binding
 
-Just like what ef requires HTML elements to do to get custom two way binding, a `value` or `checked` attribute should precent on a custom component, together with an `input` or `keyup` or `change` event been emitted when value has been changed. When binding `checked`, only `changd` event shoule be emitted.
+Just like what ef requires HTML elements to do to get custom two way binding, a `value` or `checked` property should present on a custom component, together with an `input` or `keyup` or `change` event been emitted when value has been changed. When binding `checked`, only `change` event shoule be emitted.
 
 ```efml
 App.eft
@@ -326,8 +325,6 @@ const MyComponent = class extends _MyComponent {
     }
   }
 }
-
-mapAttrs(MyComponent, {value: {}})
 
 const app = new App(null, {MyComponent}) // $data.value will automatically updats with what was changed in MyComponent
 ```
@@ -400,6 +397,10 @@ var output = buble.transform( input, {
   ...
 }
 ```
+
+## Typing Support
+
+ef.js now has partial typing support using [JSDoc](https://jsdoc.app/), which probably compatibles with TypeScript.
 
 ## Run a test
 ``` bash
