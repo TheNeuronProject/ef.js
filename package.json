@@ -1,9 +1,10 @@
 {
   "name": "ef.js",
-  "version": "0.10.5",
+  "version": "0.10.6",
   "description": "(maybe) An elegant HTML template engine & basic framework",
   "main": "dist/ef.min.js",
   "module": "src/ef.js",
+  "type": "./index.d.ts",
   "scripts": {
     "dev": "rollup -c ./config/rollup.dev.js -w",
     "build": "rollup -c ./config/rollup.prod.js",
@@ -45,7 +46,7 @@
     "rollup-plugin-uglify": "^6.0.4"
   },
   "dependencies": {
-    "ef-core": "^0.10.5",
-    "eft-parser": "^0.10.1"
+    "ef-core": "^0.10.6",
+    "eft-parser": "^0.10.6"
   }
 }

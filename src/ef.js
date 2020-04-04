@@ -25,14 +25,25 @@ import {
 let parser = parseEft
 
 /**
- * @typedef {import('ef-core/src/lib/renderer.js').EFAST} EFAST
- * @typedef {import('ef-core/src/ef-core.js').EFComponent} EFComponent
+ * @typedef {import('ef-core/src/ef-core.js').EFMountOption} EFMountOption
+ * @typedef {import('ef-core/src/ef-core.js').EFMountConfig} EFMountConfig
+ * @typedef {import('ef-core/src/ef-core.js').EFAST} EFAST
+ * @typedef {import('ef-core/src/ef-core.js').EFBaseClass} EFBaseClass
+ * @typedef {import('ef-core/src/ef-core.js').EFEventHandlerArg} EFEventHandlerArg
+ * @typedef {import('ef-core/src/ef-core.js').EFEventHandlerMethod} EFEventHandlerMethod
+ * @typedef {import('ef-core/src/ef-core.js').EFSubscriberHandlerArg} EFSubscriberHandlerArg
+ * @typedef {import('ef-core/src/ef-core.js').EFSubscriberHandlerMethod} EFSubscriberHandlerMethod
+ * @typedef {import('ef-core/src/ef-core.js').EFTemplateScope} EFTemplateScope
+ * @typedef {import('ef-core/src/ef-core.js').Fragment} Fragment
+ * @typedef {import('ef-core/src/ef-core.js').EFNodeWrapper} EFNodeWrapper
+ * @typedef {import('ef-core/src/ef-core.js').EFTextFragment} EFTextFragment
+ * @typedef {import('ef-core/src/ef-core.js').EFEventOptions} EFEventOptions
  */
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * Return a brand new class for the new component
  * @param {string|EFAST} value - Template or AST for the component
- * @returns {EFComponent} - Created component class from AST
  */
 const create = (value) => {
 	const valType = typeOf(value)
@@ -51,10 +62,10 @@ const setParser = (newParser) => {
 	parser = newParser
 }
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * Tagged template to quickly create an inline ef component class
  * @param {...*} args - String literal
- * @returns {EFComponent} - Created ef component class
  */
 const t = (...args) => create(mixStr(...args))
 

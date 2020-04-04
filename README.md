@@ -220,7 +220,7 @@ Data on ef.js components are not always that easy to access, so since v0.10.4, a
 
 ef.js can handle custom components in templates since v0.10.4. [Demo on writing logic within ef template using custom component](https://codepen.io/ClassicOldSong/pen/zYGXLyy)
 
-### Scoping
+### Scope
 
 Scoping is not done in templates. You can write your template as normal, using whatever tag name you desire for your custom component, like:
 
@@ -242,7 +242,7 @@ const scope = {MyComponent, MyOtherComponent}
 const app = new App(null, scope)
 ```
 
-If `scope` is not given at initializing the component, ef will treat these custom tags as normal HTML tags.
+If `scope` is not given when initializing the component, ef will treat these custom tags as normal HTML tags.
 
 Note that if you reference a custom component, you'll get the component instance instead of the component's DOM object:
 
@@ -297,7 +297,7 @@ Note that modifier keys are no longer able to present on custom emitted events, 
 
 ### Automatic Two Way Binding
 
-Just like what ef requires HTML elements to do to get custom two way binding, a `value` or `checked` property should present on a custom component, together with an `input` or `keyup` or `change` event been emitted when value has been changed. When binding `checked`, only `change` event shoule be emitted.
+Just like what ef requires HTML elements to do to get custom two way binding, a `value` or `checked` property should present on a custom component, together with an `input` or `keyup` or `change` event been emitted when value has been changed. When binding `checked`, only `change` event should be emitted.
 
 ```efml
 App.eft
@@ -400,7 +400,9 @@ var output = buble.transform( input, {
 
 ## Typing Support
 
-ef.js now has partial typing support using [JSDoc](https://jsdoc.app/), which probably compatibles with TypeScript.
+**`HELP WANTED`**
+
+ef.js now has partial experimental typing support using TypeScript flavored [JSDoc](https://jsdoc.app/), which should be compatible with TypeScript. See [ef-core](https://github.com/TheNeuronProject/ef-core/blob/master/src/ef-core.js) and [ef.js](https://github.com/TheNeuronProject/ef.js/blob/master/src/ef.js).
 
 ## Run a test
 ``` bash
