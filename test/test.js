@@ -44,7 +44,7 @@ var template = '\n' +
 '		>input\n' +
 '			#type = radio\n' +
 '			#name = testradio\n' +
-'			%checked = {{testRadio1}}\n' +
+'			%checked = {{testRadio1 = true}}\n' +
 '		.checked: {{testRadio1}}\n' +
 '		>input\n' +
 '			#type = radio\n' +
@@ -54,7 +54,7 @@ var template = '\n' +
 '		>input\n' +
 '			#type = checkbox\n' +
 '			%checked = {{testCheck}}\n' +
-'		.checked: {{testCheck}}\n' +
+'		.checked: {{testCheck = true}}\n' +
 '		>br\n' +
 '		.Input style here: \n' +
 '		>br\n' +
