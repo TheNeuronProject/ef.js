@@ -127,8 +127,6 @@ var module1 = ef.create(template)
 var module2 = ef.create(template2)
 var module3 = ef.create(template3)
 
-ef.registerProps(module1, {value: {key: 'value'}})
-
 class module1_1 extends module1 {
 	constructor(...args) {
 		super(...args)
