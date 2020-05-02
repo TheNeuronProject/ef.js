@@ -409,7 +409,7 @@ ef.js now has partial experimental typing support using TypeScript flavored [JSD
 git clone https://github.com/ClassicOldSong/ef.js.git
 cd ef.js
 npm install
-npm run dev
+npm start
 ```
 Then you can test it out in the opening browser window.
 
