@@ -398,6 +398,23 @@ var output = buble.transform( input, {
 }
 ```
 
+## Server Side Rendering
+
+Use [domino](https://github.com/fgnass/domino) or [JSDom](https://github.com/jsdom/jsdom) for DOM simulation, for example using `domino`:
+
+```js
+const ef = require('ef.js')
+const domino = require('domino')
+
+const {Node, document} = domino.createWindow()
+
+ef.setDOMSimulation({Node, document})
+```
+
+Then you can use it as it is in browser.
+
+[undom](https://github.com/developit/undom) is currently not supported because it's lack of `documentFragment` support.
+
 ## Typing Support
 
 **`HELP WANTED`**
