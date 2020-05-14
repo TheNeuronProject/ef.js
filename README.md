@@ -400,15 +400,18 @@ var output = buble.transform( input, {
 
 ## Server Side Rendering
 
-Use [domino](https://github.com/fgnass/domino) or [JSDom](https://github.com/jsdom/jsdom) for DOM simulation, for example using `domino`:
+Use [domino](https://github.com/fgnass/domino) or [JSDom](https://github.com/jsdom/jsdom) for DOM implementation. Only `Node` and `document` is required for customization.
+
+For example using `domino`:
 
 ```js
 const ef = require('ef.js')
 const domino = require('domino')
 
-const {Node, document} = domino.createWindow()
-
-ef.setDOMSimulation({Node, document})
+ef.setDOMImpl({
+  Node: domino.impl.Node,
+  document: domino.createDocument()
+})
 ```
 
 Then you can use it as it is in browser.
