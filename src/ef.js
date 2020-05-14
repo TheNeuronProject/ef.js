@@ -18,7 +18,7 @@ import {
 	exec,
 	bundle,
 	isPaused,
-	setDOMSimulation,
+	setDOMImpl,
 	mountOptions
 } from 'ef-core'
 
@@ -87,7 +87,7 @@ export {
 	setParser,
 	parseEft,
 	mountOptions,
-	setDOMSimulation,
+	setDOMImpl,
 	version
 }
 
