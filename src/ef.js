@@ -19,6 +19,7 @@ import {
 	bundle,
 	isPaused,
 	setDOMImpl,
+	declareNamespace,
 	mountOptions
 } from 'ef-core'
 
@@ -88,6 +89,7 @@ export {
 	parseEft,
 	mountOptions,
 	setDOMImpl,
+	declareNamespace,
 	version
 }
 
