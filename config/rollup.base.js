@@ -2,7 +2,7 @@ import chalk from 'chalk'
 
 // Rollup plugins
 import {eslint} from 'rollup-plugin-eslint'
-import {uglify} from 'rollup-plugin-uglify'
+import {terser} from 'rollup-plugin-terser'
 import json from '@rollup/plugin-json'
 import buble from '@rollup/plugin-buble'
 import replace from '@rollup/plugin-replace'
@@ -59,6 +59,6 @@ export default {
 			},
 			objectAssign: 'Object.assign'
 		}),
-		(process.env.BUILD_TARGET === 'production' && uglify())
+		(process.env.BUILD_TARGET === 'production' && terser())
 	]
 }
