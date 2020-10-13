@@ -8,12 +8,17 @@ ef.js is a static template framework for browsers, with which you can write your
 
 ef.js also provides a simple template-engine which helps you create component modules with data binding at ease, but you can also use your favourite template-engine which is compatible with ef.js's AST.
 
+ef.js is well compatible with [WebComponents](https://www.webcomponents.org/), and is probably the only existing front-end framework that handles XML namespaces properly.
+
 [Official Website (WIP)](https://ef.js.org)
 
 Demo:
 + [TodoMVC](https://classicoldsong.github.io/todomvc-efjs/) - [repo](https://github.com/ClassicOldSong/todomvc-efjs)
 + [dbmon](https://classicoldsong.github.io/js-repaint-perfs/ef/opt.html) - [repo](https://github.com/ClassicOldSong/js-repaint-perfs)
 + The [official website](https://github.com/ClassicOldSong/ef.js.org) is also written with ef.js
+
+Playground:
++ [CodeSandbox](https://codesandbox.io/s/github/TheNeuronProject/ef-starter-template)
 
 Related projects:
 + [ef-core](https://github.com/TheNeuronProject/ef-core) - Core of ef.js (without parser)
@@ -251,6 +256,19 @@ app.$refs.root // DOM object
 app.$refs.myComponent // ef component
 ```
 
+Scoping can also be used to replace some tags. Like:
+```js
+const scope = {
+  MyComponent: 'div',
+  MyOtherComponent: {
+    tag: 'div',
+    is: 'my-web-component'
+  }
+}
+```
+
+`MyComponent` will be rendered as a normal `div` element, while `MyOtherComonent` will be rendered as a `my-web-component`.
+
 ### Attributes
 
 Attributes on custom components are mapped to `component[key]`, single way:
@@ -351,6 +369,102 @@ MyComponent.eft
   +children
 ```
 
+## XML Namespaces
+
+ef.js now handles custom XML namespaces since v0.12.0, which allows ef.js to be able to handle svg fragments easily.
+
+### Namespace Usage
+
+Just like what you do in XML:
+```efml
+Render this `div` tag under a given namespaceURI
+>div
+  #xmlns = http://some.namespace.example.com/myns
+```
+```efml
+Render these tags with given namespaceURI by local prefix
+>myns:div
+  #xmlns:myns = http://some.namespace.example.com/myns
+  >myns:h1
+  >myns:table
+```
+```efml
+Render only parts of an SVG element
+>svg:path
+```
+```efml
+Render only parts of an MathML element
+>math:matcion
+```
+
+You must declare your namespace prefix before using your prefix either [globally](#global-namespaces) or [locally](#local-namespaces).
+
+
+### Global Namespaces
+
+ef.js has 4 [built-in global namespaces](https://github.com/TheNeuronProject/ef-core/blob/master/src/lib/utils/namespaces.js#L2-L5), which are `html` for HTML elements, `svg` for SVG elements, `math` for MathML elements and `xlink` for `xlink` attributes. You can register custom global namespaces using `declareNamespace`:
+```js
+import {declareNamespace} from 'ef.js'
+
+declareNamespace('myns', 'http://some.namespace.example.com/myns')
+```
+
+Then you can use it everywhere across the whole project.
+
+**Note:**
+1. Using global namespaces with prefix will make it's children also inherit it's namespace.
+1. Re-declareation the same prefix will throw out an error.
+
+### Local Namespaces
+
+ef.js supports a XML-like local namespace declaration:
+```efml
+>myns:div
+  #xmlns:myns = http://some.namespace.example.com/myns
+```
+
+Then you can use the namespace across the whole template.
+
+**Note:**
+1. What efml namespaces differs from actual XML local namespaces is that in XML it works only for itself or it's children, while in efml this declaration works across the whole template no matter where you define it.
+1. Local defined namespaces only works when a tag is prefixed with the defined prefix. Children of it will not inherit the namespace.
+1. Re-declaration will NOT give en error.
+
+### Namespacing in Scopes
+
+When an tag is scoped, it will use the scoped tag's namespace, if the tag has no prefix, it will use the original `xmlns` instead if only `namespaceURI` is not set on scope option. Scoped prefix has higher priority than `namespaceURI`. For example:
+```efml
+template.eft
+>div
+  .This tag will be scoped.
+```
+```js
+import Tpl from './template.eft'
+
+const scope1 = {
+  div: 'myns:div'
+}
+
+const component1 = new Tpl(null, scope1) // in this case it will render a `div` under `myns`
+
+const scope2 = {
+  div: {
+    tag: 'myns:div',
+    namespaceURI: 'http://some.other.ns/myns'
+  }
+}
+
+const component2 = new Tpl(null, scope2) // in this case the `namespaceURI` is completely ignored, element is rendered under `myns`
+
+const scope3 = {
+  div: {
+    namespaceURI: 'http://some.other.ns/myns'
+  }
+}
+
+const component3 = new Tpl(null, scope3) // in this case the `namespaceURI` is not ignored, element is rendered under `http://some.other.ns/myns`
+```
+
 ## JSX
 
 ef.js now comes with JSX support since v0.9.0. Demo [here](https://codepan.net/gist/192a1870d23e05d775d3667389162e63).
@@ -365,7 +479,7 @@ ef.js supports JSX fragments. You can create fragments just like what you do in 
 </>
 ```
 
-Note that JSX fragments are not always the same from ef fragments. No ef bindings can be set on JSX fragments in the meantime.
+**Note:** JSX fragments are not always the same from ef fragments. No ef bindings can be set on JSX fragments in the meantime.
 
 ### With Transpilers
 
