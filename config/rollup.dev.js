@@ -8,8 +8,7 @@ import browsersync from 'rollup-plugin-browsersync'
 base.output.file = `${base.devPath}/${base.bundle}.dev.js`
 base.plugins.push(browsersync(bsConfig))
 base.watch = {
-	chokidar: true,
-	include: 'src/'
+	include: ['src/**/*.*']
 }
 
 delete base.bundle
