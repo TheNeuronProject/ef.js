@@ -402,7 +402,7 @@ You must declare your namespace prefix before using your prefix either [globally
 
 ### Global Namespaces
 
-ef.js has 4 [built-in global namespaces](https://github.com/TheNeuronProject/ef-core/blob/master/src/lib/utils/namespaces.js#L2-L5), which are `html` for HTML elements, `svg` for SVG elements, `math` for MathML elements and `xlink` for `xlink` attributes. You can register custom global namespaces using `declareNamespace`:
+ef.js has 5 [built-in global namespaces](https://github.com/TheNeuronProject/ef-core/blob/master/src/lib/utils/namespaces.js#L2-L6), which are `xml` for XML namespace itself, `html` for HTML elements, `svg` for SVG elements, `math` for MathML elements and `xlink` for `xlink` attributes. You can register custom global namespaces using `declareNamespace`:
 ```js
 import {declareNamespace} from 'ef.js'
 
