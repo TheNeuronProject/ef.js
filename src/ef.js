@@ -71,6 +71,12 @@ const setParser = (newParser) => {
  */
 const t = (...args) => create(mixStr(...args))
 
+let coreVersion = version
+
+if (process.env.NODE_ENV !== 'production') {
+	coreVersion = `${version}+debug`
+}
+
 export {
 	t,
 	create,
@@ -90,7 +96,7 @@ export {
 	mountOptions,
 	setDOMImpl,
 	declareNamespace,
-	version
+	coreVersion as version
 }
 
-if (process.env.NODE_ENV !== 'production') console.info(`[EF] ef.js v${version} initialized!`)
+if (process.env.NODE_ENV !== 'production') console.info(`[EF] ef.js v${coreVersion} initialized!`)
