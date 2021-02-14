@@ -35,7 +35,8 @@ Community projects:
 + [EFML.vim](https://github.com/deluxghost/EFML.vim) by [deluxghost](https://github.com/deluxghost) - EFML (\*.ef, \*.eft) syntax highlighting for Vim
 + [Kefjs](https://github.com/cubesky/Kefjs) by [cubesky](https://github.com/cubesky) - A Kotlin/JS Wrapper for ef.js
 + [parcel-plugin-eft](https://github.com/oott123/parcel-plugin-eft) by [oott123](https://github.com/oott123) - Add ef.js template support for parcel bundler
-+ [xml2efml](https://github.com/tcdw/xml2efml) - by [tcdw](https://github.com/tcdw) - Convert XML/HTML snippets to EFML
++ [xml2efml](https://github.com/tcdw/xml2efml) by [tcdw](https://github.com/tcdw) - Convert XML/HTML snippets to EFML
++ [ef-language-service](https://github.com/Jack-Works/ef-language-service) by [Jack Works](https://github.com/Jack-Works) - EFML language service (currently) for VSCode
 
 Implementation in other languages:
 + [ef.qt](https://github.com/TheNeuronProject/ef.qt) Writing Qt applications using the concept of ef
@@ -324,7 +325,7 @@ App.eft
 ```
 
 ```efml
-MyComponent.etf
+MyComponent.eft
 >input
   #type = text
   @input = handleInput
@@ -346,6 +347,30 @@ const MyComponent = class extends _MyComponent {
 
 const app = new App(null, {MyComponent}) // $data.value will automatically updats with what was changed in MyComponent
 ```
+
+### Custom Two Way Binding
+
+Custom two way binding was implemented since v0.13.0. What you need to do is simply adding an `@custom-trigger-event` after your propertp definition. For example:
+
+```efml
+App.eft
+>MyComponent#myComponent
+  %customProp@valueChange = {{value}}
+```
+
+```js
+// App.js
+
+import App from 'app.eft'
+
+const app = new App()
+
+app.$refs.myComponent.$emit('valueChange')
+
+```
+
+This will trigger an automatic child-to-parent value sync.
+
 
 ### Children
 
