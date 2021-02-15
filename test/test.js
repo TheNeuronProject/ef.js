@@ -291,8 +291,8 @@ ef.exec()
 
 const {inform, exec, create, scoped} = ef
 
-const ListHolder = create(parseEft(`+children`))
-const LogicContainer = create(parseEft(`-childrenHolder`))
+const ListHolder = ef.create(`+children`)
+const LogicContainer = ef.create(`-childrenHolder`)
 
 const efLogic = class extends LogicContainer {
 	constructor(...args) {
@@ -321,7 +321,7 @@ const efLogic = class extends LogicContainer {
 	}
 }
 
-const App = scoped(create(parseEft(`
+const App = scoped(ef.t`
 >br
 >input
 	#type = checkbox
@@ -339,7 +339,8 @@ const App = scoped(create(parseEft(`
 	>br
 	-mount
 	.---layer {{layer}} end---
-`)), {Logic: efLogic})
+>br
+`, {Logic: efLogic})
 
 inform()
 const app = new App({$data: {show: true, layer: 0}})
@@ -349,5 +350,30 @@ exec()
 
 app.list[0].list.push(new App({$data: {show: false, layer: 2}}))
 
-
 app.$mount({target: document.body})
+
+
+const MyAudioPlayer = ef.t`
+>audio#player
+	%currentTime@timeupdate = {{currentTime}}
+	%src = {{src}}
+	#controls
+	#autoplay
+>div
+	>input
+		#type = file
+		#accept = audio/*
+		%files!@change = {{files}}
+	.Current  time: {{currentTime}}
+`
+
+const myPlayer = new MyAudioPlayer()
+
+myPlayer.$subscribe('files', ({state, value}) => {
+	if (value && value[0]) {
+		state.$data.src = URL.createObjectURL(value[0])
+	}
+})
+
+myPlayer.$mount({target: document.body})
+
