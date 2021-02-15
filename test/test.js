@@ -83,6 +83,13 @@ var template =
 '\n		%value@keypress.ctrl.13 = {{enterWithCtrlUpdateValue}}' +
 '\n	>span' +
 '\n		.Enter with ctrl pressed at the input box to update this value: {{enterWithCtrlUpdateValue}}' +
+'\n	>br' +
+'\n	>input' +
+'\n		%value = {{updateOnly}}' +
+'\n	>span' +
+'\n		.This is an update only textbox:' +
+'\n	>input' +
+'\n		%value! = {{updateOnly}}' +
 '\n	+list' +
 '\n	+children'
 
@@ -354,17 +361,35 @@ app.$mount({target: document.body})
 
 
 const MyAudioPlayer = ef.t`
->audio#player
+.All audio controls are implemented without a single line of extra JavaScript.
+>br
+>audio
 	%currentTime@timeupdate = {{currentTime}}
+	%duration!@canplay = {{duration}}
 	%src = {{src}}
+	%autoplay = {{autoplay = true}}
 	#controls
-	#autoplay
 >div
+	.Select an audio file: &
 	>input
 		#type = file
 		#accept = audio/*
 		%files!@change = {{files}}
-	.Current  time: {{currentTime}}
+	>br
+	.Custom progress bar: &
+	>input
+		#type = range
+		#step = 0.01
+		#max = {{duration = 0}}
+		%value = {{currentTime = 0}}
+	>br
+	.Autoplay: &
+	>input
+		#type = checkbox
+		%checked = {{autoplay}}
+	>pre
+		|Current time: {{currentTime}}
+		|Total length: {{duration}}
 `
 
 const myPlayer = new MyAudioPlayer()
@@ -376,4 +401,3 @@ myPlayer.$subscribe('files', ({state, value}) => {
 })
 
 myPlayer.$mount({target: document.body})
-
