@@ -371,6 +371,27 @@ app.$refs.myComponent.$emit('valueChange')
 
 This will trigger an automatic child-to-parent value sync.
 
+### Update Only Binding
+
+Adding a `!` after prop path will mark this prop will not receive any value changes from JavaScript part. Which is useful when needed to get some non-writable values on DOM objects:
+
+```efml
+>input
+  %value! = {{value}}
+```
+
+this will make the `input` only accepts value changes that are made by user inputs.
+
+### Sync Only Binding
+
+Adding a `&` after the value will not automatically create two way binding for this property:
+
+```efml
+>input
+  %value = {{value}}&
+```
+
+this will make the `input` not automatically send changes to `$data.value`, while modifications made on `$data.value` will still be reflected on the `input` element.
 
 ### Children
 

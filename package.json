@@ -1,6 +1,6 @@
 {
   "name": "ef.js",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "description": "(maybe) An elegant HTML template engine & basic framework",
   "main": "dist/ef.min.js",
   "module": "src/ef.js",
@@ -46,7 +46,7 @@
     "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
-    "ef-core": "^0.13.2",
-    "eft-parser": "^0.13.0"
+    "ef-core": "^0.13.3",
+    "eft-parser": "^0.13.3"
   }
 }
