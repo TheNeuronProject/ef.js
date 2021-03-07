@@ -401,3 +401,43 @@ myPlayer.$subscribe('files', ({state, value}) => {
 })
 
 myPlayer.$mount({target: document.body})
+
+// Passive event handier test
+const PassiveTest = ef.t`
+>br
+>div
+	.Passive Test
+	>button
+		.Passive: Right click on me, menu should pop up
+		@contextmenu.passive.prevent = menuHandler
+	>button
+		.Non Passive: Right click on me, menu should not pop up
+		@contextmenu.prevent = menuHandler
+`
+
+const passiveTest = new PassiveTest()
+
+passiveTest.$mount({target: document.body})
+
+// Once handler test
+const OnceTest = ef.t`
+>br
+>div
+	.OnceTest
+	>button
+		.Click me, alert should always pop
+		@click = clickHandler
+	>button
+		.Click me, alert should pop only once
+		@click.once = clickHandler
+`
+
+const onceTest = new OnceTest({
+	$methods: {
+		clickHandler() {
+			alert('clicked!')
+		}
+	}
+})
+
+onceTest.$mount({target: document.body})
