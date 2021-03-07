@@ -50,7 +50,10 @@ export default {
 		commonjs(),
 		json(),
 		replace({
-			'process.env.NODE_ENV': `'${process.env.BUILD_TARGET || 'development'}'`
+			preventAssignment: true,
+			values: {
+				'process.env.NODE_ENV': `'${process.env.BUILD_TARGET || 'development'}'`
+			}
 		}),
 		buble({
 			transforms: {
