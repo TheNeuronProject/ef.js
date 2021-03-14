@@ -105,7 +105,7 @@ component1.mountingPoint = null // Detach the mounted component
 component1.listMP.push(componet2) // Mount component2 to list 'listMP' mounting point on component1
 
 component1.$mount(...) // Mount method called by ef when trying to mount
-compinent1.$umount() // Unmount from parent
+component1.$umount() // Unmount from parent
 component1.$destroy() // Destroy the component when not needed for more memory
 
 ```
@@ -153,6 +153,8 @@ Lines starting with '>' stand for a new tag
   bind to keys is also easy
   @keypress.13 = submit
   use '.prevent' to `preventDefault`, '.stop' to `stopPropagation`, '.stopImmediate' to `stopImmediatePropagation`
+  use '.passive' to make the event listener passive, '.!passive' to explicitly claim a non-passive listener
+  use '.once' to create a trigger once listener
   @keydown.8.prevent.stop = stopbackspace
   use '.capture' to capture an event
   @submit.capture.stopImmediate = submit
