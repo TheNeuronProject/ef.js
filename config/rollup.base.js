@@ -3,7 +3,6 @@ import chalk from 'chalk'
 // Rollup plugins
 import {eslint} from 'rollup-plugin-eslint'
 import {terser} from 'rollup-plugin-terser'
-import json from '@rollup/plugin-json'
 import buble from '@rollup/plugin-buble'
 import replace from '@rollup/plugin-replace'
 import resolve from '@rollup/plugin-node-resolve'
@@ -48,7 +47,6 @@ export default {
 			browser: true,
 		}),
 		commonjs(),
-		json(),
 		replace({
 			preventAssignment: true,
 			values: {
