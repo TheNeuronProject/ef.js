@@ -12,6 +12,7 @@ import {
 	EFNodeWrapper,
 	EFTextFragment,
 	Fragment,
+	toEFComponent,
 	scoped,
 	onNextRender,
 	inform,
