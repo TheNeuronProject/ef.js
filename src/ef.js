@@ -3,7 +3,6 @@ import parse from './lib/parser.js'
 import typeOf from 'ef-core/src/lib/utils/type-of.js'
 import { mixStr } from 'ef-core/src/lib/utils/literals-mix.js'
 import parseEft from 'eft-parser'
-import { version } from '../package.json'
 // Import core components
 import {
 	create as createComponent,
@@ -12,6 +11,7 @@ import {
 	EFNodeWrapper,
 	EFTextFragment,
 	Fragment,
+	toEFComponent,
 	scoped,
 	onNextRender,
 	inform,
@@ -71,10 +71,10 @@ const setParser = (newParser) => {
  */
 const t = (...args) => create(mixStr(...args))
 
-let coreVersion = version
+let coreVersion = '0.13.7'
 
 if (process.env.NODE_ENV !== 'production') {
-	coreVersion = `${version}+debug`
+	coreVersion = `${coreVersion}+debug`
 }
 
 export {
@@ -85,6 +85,7 @@ export {
 	EFNodeWrapper,
 	EFTextFragment,
 	Fragment,
+	toEFComponent,
 	scoped,
 	onNextRender,
 	inform,
