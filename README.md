@@ -188,7 +188,7 @@ For standalone eft parser see [eft-parser](https://github.com/ClassicOldSong/eft
 
 ### Fragments
 
-After version 0.9.0, ef.js now supports fragments, which requires eft-parser to be v0.9.0 and above. A normal template could only have one entry tag, while fragment templates can have multiple, even mounting poings can be put at root level:
+After version 0.9.0, ef.js now supports fragments, which requires eft-parser to be v0.9.0 and above. A normal template could only have one entry tag, while fragment templates can have multiple, even mounting points can be put at root level:
 
 ```
 >div
@@ -270,7 +270,7 @@ const scope = {
 }
 ```
 
-`MyComponent` will be rendered as a normal `div` element, while `MyOtherComonent` will be rendered as a `my-web-component`.
+`MyComponent` will be rendered as a normal `div` element, while `MyOtherComponent` will be rendered as a `my-web-component`.
 
 ### Attributes
 
@@ -288,7 +288,7 @@ app.$data.customAttr = 'Lorem ipsum...' // This will actually set app.$refs.myCo
 
 ### Properties
 
-Properties on custom components are mappde to `component.$data[key]`, single way:
+Properties on custom components are mapped to `component.$data[key]`, single way:
 
 ```efml
 App.eft
@@ -461,7 +461,7 @@ Then you can use it everywhere across the whole project.
 
 **Note:**
 1. Using global namespaces with prefix will make it's children also inherit it's namespace.
-1. Re-declareation the same prefix will throw out an error.
+1. Re-declareation of the same prefix will throw out an error.
 
 ### Local Namespaces
 
@@ -562,6 +562,8 @@ var output = buble.transform( input, {
 
 ## Server Side Rendering
 
+### JavaScript implemented DOM
+
 Use [domino](https://github.com/fgnass/domino) or [JSDom](https://github.com/jsdom/jsdom) for DOM implementation. Only `Node` and `document` is required for customization.
 
 For example using `domino`:
@@ -578,7 +580,15 @@ ef.setDOMImpl({
 
 Then you can use it as it is in browser.
 
-[undom](https://github.com/developit/undom) is currently not supported because it's lack of `documentFragment` support.
+[undom](https://github.com/developit/undom) is currently not supported because it's lack of `documentFragment` support, but an [undom-ef](https://github.com/ClassicOldSong/undom-ef) fork has made it possible.
+
+Check [here](https://stackblitz.com/edit/server-side-ef) for an exapmle.
+
+### Implementation without DOM
+
+Currently there's no full featured implementation for ef.js to run without a DOM, but [some experiments](https://stackblitz.com/edit/ef-ssr-benchmark?file=static-ef-raw.js) have been done. If you want speed or do not need full featured ef, you can try the `static-ef-raw` method.
+
+Since ef sacrifices initialization time for faster updating, if you are not re-generating your page every second, the `undom-ef-super-cached` method is the most recommended since it gives you an almost fully featured ef.js in server environment while keeping the footprint small, yet still fast enough compared to other frameworks.
 
 ## Typing Support
 
