@@ -12,15 +12,22 @@ ef.js is well compatible with [WebComponents](https://www.webcomponents.org/), a
 
 [Official Website (WIP)](https://ef.js.org)
 
-Demo:
+#### Sponsors and Backers
+
+See [here](https://github.com/TheNeuronProject/BACKERS/blob/main/README.md).
+
+#### Demo:
+
 + [TodoMVC](https://classicoldsong.github.io/todomvc-efjs/) - [repo](https://github.com/ClassicOldSong/todomvc-efjs)
 + [dbmon](https://classicoldsong.github.io/js-repaint-perfs/ef/opt.html) - [repo](https://github.com/ClassicOldSong/js-repaint-perfs)
 + The [official website](https://github.com/ClassicOldSong/ef.js.org) is also written with ef.js
 
-Playground:
-+ [CodeSandbox](https://codesandbox.io/s/github/TheNeuronProject/ef-starter-template)
+#### Playground:
 
-Related projects:
++ [StackBlitz](https://stackblitz.com/edit/ef-playground?file=src%2Fmain.js)
+
+#### Related projects:
+
 + [ef-core](https://github.com/TheNeuronProject/ef-core) - Core of ef.js (without parser)
 + [Neonclear](https://neon.atm.re) - An ef.js based progressive UI framework (WIP)
 + [bPlayer-ef](https://bplayer-ef.ccoooss.com) - The ef.js based web audio player
@@ -31,14 +38,15 @@ Related projects:
 + [AtomEFMLHighlighter](https://atom.io/packages/efml) - EFML syntax highlighter for Atom
 + [PrismEFMLSyntax](https://github.com/ClassicOldSong/PrismEFMLSyntax) - EFML syntax for [Prism](http://prismjs.com/)
 
-Community projects:
+#### Community projects:
+
 + [EFML.vim](https://github.com/deluxghost/EFML.vim) by [deluxghost](https://github.com/deluxghost) - EFML (\*.ef, \*.eft) syntax highlighting for Vim
 + [Kefjs](https://github.com/cubesky/Kefjs) by [cubesky](https://github.com/cubesky) - A Kotlin/JS Wrapper for ef.js
 + [parcel-plugin-eft](https://github.com/oott123/parcel-plugin-eft) by [oott123](https://github.com/oott123) - Add ef.js template support for parcel bundler
 + [xml2efml](https://github.com/tcdw/xml2efml) by [tcdw](https://github.com/tcdw) - Convert XML/HTML snippets to EFML
 + [ef-language-service](https://github.com/Jack-Works/ef-language-service) by [Jack Works](https://github.com/Jack-Works) - EFML language service (currently) for VSCode
 
-Implementation in other languages:
+#### Implementation in other languages:
 + [ef.qt](https://github.com/TheNeuronProject/ef.qt) Writing Qt applications using the concept of ef
 
 ## CDN
