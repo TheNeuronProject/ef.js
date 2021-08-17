@@ -71,7 +71,7 @@ const setParser = (newParser) => {
  */
 const t = (...args) => create(mixStr(...args))
 
-let coreVersion = '0.13.10'
+let coreVersion = '0.13.12'
 
 if (process.env.NODE_ENV !== 'production') {
 	coreVersion = `${coreVersion}+debug`
