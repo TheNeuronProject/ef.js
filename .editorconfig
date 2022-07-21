@@ -11,7 +11,7 @@ trim_trailing_whitespace = true
 [package.json]
 indent_style = space
 
-[.travis.yml]
+[*.yml]
 indent_style = space
 
 [README.md]

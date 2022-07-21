@@ -4,28 +4,28 @@
 name: Build Test Builds
 
 on:
-	push:
-		branches: [ master ]
-	pull_request:
-		branches: [ master ]
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 env:
-	BUILD_ENV: CI
+  BUILD_ENV: CI
 
 jobs:
-	build:
-		runs-on: ubuntu-latest
-		steps:
-			- uses: actions/checkout@v2
-			- uses: actions/setup-node@v2
-				with:
-					node-version: 18
-			- run: npm ci
-			- run: npm run build
-			- run: npm run prod
-			- name: Archive production artifacts
-				uses: actions/upload-artifact@v2
-				with:
-					name: Build Artifact
-					path: |
-						${{github.workspace}}/dist/*
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm run build
+      - run: npm run prod
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Build Artifact
+          path: |
+            ${{github.workspace}}/dist/*
