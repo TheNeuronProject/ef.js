@@ -1,7 +1,7 @@
 // Import base config
-import base from './rollup.base'
+import base from './rollup.base.mjs'
 // Import browsersync config
-import bsConfig from './bs-config'
+import bsConfig from './bs-config.mjs'
 // Import dev plugins
 import browsersync from 'rollup-plugin-browsersync'
 
