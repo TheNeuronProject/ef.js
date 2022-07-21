@@ -1,5 +1,5 @@
 // Import base config
-import base from './rollup.base'
+import base from './rollup.base.mjs'
 
 if (process.env.BUILD_TARGET === 'production') base.output.file = `${base.proPath}/${base.bundle}.min.js`
 else base.output.file = `${base.proPath}/${base.bundle}.dev.js`
