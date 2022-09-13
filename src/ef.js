@@ -19,6 +19,7 @@ import {
 	bundle,
 	isPaused,
 	setDOMImpl,
+	getNodeAST,
 	declareNamespace,
 	mountOptions
 } from 'ef-core'
@@ -71,7 +72,7 @@ const setParser = (newParser) => {
  */
 const t = (...args) => create(mixStr(...args))
 
-let coreVersion = '0.14.8'
+let coreVersion = '0.15.1'
 
 if (process.env.NODE_ENV !== 'production') {
 	coreVersion = `${coreVersion}+debug`
@@ -96,6 +97,7 @@ export {
 	parseEft,
 	mountOptions,
 	setDOMImpl,
+	getNodeAST,
 	declareNamespace,
 	coreVersion as version
 }
