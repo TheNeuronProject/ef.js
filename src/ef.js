@@ -1,7 +1,6 @@
 // Import everything
 import parse from './lib/parser.js'
 import typeOf from 'ef-core/src/lib/utils/type-of.js'
-import { mixStr } from 'ef-core/src/lib/utils/literals-mix.js'
 import parseEft from 'eft-parser'
 // Import core components
 import {
@@ -64,6 +63,13 @@ const setParser = (newParser) => {
 	parser = newParser
 }
 
+const mixStr = (strs, ...vars) => {
+	const strArr = new Array(strs.length + vars.length)
+	for (let i in strs) strArr[i * 2] = strs[i]
+	for (let i in vars) strArr[i * 2 + 1] = vars[i]
+	return ''.concat(...strArr)
+}
+
 // eslint-disable-next-line valid-jsdoc
 /**
  * Tagged template to quickly create an inline ef component class
@@ -71,7 +77,7 @@ const setParser = (newParser) => {
  */
 const t = (...args) => create(mixStr(...args))
 
-let coreVersion = '0.16.0'
+let coreVersion = '0.16.1'
 
 if (process.env.NODE_ENV !== 'production') {
 	coreVersion = `${coreVersion}+debug`
