@@ -128,68 +128,92 @@ Also EFML is the first language that can be parsed into the AST which ef support
 Here is an example.
 
 ```efml
-Tree structure
-Lines not started with >#%@.|+- are considered as comments
-The escape character of EFML is '&', for prevention of conflicts with js escapes.
-Except for changes of the characters, all the usage should remain the same on all versions.
-this is a comment
+Lines not start with >#%@.|+- are comments.
+For example, this line is a comment.
+The escape character of EFML is `&`, for prevention of conflicts with js escapes.
 
-Lines starting with '>' stand for a new tag
+Lines starting with '>' stand for a new tag, for example, a `div` tag can be written as:
 >div
-  Lines with exactly one indent after a tag definition are considered to be all things belongs to the defined tag
+
+`.` following a tag definition is the short hand for writing class names, for example:
+>div.my.class.name
+would be rendered as `<div class="my class name">`
+
+Class names can have mustaches mixed together:
+>div.my.{{dynamic}}.class.name
+would be rendered as `<div class="my class name">` when `instance.$data.dynamic` is empty, `<div class="my dynamic class name">` when `instance.$data.dynamic` is 'dynamic'
+
+`#` at the end of a tag definition means the reference name for this element, for example:
+>div#myDiv
+this `div` tag is now accessable form `instance.$refs.myDiv`.
+
+New lines with exactly one indent after a tag definition are all things that belong to the defined tag, for example:
+>div
+  #attribute = myAttr
+  %property = myProp
+  @event = myEventHandler
+  >ChildElement
 
   Lines starting with '#' stand for attributes
-  Mustaches are used for binding data
-  Contents inside mustaches after '=' stand for the default value for this binding
-  Contents without mustaches stand for static data,
-  which means that you can not modify them through ef.js
-  #class = {{class = some class name}}
-  #style = {{attr.style = background: #ECECEC}}
-  #id = testdiv
-  #some-attr = some text
-  #content
 
-  Lines starting with '%' stand for properties
+  This means an attribute without any parameters:
+  #flagattr
+
+  Contents without mustaches stand for static data:
+  #id = myID
+  #some-attr = some text
+
+  Mustaches are used for binding data:
+  #class = {{myClass}}
+  The element's class name can then be set via `instance.$data.myClass = 'some class names'`
+
+  Contents inside mustaches after '=' stand for the default value for this binding:
+  #class = {{myClass = some class name}}
+  #style = {{attr.style = background: #ECECEC}}
+
+  Static content and mustaches can be mixed:
+  #class = static and {{mixed}} classes
+
+  Lines starting with '%' stand for properties that can be accessed from the DOM object
   %title = Welcome, {{name}}
   %anotherProperty = text
 
-  Lines starting with '@' stand for events
-  Contents after ':' are considered as value to be passed to the handler
+  Lines starting with '@' stand for events that triggers an event handler method:
+  @click = clickHandler
+
+  Contents after ':' are values to be passed to the handler:
   @click = updateInfo:{{binding.value}} and static value
-  modifier keys now can bind easily
+
+  modifier keys now can bind with predefined aliases:
   @mousedown.shift.alt.ctrl.meta = select
-  bind to keys is also easy
+
+  bind to specific key code by writing the code directely:
   @keypress.13 = submit
-  use '.prevent' to `preventDefault`, '.stop' to `stopPropagation`, '.stopImmediate' to `stopImmediatePropagation`
+
+  use '.prevent' for `preventDefault`, '.stop' for `stopPropagation`, '.stopImmediate' for `stopImmediatePropagation`
   use '.passive' to make the event listener passive, '.!passive' to explicitly claim a non-passive listener
   use '.once' to create a trigger once listener
   @keydown.8.prevent.stop = stopbackspace
+
   use '.capture' to capture an event
   @submit.capture.stopImmediate = submit
 
   Lines starting with '.' stand for text nodes
   .Name: {{name}}&nJob: {{job}}
+
   >pre
     Lines starting with '|' stand for multiline text
     |Line 1
     |Line 2
     |Line 3
-  >br
 
   Lines starting with '-' stand for single node mounting point
   -node1
+  use `instance.node1 = anotherInstance` to put another EF component right at the point.
 
   Lines starting with '+' stand for multi node mounting point
   +list1
-
-  '.' after a tag name stand for class names for this tag
-  >p.some.{{binding.class}}.class.names
-
-    '#' at the end of a tag name stand for the reference name of the node
-    Mustaches after a dot will bind to 'class' automatically
-    >span.{{emergency = emergency}}#notice_box
-      .Notice: {{notice}}
-    .some text
+  use `instance.list1.push(...newInstances)` to put other EF components here.
 ```
 
 For standalone eft parser see [eft-parser](https://github.com/ClassicOldSong/eft-parser).
@@ -230,7 +254,7 @@ ef.toEFComponent(Any)
 ```
 ### Attribute Mapping
 
-Data on ef.js components are not always that easy to access, so since v0.10.4, a stable version of attribute mapping helper is bundled with ef.js. For documents, please refer to the [comments](https://github.com/TheNeuronProject/ef-core/blob/master/src/lib/map-attrs.js#L50-L67) for now. It would be extremely useful when using with custom components and JSX.
+Data on ef.js components are not always that easy to access, so since v0.10.4, a stable version of attribute mapping helper is bundled with ef.js. For documents, please refer to the [comments](https://github.com/TheNeuronProject/ef-core/blob/master/src/lib/map-attrs.js#L50-L67) for now. It would be extremely useful when using with custom components.
 
 ## Custom Components
 
@@ -521,52 +545,73 @@ const scope3 = {
 const component3 = new Tpl(null, scope3) // in this case the `namespaceURI` is not ignored, element is rendered under `http://some.other.ns/myns`
 ```
 
+## Initialization API
+
+Initialization APIs are added since v0.17.0.
+
+**NOTE:** `state` and `$data` are not fully initialized yet upon initlization. They're passed here only for reference. You should retrive any mount point or reactive value within your handler methods.
+
+```js
+import Tpl from './template.eft'
+import Component from './my-component.eft'
+
+const App = class extends Tpl {
+
+  // Prepare initial methods. The return value will be used as-is.
+  static initMethods(state, $data, watch) {
+    let count = 0
+    return {
+      clickBtn() {
+        count += 1
+        $data.count = count
+        alert(`You have clicked ${count} times!`)
+      }
+    }
+  }
+
+  // Prepare initial data. The return value is non-reactive.
+  static initData(state, $data, watch) {
+    // Watch is equivalent for '$subscribe', but you have to use `watch` instead during initlization.
+    watch('count', ({value}) => {
+      console.log('Count has changed to', value)
+    })
+
+    return {
+      count: 'You have not clicked.'
+      btnText: 'Click Me!'
+    }
+  }
+
+  // Prepare scope. The return value will be merged and supress previous assigned values.
+  static initScope(state, $data, watch) {
+    return {
+      // In this case, all `div` will be rendered as `h1`, all `MyComponent` will be rendered as `Component`
+      div: 'h1',
+      MyComponent: Component
+    }
+  }
+
+  // Notice: overriding `init` will supress all above methods.
+  static init(state, $data, watch) {
+    return {
+      methods: {},
+      data: {},
+      scope: {},
+      beforeMount() {},
+      afterMount() {},
+      beforeUmount() {},
+      afterUmount() {},
+      beforeDestroy() {},
+      afterDestroy() {},
+      onCreated() {}
+    }
+  }
+}
+```
+
 ## JSX
 
-ef.js now comes with JSX support since v0.9.0. Demo [here](https://codepan.net/gist/192a1870d23e05d775d3667389162e63).
-
-### JSX Fragments
-
-ef.js supports JSX fragments. You can create fragments just like what you do in React:
-```jsx
-<>
-  <h1>Hello JSX!</h1>
-  <MyCustomComponent>Now ef.js comes with JSX fragment support!</MyCustomComponent>
-</>
-```
-
-**Note:** JSX fragments are not always the same from ef fragments. No ef bindings can be set on JSX fragments in the meantime.
-
-### With Transpilers
-
-**Babel:** As documented [here](https://babeljs.io/docs/en/babel-preset-react), you can customize your jsx pragma when using babel. For example:
-```cson
-{
-  "presets": [
-    [
-      "@babel/preset-react",
-      {
-        "pragma": "ef.createElement", // default pragma is React.createElement
-        "pragmaFrag": "ef.Fragment", // default is React.Fragment
-        "throwIfNamespace": false // defaults to true
-      }
-    ]
-  ]
-}
-```
-
-**Buble:** A [pull request on custom `Fragment` pragma](https://github.com/bublejs/buble/pull/199) has been merged but not yet properly [documented](https://buble.surge.sh/guide/#using-the-javascript-api). Below is a correct example:
-```js
-var output = buble.transform( input, {
-  ...
-
-  // custom JSX pragma
-  jsx: 'ef.createElement',
-  jsxFragment: 'ef.Fragment',
-
-  ...
-}
-```
+JSX support was removed since v0.17.0.
 
 ## Server Side Rendering
 

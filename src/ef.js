@@ -5,7 +5,6 @@ import parseEft from 'eft-parser'
 // Import core components
 import {
 	create as createComponent,
-	createElement,
 	mapAttrs,
 	EFNodeWrapper,
 	EFTextFragment,
@@ -77,7 +76,7 @@ const mixStr = (strs, ...vars) => {
  */
 const t = (...args) => create(mixStr(...args))
 
-let coreVersion = '0.16.6'
+let coreVersion = '0.17.2'
 
 if (process.env.NODE_ENV !== 'production') {
 	coreVersion = `${coreVersion}+debug`
@@ -86,7 +85,6 @@ if (process.env.NODE_ENV !== 'production') {
 export {
 	t,
 	create,
-	createElement,
 	mapAttrs,
 	EFNodeWrapper,
 	EFTextFragment,
