@@ -1,27 +1,13 @@
 import chalk from 'chalk'
 
 // Rollup plugins
-import {eslint} from 'rollup-plugin-eslint'
-import {terser} from 'rollup-plugin-terser'
-import buble from '@rollup/plugin-buble'
-import replace from '@rollup/plugin-replace'
+import eslint from '@rollup/plugin-eslint'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
+import esbuild from 'rollup-plugin-esbuild'
 import progress from 'rollup-plugin-progress'
 
-switch (process.env.BUILD_ENV) {
-	case 'DEV': {
-		console.log(chalk.cyan('+--------------=+| DEVELOP BUILD |+=--------------+'))
-		break
-	}
-	case 'CI': {
-		console.log(chalk.green('+--------------=+| CI BUILD |+=--------------+'))
-		break
-	}
-	default: {
-		console.log(chalk.yellow('+--------------=+| NORMAL BUILD |+=--------------+'))
-	}
-}
+const isProduction = process.env.NODE_ENV === 'production'
 
 // Log build environment
 console.log('Build Target:', chalk.bold.green(process.env.BUILD_TARGET || 'development'))
@@ -47,19 +33,10 @@ export default {
 			browser: true,
 		}),
 		commonjs(),
-		replace({
-			preventAssignment: true,
-			values: {
-				'process.env.NODE_ENV': `'${process.env.BUILD_TARGET || 'development'}'`
-			}
-		}),
-		buble({
-			transforms: {
-				modules: false,
-				dangerousForOf: true
-			},
-			objectAssign: 'Object.assign'
-		}),
-		(process.env.BUILD_TARGET === 'production' && terser())
+		esbuild({
+			target: 'es2015',
+			sourceMap: true,
+			minify: isProduction
+		})
 	]
 }

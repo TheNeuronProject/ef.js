@@ -21,7 +21,6 @@ jobs:
           node-version: 18
       - run: npm ci
       - run: npm run build
-      - run: npm run prod
 
   publish-npm:
     needs: build
@@ -34,7 +33,6 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm run build
-      - run: npm run prod
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
@@ -50,7 +48,6 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm run build
-      - run: npm run prod
       - uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:

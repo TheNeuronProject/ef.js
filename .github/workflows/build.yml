@@ -22,7 +22,6 @@ jobs:
           node-version: 18
       - run: npm ci
       - run: npm run build
-      - run: npm run prod
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
