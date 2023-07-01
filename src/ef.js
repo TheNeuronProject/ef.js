@@ -76,7 +76,7 @@ const mixStr = (strs, ...vars) => {
  */
 const t = (...args) => create(mixStr(...args))
 
-let coreVersion = '0.17.2'
+let coreVersion = '0.17.3'
 
 if (process.env.NODE_ENV !== 'production') {
 	coreVersion = `${coreVersion}+debug`
