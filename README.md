@@ -577,7 +577,7 @@ const App = class extends Tpl {
     })
 
     return {
-      count: 'You have not clicked.'
+      count: 'You have not clicked.',
       btnText: 'Click Me!'
     }
   }
